@@ -712,6 +712,95 @@
   opacity: 0;
   pointer-events: none;
 }
+/* BOTÓN REVEAL / TOGGLE INFO */
+.hero-toggle-btn {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(10, 10, 13, 0.75);
+  border: 1px solid var(--border-accent);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-toggle-btn.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.hero-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--text-main);
+}
+
+.hero-toggle-icon {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+/* FIX DE CORTE EN PANTALLAS MÓVILES (IPHONE) */
+@media (max-width: 640px) {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  .container {
+    padding: 0 1.25rem !important;
+    width: 100%;
+  }
+
+  .hero-cinematic {
+    padding-top: 7rem !important;
+    padding-bottom: 5rem !important;
+    min-height: 100svh; /* Usa unidades svh para evitar problemas con la barra de Safari */
+  }
+
+  .hero-big-title {
+    font-size: clamp(2.3rem, 11vw, 3.4rem) !important;
+    line-height: 0.95 !important;
+    letter-spacing: -0.02em !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .hero-tagline {
+    font-size: 0.62rem !important;
+    letter-spacing: 0.2em !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-description {
+    font-size: 0.95rem !important;
+    line-height: 1.55 !important;
+  }
+
+  .hero-meta-row {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    padding-top: 1.25rem !important;
+  }
+
+  .hero-meta-row div[style*="text-align: right"] {
+    text-align: left !important;
+  }
+}
   </style>
 </head>
 <body>
@@ -799,6 +888,11 @@
           </div>
         </div>
       </div>
+
+      <button class="hero-toggle-btn" id="heroToggleBtn" type="button" aria-label="Toggle Hero Info">
+        <span id="heroToggleText">Show Details</span>
+        <span class="hero-toggle-icon" id="heroToggleIcon">&uarr;</span>
+      </button>
     </section>
 
     <!-- CARRUSEL VISUAL DE FOTOS DE ATLETAS (SLIDER INFINITO) -->
@@ -1036,9 +1130,12 @@
       alert('Verification required. Access credentials are provided directly by Canvas Management Group.');
       portalModal.classList.remove('active');
     }
-    window.addEventListener('DOMContentLoaded', () => {
+   window.addEventListener('DOMContentLoaded', () => {
   const hero = document.getElementById('heroCinematic');
   const heroContent = document.querySelector('.hero-content');
+  const heroToggleBtn = document.getElementById('heroToggleBtn');
+  const heroToggleText = document.getElementById('heroToggleText');
+  const heroToggleIcon = document.getElementById('heroToggleIcon');
 
   // A los 3.5 segundos exactos:
   setTimeout(() => {
@@ -1050,7 +1147,28 @@
     if (heroContent) {
       heroContent.classList.add('slide-down');
     }
+    // 3. Muestra el botón para poder volver a ver los textos
+    if (heroToggleBtn) {
+      heroToggleBtn.classList.add('visible');
+    }
   }, 3500);
+
+  // Click para alternar mostrar / ocultar
+  if (heroToggleBtn && heroContent) {
+    heroToggleBtn.addEventListener('click', () => {
+      const isHidden = heroContent.classList.contains('slide-down');
+
+      if (isHidden) {
+        heroContent.classList.remove('slide-down');
+        if (heroToggleText) heroToggleText.textContent = 'Hide Details';
+        if (heroToggleIcon) heroToggleIcon.innerHTML = '&darr;';
+      } else {
+        heroContent.classList.add('slide-down');
+        if (heroToggleText) heroToggleText.textContent = 'Show Details';
+        if (heroToggleIcon) heroToggleIcon.innerHTML = '&uarr;';
+      }
+    });
+  }
 });
   </script>
 </body>
