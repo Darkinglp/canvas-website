@@ -431,10 +431,32 @@
   gap: 1rem;
 }
 
-/* ACTIVAR EN DISPOSITIVOS MÓVILES */
-@media (max-width: 1024px) {
-  .nav-menu, .nav-inner .portal-badge { display: none; }
-  .luxury-burger { display: flex; }
+/* 2. Ajuste responsivo para títulos en celulares y tablets */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.25rem !important;
+  }
+
+  /* Control para que títulos nunca sobrepasen el ancho */
+  .page-title,
+  .hero-title {
+    font-size: clamp(2rem, 9.5vw, 3.2rem) !important;
+    line-height: 1.02 !important;
+    letter-spacing: -0.02em !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .page-hero,
+  .about-hero {
+    padding-top: 7.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+
+  .page-lead {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
 }
   </style>
 </head>
