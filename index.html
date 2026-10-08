@@ -754,25 +754,36 @@
   transition: transform 0.3s ease;
 }
 
-/* FIX DE CORTE EN PANTALLAS MÓVILES (IPHONE) */
+/* BLOQUEO TOTAL DE DESPLAZAMIENTO LATERAL */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  position: relative;
+}
+
+/* FIX DE CORTE EN PANTALLAS MÓVILES (IPHONE & TABLETS) */
 @media (max-width: 640px) {
   .container {
     padding: 0 1.25rem !important;
     width: 100%;
+    box-sizing: border-box !important;
   }
 
   .hero-cinematic {
     padding-top: 7rem !important;
     padding-bottom: 5rem !important;
-    min-height: 100svh; /* Usa unidades svh para evitar problemas con la barra de Safari */
+    min-height: 100svh; /* Mantiene la compatibilidad con Safari en iPhone */
   }
 
   .hero-big-title {
-    font-size: clamp(2.3rem, 11vw, 3.4rem) !important;
-    line-height: 0.95 !important;
-    letter-spacing: -0.02em !important;
-    word-break: break-word;
-    overflow-wrap: break-word;
+    font-size: clamp(1.85rem, 8.8vw, 2.5rem) !important; /* Tamaño exacto para no desbordar */
+    line-height: 1.05 !important;
+    letter-spacing: -0.01em !important;
+    word-break: normal !important;      /* EVITA QUE PARTA LA PALABRA */
+    overflow-wrap: normal !important;  /* MANTIENE ATHLETES COMPLETO */
+    white-space: normal !important;
+    hyphens: none !important;
   }
 
   .hero-tagline {
@@ -784,6 +795,7 @@
   .hero-description {
     font-size: 0.95rem !important;
     line-height: 1.55 !important;
+    max-width: 100% !important;
   }
 
   .hero-meta-row {
@@ -795,11 +807,6 @@
   .hero-meta-row div[style*="text-align: right"] {
     text-align: left !important;
   }
-}
-html, body {
-  overflow-x: hidden !important;
-  max-width: 100vw !important;
-  width: 100% !important;
 }
 </style>
 </head>
