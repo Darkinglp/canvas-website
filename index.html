@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Management Group — Sports &amp; Creator Management</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #030303;
+      --surface: #0a0a0d;
+      --surface-card: rgba(18, 18, 22, 0.7);
+      --surface-hover: rgba(28, 28, 36, 0.85);
+      --text-main: #FFFFFF;
+      --text-dim: #848494;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(255, 255, 255, 0.22);
+      --accent-neon: #E0E722;
+      --accent-green: #34D399;
+      --accent-blue: #60A5FA;
+      --accent-pink: #F472B6;
+      --font-display: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    .container { max-width: 1480px; margin: 0 auto; padding: 0 2rem; width: 100%; }
+
+    /* =========================================================
+       HEADER & NAVIGATION
+    ========================================================= */
+    header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: none !important;
+}
+
+/* Espacio limpio entre el logo y los botones flotantes */
+.nav-menu {
+  display: flex;
+  gap: 3.5rem;
+  align-items: center;
+  margin-left: 3rem; /* Evita que HOME choque con GROUP */
+}
+
+    .nav-inner {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-text {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .brand-sub {
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  line-height: 1.25;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #D4AF37; /* Tono dorado champagne lujoso */
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(212, 175, 55, 0.4); /* Línea divisoria en armonía con el dorado */
+  padding-left: 0.9rem;
+}
+
+    .nav-menu {
+      display: flex;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text-main);
+    }
+
+    .portal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.65rem 1.25rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .portal-badge:hover {
+      border-color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dot-pulse {
+      width: 8px;
+      height: 8px;
+      min-width: 8px;
+      min-height: 8px;
+      border-radius: 50%;
+      background: #34D399;
+      box-shadow: 0 0 10px #34D399;
+      position: relative;
+      display: inline-block;
+    }
+
+    .dot-pulse::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 1px solid #34D399;
+      animation: pulse 2s infinite ease-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 1; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    /* BURGER BUTTON & OVERLAY */
+    .luxury-burger {
+      display: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      z-index: 250;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .burger-line {
+      display: block;
+      height: 1.5px;
+      background-color: var(--text-main);
+      transition: all 0.35s ease;
+      border-radius: 1px;
+    }
+
+    .burger-line-1 { width: 26px; }
+    .burger-line-2 { width: 17px; }
+
+    .luxury-burger.active .burger-line-1 {
+      transform: translateY(3.75px) rotate(45deg);
+      width: 24px;
+    }
+    .luxury-burger.active .burger-line-2 {
+      transform: translateY(-3.75px) rotate(-45deg);
+      width: 24px;
+    }
+
+    .luxury-nav-curtain {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(4, 4, 5, 0.98);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 6.5rem 2rem 3rem 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .luxury-nav-curtain.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .curtain-top-meta {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .curtain-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      margin: auto 0;
+    }
+
+    .curtain-link-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1.2rem;
+      color: var(--text-dim);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.45s ease;
+    }
+
+    .curtain-link-num {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+    }
+
+    .curtain-link-label {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 8vw, 2.75rem);
+      text-transform: uppercase;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .curtain-link-item:hover,
+    .curtain-link-item.active {
+      color: var(--text-main);
+    }
+
+    .curtain-link-item.active .curtain-link-num {
+      color: var(--accent-neon);
+    }
+
+    .luxury-nav-curtain.active .curtain-link-item:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
+    .luxury-nav-curtain.active .curtain-link-item:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.18s; }
+    .luxury-nav-curtain.active .curtain-link-item:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.26s; }
+    .luxury-nav-curtain.active .curtain-link-item:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.34s; }
+
+    .curtain-bottom-meta {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* =========================================================
+       HERO CINEMATIC & SPLASH (3.5s ANIMATION)
+    ========================================================= */
+   /* CONTENEDOR HERO */
+.hero-cinematic {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 4rem;
+  padding-top: 8rem;
+  overflow: hidden;
+  background-color: #030303;
+}
+
+/* IMAGEN DE LA CESTA DE FONDO CON DESENFOQUE INICIAL */
+.hero-bg-media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-image: 
+    linear-gradient(180deg, rgba(3, 3, 3, 0.25) 0%, rgba(3, 3, 3, 0.8) 100%), 
+    url('https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=2200&q=85');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(14px) brightness(0.7);
+  transform: scale(1.08);
+  transition: filter 1.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* A LOS 3.5 SEGUNDOS: SE QUITA EL DESENFOQUE Y QUEDA NÍTIDA */
+.hero-cinematic.loaded .hero-bg-media {
+  filter: blur(0px) brightness(1);
+  transform: scale(1);
+}
+
+/* TEXTO FRONTAL */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease;
+}
+
+.hero-content.slide-down {
+  transform: translateY(120px);
+  opacity: 0;
+  pointer-events: none;
+}
+    .hero-tagline {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent-neon);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s;
+    }
+
+    .hero-big-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 9.5vw, 9.8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      margin-bottom: 2.2rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.7s;
+    }
+
+    .hero-meta-row {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3rem;
+      align-items: flex-end;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 1s;
+    }
+
+    .hero-description {
+      font-size: 1.15rem;
+      color: var(--text-dim);
+      max-width: 620px;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    @keyframes heroFadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =========================================================
+       ATHLETES PHOTO CAROUSEL (BOTTOM SLIDER)
+    ========================================================= */
+    .athletes-carousel-section {
+      padding: 3.5rem 0;
+      border-bottom: 1px solid var(--border);
+      background: #020203;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .carousel-track-wrapper {
+      display: flex;
+      overflow: hidden;
+      user-select: none;
+      mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 1.5rem;
+      animation: scrollPhotos 35s linear infinite;
+      width: max-content;
+    }
+
+    .carousel-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes scrollPhotos {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .carousel-photo-card {
+      width: 280px;
+      height: 380px;
+      position: relative;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .carousel-photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(120%);
+      transition: transform 0.6s ease, filter 0.5s ease;
+    }
+
+    .carousel-photo-card:hover img {
+      transform: scale(1.06);
+      filter: grayscale(0%);
+    }
+
+    .carousel-photo-info {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(4, 4, 5, 0.95) 90%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+    }
+
+    .carousel-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-neon);
+      margin-bottom: 0.25rem;
+    }
+
+    .carousel-name {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    /* =========================================================
+       SCROLL PROTAGÓNICO / SECCIONES INTERACTIVAS
+    ========================================================= */
+    .scroll-reveal-section {
+      opacity: 0;
+      transform: translateY(45px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scroll-reveal-section.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* PILARES */
+    .pillars-section {
+      padding: 8rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+
+    .pillar-box {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      padding: 3.2rem 2.4rem;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.4s ease;
+    }
+
+    .pillar-box:hover {
+      border-color: var(--border-accent);
+      background: var(--surface-hover);
+      transform: translateY(-6px);
+    }
+
+    .pillar-num {
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .pillar-box h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 1.8vw, 1.85rem);
+      text-transform: uppercase;
+      font-weight: 800;
+      margin: 1.25rem 0 0.8rem 0;
+      line-height: 1.15;
+    }
+
+    .pillar-box p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* CASOS DE ESTUDIO / DEALS EN HOME */
+    .featured-work-section {
+      padding: 8rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .featured-deals-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+
+    .deal-feature-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      padding: 3.5rem 2.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 380px;
+      transition: all 0.35s ease;
+    }
+
+    .deal-feature-card:hover {
+      border-color: var(--accent-neon);
+      transform: translateY(-5px);
+    }
+
+    .deal-metric-highlight {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 4.5vw, 4rem);
+      font-weight: 900;
+      color: var(--accent-neon);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .deal-feature-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .deal-feature-card p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 8rem 0 4.5rem 0;
+      background: #020203;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1.7fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .footer-huge {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4.2vw, 4.4rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.95;
+    }
+
+    .contact-card {
+      border: 1px solid var(--border);
+      padding: 3rem 2.5rem;
+      background: var(--surface);
+      width: 100%;
+    }
+
+    .contact-link {
+      display: flex;
+      justify-content: space-between;
+      font-size: clamp(0.95rem, 1.3vw, 1.25rem);
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+      word-break: break-all;
+      transition: color 0.25s;
+    }
+
+    .contact-link:hover { color: var(--accent-neon); }
+
+    /* MODAL CLIENT PORTAL */
+    .portal-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 4, 5, 0.88);
+      backdrop-filter: blur(14px);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .portal-modal-overlay.active { display: flex; }
+
+    .portal-modal-box {
+      background: #0c0c10;
+      border: 1px solid var(--border-accent);
+      max-width: 440px;
+      width: 100%;
+      padding: 3rem 2.4rem;
+      position: relative;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+    .modal-close-btn:hover { color: var(--text-main); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .nav-menu, .nav-inner .portal-badge { display: none; }
+      .luxury-burger { display: flex; }
+      .hero-meta-row { grid-template-columns: 1fr; gap: 2rem; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .featured-deals-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 0 1.25rem; }
+      .nav-inner { padding: 1.25rem 1.25rem; }
+      .hero-cinematic { padding-bottom: 3.5rem; }
+      .hero-big-title { font-size: clamp(2.8rem, 12vw, 4.4rem); }
+      .carousel-photo-card { width: 220px; height: 300px; }
+      .pillars-section, .featured-work-section, footer { padding: 5rem 0 3.5rem 0; }
+      .contact-card { padding: 2rem 1.5rem; }
+    }
+    /* Contenedor del texto inicial sobre el video */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease;
+}
+
+/* Estado cuando se activa el deslizamiento */
+.hero-content.slide-down {
+  transform: translateY(120px);
+  opacity: 0;
+  pointer-events: none;
+}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-text">Canvas</span>
+        <span class="brand-sub">
+          <span>MANAGEMENT</span>
+          <span>GROUP</span>
+        </span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="athletes.html" class="nav-link">Roster &amp; Creators</a>
+        <a href="work.html" class="nav-link">Campaigns &amp; Deals</a>
+      </nav>
+
+      <button class="portal-badge" id="openPortalBtn" type="button">
+        <span class="dot-pulse"></span>
+        <span>Client Portal</span>
+      </button>
+
+      <button class="luxury-burger" id="burgerToggle" type="button" aria-label="Toggle navigation">
+        <span class="burger-line burger-line-1"></span>
+        <span class="burger-line burger-line-2"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- CORTINA MÓVIL LUXURY -->
+  <div class="luxury-nav-curtain" id="luxuryCurtain">
+    <div class="curtain-top-meta">
+      <span>NYC &bull; MIA &bull; LA</span>
+      <span>Encrypted Protocol</span>
+    </div>
+    <div class="curtain-links">
+      <a href="index.html" class="curtain-link-item active">
+        <span class="curtain-link-num">01 //</span>
+        <span class="curtain-link-label">Home</span>
+      </a>
+      <a href="about.html" class="curtain-link-item">
+        <span class="curtain-link-num">02 //</span>
+        <span class="curtain-link-label">About</span>
+      </a>
+      <a href="athletes.html" class="curtain-link-item">
+        <span class="curtain-link-num">03 //</span>
+        <span class="curtain-link-label">Roster</span>
+      </a>
+      <a href="work.html" class="curtain-link-item">
+        <span class="curtain-link-num">04 //</span>
+        <span class="curtain-link-label">Campaigns</span>
+      </a>
+    </div>
+    <div class="curtain-bottom-meta">
+      <button class="portal-badge" id="openPortalMobileCurtain" type="button" style="width: 100%; justify-content: center; padding: 0.85rem;">
+        <span class="dot-pulse"></span>
+        Client Portal
+      </button>
+      <div style="font-size: 0.65rem; color: var(--text-dim); text-align: center; letter-spacing: 0.15em; text-transform: uppercase;">
+        Private Representation Only
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO CINEMÁTICO CON ENTRADA DE 3.5 SEGUNDOS -->
+    <section class="hero-cinematic" id="heroCinematic">
+      <div class="hero-bg-media"></div>
+      <div class="container hero-content">
+        <span class="hero-tagline">Private Representation &bull; Media House</span>
+        <h1 class="hero-big-title">Athletes.<br>Creators.<br>Equity.</h1>
+        <div class="hero-meta-row">
+          <p class="hero-description">
+            A selective management group engineering the modern intersection of athletic prestige, digital creator ownership, and institutional commercial partnerships.
+          </p>
+          <div style="text-align: right;">
+            <a href="athletes.html" style="display: inline-flex; align-items: center; gap: 0.75rem; border: 1px solid var(--border-accent); padding: 0.9rem 1.8rem; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; background: rgba(255, 255, 255, 0.04);">
+              Explore Roster &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARRUSEL VISUAL DE FOTOS DE ATLETAS (SLIDER INFINITO) -->
+    <section class="athletes-carousel-section">
+      <div class="carousel-track-wrapper">
+        <div class="carousel-track">
+          <!-- Item 1 -->
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Marcus Vance">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">SEC Basketball &bull; NIL</span>
+              <h4 class="carousel-name">Marcus Vance</h4>
+            </div>
+          </div>
+          <!-- Item 2 -->
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Sienna Cole">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">Lifestyle Creator</span>
+              <h4 class="carousel-name">Sienna Cole</h4>
+            </div>
+          </div>
+          <!-- Item 3 -->
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Devon Sterling">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">Big Ten Forward</span>
+              <h4 class="carousel-name">Devon Sterling</h4>
+            </div>
+          </div>
+          <!-- Item 4 -->
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1519766304817-4f37bda74a29?auto=format&fit=crop&w=800&q=80" alt="Julian Reyes">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">Pro Guard &bull; Global</span>
+              <h4 class="carousel-name">Julian Reyes</h4>
+            </div>
+          </div>
+          <!-- Item 5 -->
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80" alt="Tariq Ross">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">Culture &bull; Street Hoops</span>
+              <h4 class="carousel-name">Tariq Ross</h4>
+            </div>
+          </div>
+
+          <!-- DUPLICADOS PARA EL LOOP FLUIDO INFINITO -->
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Marcus Vance">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">SEC Basketball &bull; NIL</span>
+              <h4 class="carousel-name">Marcus Vance</h4>
+            </div>
+          </div>
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Sienna Cole">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">Lifestyle Creator</span>
+              <h4 class="carousel-name">Sienna Cole</h4>
+            </div>
+          </div>
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Devon Sterling">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">Big Ten Forward</span>
+              <h4 class="carousel-name">Devon Sterling</h4>
+            </div>
+          </div>
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1519766304817-4f37bda74a29?auto=format&fit=crop&w=800&q=80" alt="Julian Reyes">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">Pro Guard &bull; Global</span>
+              <h4 class="carousel-name">Julian Reyes</h4>
+            </div>
+          </div>
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80" alt="Tariq Ross">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">Culture &bull; Street Hoops</span>
+              <h4 class="carousel-name">Tariq Ross</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PILARES CON EFECTO PROTAGÓNICO EN SCROLL -->
+    <section class="container pillars-section scroll-reveal-section">
+      <span style="font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--text-dim); display: block;">Strategic Core</span>
+      <h2 style="font-family: var(--font-display); font-size: clamp(2.2rem, 3.8vw, 3.6rem); font-weight: 900; text-transform: uppercase; margin-top: 0.5rem; letter-spacing: -0.02em;">Architecture of Representation</h2>
+
+      <div class="pillars-grid">
+        <div class="pillar-box">
+          <span class="pillar-num">01 / Collegiate &bull; Pro</span>
+          <div>
+            <h3>NIL &amp; Contract Valuation</h3>
+            <p>Guiding high-profile athletes through transfer portal leverage, multi-year endorsements, and strict NCAA and tax protection models.</p>
+          </div>
+        </div>
+        <div class="pillar-box">
+          <span class="pillar-num">02 / Digital IP</span>
+          <div>
+            <h3>In-House Media Engine</h3>
+            <p>Direct creator content development. Producing original formats, podcasts, and digital assets tailored directly to conversion.</p>
+          </div>
+        </div>
+        <div class="pillar-box">
+          <span class="pillar-num">03 / Equity</span>
+          <div>
+            <h3>Venture Partnerships</h3>
+            <p>Transitioning talent from one-off sponsorships into true equity, licensing royalties, and cap-table ownership in consumer brands.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CASOS DE NEGOCIACIÓN CON SCROLL REVEAL -->
+    <section class="container featured-work-section scroll-reveal-section">
+      <span style="font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--text-dim); display: block;">Commercial Records</span>
+      <h2 style="font-family: var(--font-display); font-size: clamp(2.2rem, 3.8vw, 3.6rem); font-weight: 900; text-transform: uppercase; margin-top: 0.5rem; letter-spacing: -0.02em;">Notable Outcomes</h2>
+
+      <div class="featured-deals-grid">
+        <div class="deal-feature-card">
+          <div>
+            <div class="deal-metric-highlight">+353%</div>
+            <h3>NIL Restructure</h3>
+            <p>Comprehensive collegiate endorsement restructuring across high-major programs, securing multi-year guarantees and full brand autonomy.</p>
+          </div>
+        </div>
+        <div class="deal-feature-card">
+          <div>
+            <div class="deal-metric-highlight">$1.4M</div>
+            <h3>Signature Apparel</h3>
+            <p>End-to-end commercial partnership structuring with global sportswear titans for footwear, lifestyle, and global apparel distribution.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <span style="font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--text-dim); display: block; margin-bottom: 1.5rem;">Private Verification</span>
+        <h2 class="footer-huge">Representation<br>Built Around You.</h2>
+      </div>
+      <div class="contact-card">
+        <span style="font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.5rem; display: block;">Direct Desk</span>
+        <a href="mailto:talent@canvasmg.com" class="contact-link"><span>talent@canvasmg.com</span><span>&rarr;</span></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="contact-link"><span>@canvasmanagement</span><span>&rarr;</span></a>
+        <p style="font-size: 0.82rem; color: var(--text-dim); margin-top: 1.5rem; line-height: 1.6;">
+          Canvas operates under selective non-disclosure agreements for all represented athletes, creators, and corporate brand partners.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CLIENT PORTAL MODAL -->
+  <div class="portal-modal-overlay" id="portalModal">
+    <div class="portal-modal-box">
+      <button class="modal-close-btn" id="closePortalBtn">&times;</button>
+      <span style="font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: #34D399; display: block; margin-bottom: 0.5rem;">&bull; Encrypted Session</span>
+      <h3 style="font-family: var(--font-display); font-size: 1.8rem; text-transform: uppercase; font-weight: 800; margin-bottom: 0.8rem;">Client Portal</h3>
+      <p style="font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 2rem;">Restricted access for represented athletes, creators, collegiate programs, and brand partners.</p>
+      <form onsubmit="handlePortalLogin(event)">
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.4rem;">Client ID / Email</label>
+          <input type="email" required placeholder="athlete@canvasmg.com" style="width: 100%; background: #141418; border: 1px solid var(--border); padding: 0.85rem; color: #fff; font-family: var(--font-body); font-size: 0.9rem; outline: none;">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.4rem;">Security Passcode</label>
+          <input type="password" required placeholder="••••••••" style="width: 100%; background: #141418; border: 1px solid var(--border); padding: 0.85rem; color: #fff; font-family: var(--font-body); font-size: 0.9rem; outline: none;">
+        </div>
+        <button type="submit" style="width: 100%; background: #FFFFFF; color: #000; border: none; padding: 0.85rem; font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; cursor: pointer;">Access Portal &rarr;</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 1. TIMER DE 3.5 SEGUNDOS PARA EL HERO CINEMÁTICO
+    window.addEventListener('DOMContentLoaded', () => {
+      const hero = document.getElementById('heroCinematic');
+      setTimeout(() => {
+        if (hero) hero.classList.add('loaded');
+      }, 3500);
+    });
+
+    // 2. SCROLL REVEAL (SECCIONES SUBEN CON PROTAGONISMO)
+    const revealSections = document.querySelectorAll('.scroll-reveal-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealSections.forEach(sec => observer.observe(sec));
+
+    // 3. CONTROL DE MENÚ MÓVIL Y CORTINA
+    const burgerToggle = document.getElementById('burgerToggle');
+    const luxuryCurtain = document.getElementById('luxuryCurtain');
+    if (burgerToggle && luxuryCurtain) {
+      burgerToggle.addEventListener('click', () => {
+        burgerToggle.classList.toggle('active');
+        luxuryCurtain.classList.toggle('active');
+        document.body.style.overflow = luxuryCurtain.classList.contains('active') ? 'hidden' : '';
+      });
+    }
+
+    // 4. CLIENT PORTAL MODAL
+    const portalModal = document.getElementById('portalModal');
+    const openPortalBtn = document.getElementById('openPortalBtn');
+    const openPortalMobileCurtain = document.getElementById('openPortalMobileCurtain');
+    const closePortalBtn = document.getElementById('closePortalBtn');
+
+    function openModal() {
+      if (portalModal) {
+        portalModal.classList.add('active');
+        if (burgerToggle) burgerToggle.classList.remove('active');
+        if (luxuryCurtain) luxuryCurtain.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (openPortalBtn) openPortalBtn.addEventListener('click', openModal);
+    if (openPortalMobileCurtain) openPortalMobileCurtain.addEventListener('click', openModal);
+    if (closePortalBtn && portalModal) closePortalBtn.addEventListener('click', () => portalModal.classList.remove('active'));
+    if (portalModal) portalModal.addEventListener('click', (e) => { if (e.target === portalModal) portalModal.classList.remove('active'); });
+
+    function handlePortalLogin(e) {
+      e.preventDefault();
+      alert('Verification required. Access credentials are provided directly by Canvas Management Group.');
+      portalModal.classList.remove('active');
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+  const hero = document.getElementById('heroCinematic');
+  const heroContent = document.querySelector('.hero-content');
+
+  // A los 3.5 segundos exactos:
+  setTimeout(() => {
+    // 1. Quita el blur y aclara el video de fondo
+    if (hero) {
+      hero.classList.add('loaded');
+    }
+    // 2. Desliza suavemente las letras hacia abajo
+    if (heroContent) {
+      heroContent.classList.add('slide-down');
+    }
+  }, 3500);
+});
+  </script>
+</body>
+</html> 
