@@ -157,11 +157,15 @@
     .modal-close-btn { position: absolute; top: 1.25rem; right: 1.25rem; background: transparent; border: none; color: var(--text-dim); font-size: 1.4rem; cursor: pointer; }
     .modal-close-btn:hover { color: var(--text-main); }
 
-    @media (max-width: 1024px) {
-      .deals-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .nav-menu { display: none; }
-    }
+   @media (max-width: 1024px) {
+  .nav-menu, 
+  .nav-inner .portal-badge { 
+    display: none !important; 
+  }
+  .luxury-burger { 
+    display: flex !important; /* Fuerza a que se muestre en móvil y tablet */
+  }
+}
     /* Contenedor del texto inicial sobre el video */
 .hero-content {
   position: relative;
@@ -314,30 +318,43 @@ html, body {
     width: 100% !important;
     box-sizing: border-box !important;
   }
+  /* REGLA MAESTRA PARA QUE NINGÚN TÍTULO SE CORTE EN MÓVIL */
+h1, h2, h3,
+.hero-big-title,
+.page-title,
+.hero-title,
+.footer-huge {
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+  white-space: normal !important;
+}
 
-  /* Tamaño calibrado para que "VALUATION" no se parta en letras sueltas */
-  .page-title,
-  .hero-title {
-    font-size: clamp(1.75rem, 8vw, 2.5rem) !important;
-    line-height: 1.05 !important;
+@media (max-width: 768px) {
+  /* Títulos de sección (como ARCHITECTURE OF REPRESENTATION) */
+  h2,
+  .pillars-section h2,
+  .featured-work-section h2 {
+    font-size: clamp(1.6rem, 7.5vw, 2.2rem) !important;
+    line-height: 1.1 !important;
     letter-spacing: -0.01em !important;
-    word-break: normal !important;      /* EVITA CORTAR SÍLABAS */
-    overflow-wrap: normal !important;  /* MANTIENE LA PALABRA COMPLETA */
-    white-space: normal !important;
-    hyphens: none !important;
   }
 
-  .page-hero,
-  .about-hero {
-    padding-top: 7.5rem !important;
-    padding-bottom: 2.5rem !important;
+  /* Título gigante del Footer (Representation Built Around You) */
+  .footer-huge {
+    font-size: clamp(1.8rem, 8vw, 2.4rem) !important;
+    line-height: 1.05 !important;
   }
 
-  .page-lead {
-    font-size: 0.95rem !important;
-    line-height: 1.6 !important;
-    max-width: 100% !important;
+  /* Títulos de tarjetas */
+  .pillar-box h3,
+  .deal-feature-card h3,
+  .deal-title {
+    font-size: 1.35rem !important;
+    line-height: 1.15 !important;
   }
+}
+
 }
   </style>
 </head>
