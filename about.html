@@ -638,26 +638,39 @@ h1, h2, h3,
     max-width: 100vw !important;
   }
 
-  /* 2. Reducir la letra en celulares para que no se corten las palabras */
-  @media (max-width: 768px) {
-    h1, h2, h3, h4, 
-    .hero-big-title, .page-title, .hero-title, 
-    .footer-huge, .section-title {
-      font-size: 1.45rem !important; /* Letra lo suficientemente pequeña para que quepa todo */
-      line-height: 1.2 !important;
-      white-space: normal !important;
-      word-break: normal !important; /* Fuerza a que la palabra completa baje al siguiente renglón si no cabe, sin partirse */
-      overflow-wrap: normal !important;
-    }
-    
-    /* Asegurar que los márgenes no empujen el texto hacia afuera */
-    .container {
-      padding-left: 15px !important;
-      padding-right: 15px !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
+ /* =========================================
+   FIX ESTRICTO: TÍTULOS Y CUADROS DE ABOUT
+========================================= */
+@media (max-width: 768px) {
+  /* 1. REDUCIR TÍTULO "ARCHITECTURE" Y SIMILARES PARA QUE QUEPAN */
+  h1, h2, h3, .section-title, .page-title, .hero-title, .footer-huge {
+    font-size: 1.5rem !important; 
+    line-height: 1.2 !important;
+    white-space: normal !important;
+    word-break: normal !important; 
+    overflow-wrap: break-word !important;
   }
+
+  /* 2. APILAR LOS CUADROS DE ESTADÍSTICAS EN ABOUT (1 SOLA COLUMNA) */
+  .stats-strip {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 2rem !important;
+  }
+
+  .stat-item {
+    border-right: none !important; /* Quita la línea vertical divisoria */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; /* Línea separadora horizontal */
+    width: 100% !important;
+    padding-bottom: 1.5rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .stat-item:last-child {
+    border-bottom: none !important;
+  }
+}
 </style>
 </head>
 <body>
