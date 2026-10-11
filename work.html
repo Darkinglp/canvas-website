@@ -469,59 +469,218 @@ h1, h2, h3,
       box-sizing: border-box !important;
     }
   }
-  /* =========================================
-   NAVBAR MINIMALISTA TIPO LIFT
-========================================= */
-header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 30px 0 !important;
-}
+ /* =========================================
+       2. NAVBAR MINIMALISTA (ALINEADA A LA DERECHA)
+    ========================================= */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background: transparent !important;
+      background-color: transparent !important;
+      padding: 30px 0;
+      transition: all 0.3s ease;
+    }
 
-.nav-inner {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  width: 100% !important;
-  max-width: 1480px !important;
-  margin: 0 auto !important;
-  padding: 0 4% !important;
-}
+    .nav-inner {
+      display: flex;
+      justify-content: flex-end; /* Empuja el menú a la derecha */
+      align-items: center;
+      width: 100%;
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 0 4%;
+    }
 
-.brand {
-  margin-right: auto !important; 
-}
+    .brand {
+      margin-right: auto; /* Logo a la izquierda */
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+    }
 
-.nav-menu {
-  display: flex !important;
-  gap: 3rem !important;
-  align-items: center !important;
-  margin: 0 !important;
-}
+    .brand-text {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
 
-/* Texto limpio y pequeño */
-.nav-link, .contact-link {
-  font-family: var(--font-body) !important;
-  font-size: 11px !important; 
-  font-weight: 600 !important;
-  letter-spacing: 0.15em !important;
-  text-transform: uppercase !important;
-  color: #ffffff !important;
-  text-decoration: none !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  transition: opacity 0.3s ease !important;
-}
+    .brand-sub {
+      font-family: var(--font-body);
+      font-size: 0.58rem;
+      line-height: 1.25;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #D4AF37;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid rgba(212, 175, 55, 0.4);
+      padding-left: 0.9rem;
+    }
 
-.nav-link:hover, .contact-link:hover {
-  opacity: 0.6 !important;
-}
+    .nav-menu {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      margin: 0;
+    }
+
+    .nav-link, .contact-link {
+      font-family: var(--font-body);
+      font-size: 11px; 
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #ffffff;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-link:hover, .contact-link:hover { opacity: 0.6; }
+    .contact-link { gap: 8px; }
+
+    /* Punto Verde Aislado */
+    .dot-pulse {
+      display: block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      position: relative;
+    }
+
+    .dot-pulse::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 50%;
+      border: 1px solid var(--accent-green);
+      animation: pulse 2s infinite ease-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 1; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    /* Menú Hamburguesa (Móviles) */
+    .luxury-burger {
+      display: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      z-index: 250;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .burger-line { display: block; height: 1.5px; background: #fff; transition: all 0.35s ease; }
+    .burger-line-1 { width: 26px; }
+    .burger-line-2 { width: 17px; }
+    .luxury-burger.active .burger-line-1 { transform: translateY(3.75px) rotate(45deg); width: 24px; }
+    .luxury-burger.active .burger-line-2 { transform: translateY(-3.75px) rotate(-45deg); width: 24px; }
+
+   /* =========================================
+       ESTILOS DEL MENÚ FULL-SCREEN
+    ========================================= */
+    .luxury-nav-curtain {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 4, 5, 0.98);
+      backdrop-filter: blur(28px);
+      z-index: 2000; /* Siempre por encima de todo */
+      display: flex;
+      align-items: center; /* Centra verticalmente */
+      justify-content: center; /* Centra horizontalmente */
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .luxury-nav-curtain.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .curtain-links-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      text-align: left; /* Alineamos a la izquierda para que el texto hover salga a la derecha */
+    }
+
+    .menu-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .curtain-link-item {
+      color: var(--text-dim, rgba(255, 255, 255, 0.4)); /* Texto gris atenuado por defecto */
+      font-size: clamp(3rem, 6vw, 5rem); /* Texto gigante responsivo */
+      font-family: var(--font-display);
+      font-weight: 900;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Al pasar el mouse, la letra brilla blanca y se mueve un poco */
+    .curtain-link-item:hover {
+      color: #ffffff;
+      transform: translateX(20px); 
+    }
+
+    /* =========================================
+       TEXTO DESCRIPTIVO (HOVER EFFECT)
+    ========================================= */
+    .menu-hover-text {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #D4AF37; /* Tu dorado corporativo */
+      margin-left: 3rem; /* Separación de la palabra gigante */
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    /* Cuando pasas el mouse por el link gigante, aparece su descripción */
+    .curtain-link-item:hover + .menu-hover-text {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Ajustes para móviles (donde no hay hover) */
+    @media (max-width: 768px) {
+      .curtain-links-container {
+        text-align: center;
+      }
+      .curtain-link-item {
+        font-size: 2.5rem;
+      }
+      .curtain-link-item:hover {
+        transform: none; /* Quitamos el movimiento en celular */
+      }
+      .menu-hover-text {
+        display: none; /* Escondemos las descripciones en celular para mantenerlo limpio */
+      }
+    }
 /* =========================================
        ICONOS SOCIALES DEL FOOTER
     ========================================= */
@@ -550,11 +709,84 @@ header {
       color: var(--accent-green) !important;
       transform: translateY(-4px) !important; /* Pequeño salto elegante al pasar el mouse */
     }
+    /* =========================================
+       AJUSTES DE TAMAÑO PARA EL MENÚ FULL-SCREEN
+    ========================================= */
+    .curtain-links-container {
+      gap: 1rem !important; /* Reducimos el espacio entre las opciones */
+    }
+
+    .curtain-link-item {
+      /* Reducimos el tamaño general. Mínimo 2rem, ideal 4.5vw, máximo 3.8rem */
+      font-size: clamp(2rem, 4.5vw, 3.8rem) !important; 
+    }
+
+    .menu-hover-text {
+      font-size: 0.8rem !important; /* Texto descriptivo un poco más sutil */
+    }
+
+    /* =========================================
+       AJUSTES ESTRICTOS PARA CELULARES
+    ========================================= */
+    @media (max-width: 768px) {
+      .luxury-nav-curtain {
+        /* Quitamos un poco de relleno arriba y abajo para dar más espacio */
+        padding: 6rem 1rem 2rem 1rem !important; 
+      }
+      .curtain-links-container {
+        gap: 1.5rem !important; 
+      }
+      .curtain-link-item {
+        /* Letra mucho más controlada en celular para que quepan las 4 opciones */
+        font-size: clamp(1.6rem, 7vw, 2.2rem) !important;
+      }
+    }
+    /* =========================================
+       REGLA DE HIERRO PARA TÍTULOS EN CELULAR
+       (Evita que se corten o salgan de pantalla)
+    ========================================= */
+    @media (max-width: 768px) {
+      h1, h2, h3, 
+      .hero-big-title, 
+      .page-title, 
+      .hero-title, 
+      .curtain-link-item,
+      .footer-huge {
+        /* 1. Tamaño seguro: 8vw asegura que palabras de 14 letras quepan enteras */
+        font-size: clamp(1.5rem, 8vw, 2.2rem) !important; 
+        line-height: 1.1 !important;
+        
+        /* 2. Prohibido cortar palabras o usar guiones */
+        word-break: keep-all !important; /* Mantiene la palabra junta */
+        overflow-wrap: normal !important;
+        hyphens: none !important;
+        white-space: normal !important;
+        
+        /* 3. Márgenes de seguridad laterales */
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+      }
+
+      /* 4. Doble candado para evitar scroll horizontal en toda la página */
+      html, body {
+        overflow-x: hidden !important;
+        width: 100vw !important;
+        max-width: 100% !important;
+        position: relative !important;
+      }
+    }
 </style>
 </head>
 <body>
-<header>
+
+<!-- =========================================
+       NUEVO HEADER MINIMALISTA
+  ========================================= -->
+  <header>
     <div class="nav-inner">
+      <!-- LOGO -->
       <a href="index.html" class="brand">
         <span class="brand-text">Canvas</span>
         <span class="brand-sub">
@@ -563,34 +795,60 @@ header {
         </span>
       </a>
 
-      <nav class="nav-menu">
-        <a href="index.html" class="nav-link">HOME</a>
-        <a href="about.html" class="nav-link">ABOUT</a>
-        <a href="athletes.html" class="nav-link">ROSTER &amp; CREATORS</a>
-        <a href="work.html" class="nav-link">CAMPAIGNS &amp; DEALS</a>
+      <!-- BOTONES A LA DERECHA -->
+      <div style="display: flex; align-items: center; gap: 2.5rem; margin-left: auto;">
         
-        <!-- BOTÓN DE CONTACTO TRANSPARENTE (ABRE FORMULARIO) -->
-        <button id="openContactBtn" class="contact-link" type="button" style="background: transparent !important; border: none !important; color: #ffffff !important; cursor: pointer; padding: 0; outline: none; font-family: inherit;">
+        <!-- BOTÓN DE MENÚ (Abre la cortina) -->
+        <button id="openMenuBtn" class="nav-link" type="button" style="background: transparent; border: none; cursor: pointer; padding: 0;">
+          MENU
+        </button>
+        
+        <!-- BOTÓN DE CONTACTO (Intacto) -->
+        <button id="openContactBtn" class="contact-link" type="button" style="background: transparent; border: none; cursor: pointer; padding: 0;">
           <span class="dot-pulse"></span>
           CONTACT
         </button>
-      </nav>
 
-      <button class="luxury-burger" id="burgerToggle" type="button" aria-label="Toggle navigation">
-        <span class="burger-line burger-line-1"></span>
-        <span class="burger-line burger-line-2"></span>
-      </button>
+      </div>
     </div>
   </header>
 
-  <<!-- MENÚ MÓVIL -->
-  <div class="luxury-nav-curtain" id="luxuryCurtain">
-    <div class="curtain-links">
-      <a href="index.html" class="curtain-link-item">Home</a>
-      <a href="about.html" class="curtain-link-item">About</a>
-      <a href="athletes.html" class="curtain-link-item">Roster</a>
-       <a href="work.html" class="curtain-link-item">Campaigns</a>
-      <button id="openContactMobileBtn" style="background: transparent; border: none; color: #fff; font-family: var(--font-display); font-size: 2.5rem; text-transform: uppercase; font-weight: 900; text-align: left; padding: 0;">Contact</button>
+  <!-- =========================================
+       CORTINA INTERACTIVA FULL-SCREEN
+  ========================================= -->
+  <div class="luxury-nav-curtain" id="fullScreenMenu">
+    
+    <!-- Botón para cerrar (X) en la esquina -->
+    <button id="closeMenuBtn" class="nav-link" style="position: absolute; top: 40px; right: 5vw; background: transparent; border: none; cursor: pointer; font-size: 1.2rem;">
+      CLOSE [X]
+    </button>
+    
+    <div class="curtain-links-container">
+      
+      <!-- ITEM 1 -->
+      <div class="menu-item">
+        <a href="index.html" class="curtain-link-item">HOME</a>
+        <span class="menu-hover-text">Return to the main canvas.</span>
+      </div>
+      
+      <!-- ITEM 2 -->
+      <div class="menu-item">
+        <a href="about.html" class="curtain-link-item">ABOUT</a>
+        <span class="menu-hover-text">Our philosophy and vision.</span>
+      </div>
+      
+      <!-- ITEM 3 -->
+      <div class="menu-item">
+        <a href="athletes.html" class="curtain-link-item">ROSTER &amp; CREATORS</a>
+        <span class="menu-hover-text">The elite talent we represent.</span>
+      </div>
+      
+      <!-- ITEM 4 -->
+      <div class="menu-item">
+        <a href="work.html" class="curtain-link-item">CAMPAIGNS &amp; DEALS</a>
+        <span class="menu-hover-text">Brand partnerships and success stories.</span>
+      </div>
+
     </div>
   </div>
 
@@ -719,6 +977,21 @@ if (openPortalMobileCurtain && typeof portalModal !== 'undefined' && portalModal
     portalModal.classList.add('active');
   });
 }
+
+// Lógica del Menú Full-Screen
+    const openMenuBtn = document.getElementById('openMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const fullScreenMenu = document.getElementById('fullScreenMenu');
+
+    // Abre el menú
+    openMenuBtn.addEventListener('click', () => {
+      fullScreenMenu.classList.add('active');
+    });
+
+    // Cierra el menú
+    closeMenuBtn.addEventListener('click', () => {
+      fullScreenMenu.classList.remove('active');
+    });
   </script>
 </body>
 </html>
