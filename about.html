@@ -571,6 +571,39 @@
         max-width: 100% !important;
         position: relative !important;
       }
+      /* =========================================
+       OCULTAR "MENU" EN CELULAR (REGLA INFALIBLE)
+    ========================================= */
+    @media (max-width: 768px) {
+      /* Atacamos directamente el ID del botón */
+      #openMenuBtn {
+        display: none !important; 
+        opacity: 0 !important;
+        pointer-events: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+      }
+      
+      /* Aseguramos que la hamburguesa sí se vea */
+      .luxury-burger {
+        display: flex !important;
+      }
+      
+      .nav-actions-right {
+        gap: 1.2rem !important;
+      }
+    }
+      
+      /* Aseguramos que la hamburguesa sea visible */
+      .luxury-burger {
+        display: flex !important;
+      }
+      
+      /* Juntamos un poco el botón de contacto y la hamburguesa */
+      .nav-actions-right {
+        gap: 1.2rem !important;
+      }
     }
   </style>
 </head>
@@ -591,10 +624,11 @@
       </a>
 
       <!-- BOTONES A LA DERECHA -->
-      <div style="display: flex; align-items: center; gap: 2.5rem; margin-left: auto;">
+     <!-- BOTONES A LA DERECHA -->
+      <div class="nav-actions-right" style="display: flex; align-items: center; gap: 2.5rem; margin-left: auto;">
         
-        <!-- BOTÓN DE MENÚ (Abre la cortina) -->
-        <button id="openMenuBtn" class="nav-link" type="button" style="background: transparent; border: none; cursor: pointer; padding: 0;">
+        <!-- BOTÓN DE MENÚ (Solo se verá en PC) -->
+        <button id="openMenuBtn" class="desktop-menu-btn nav-link" type="button" style="background: transparent; border: none; cursor: pointer; padding: 0;">
           MENU
         </button>
         
@@ -604,6 +638,12 @@
           CONTACT
         </button>
 
+        <!-- HAMBURGUESA (Solo se verá en Celular) -->
+        <button class="luxury-burger" id="burgerToggle" type="button" aria-label="Toggle navigation">
+          <span class="burger-line burger-line-1"></span>
+          <span class="burger-line burger-line-2"></span>
+        </button>
+      </div>
       </div>
     </div>
   </header>
@@ -819,16 +859,7 @@
 
   <!-- SCRIPTS -->
   <script>
-    // Menú Móvil
-    const burgerToggle = document.getElementById('burgerToggle');
-    const luxuryCurtain = document.getElementById('luxuryCurtain');
-    if (burgerToggle && luxuryCurtain) {
-      burgerToggle.addEventListener('click', () => {
-        burgerToggle.classList.toggle('active');
-        luxuryCurtain.classList.toggle('active');
-        document.body.style.overflow = luxuryCurtain.classList.contains('active') ? 'hidden' : '';
-      });
-    }
+ 
 
     // Modal de Contacto
     const contactModal = document.getElementById('contactModal');
@@ -951,21 +982,35 @@
     document.addEventListener('touchend', () => {
       touchItems.forEach(i => i.classList.remove('touch-active'));
     });
-
-    // Lógica del Menú Full-Screen
+// =========================================
+    // Lógica del Menú Full-Screen (PC y Móvil)
+    // =========================================
     const openMenuBtn = document.getElementById('openMenuBtn');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const burgerToggle = document.getElementById('burgerToggle');
     const fullScreenMenu = document.getElementById('fullScreenMenu');
 
-    // Abre el menú
-    openMenuBtn.addEventListener('click', () => {
-      fullScreenMenu.classList.add('active');
-    });
+    // Abre el menú desde PC (Palabra MENU)
+    if (openMenuBtn) {
+      openMenuBtn.addEventListener('click', () => {
+        fullScreenMenu.classList.add('active');
+      });
+    }
 
-    // Cierra el menú
-    closeMenuBtn.addEventListener('click', () => {
-      fullScreenMenu.classList.remove('active');
-    });
+    // Abre el menú desde Celular (Hamburguesa)
+    if (burgerToggle) {
+      burgerToggle.addEventListener('click', () => {
+        fullScreenMenu.classList.add('active');
+      });
+    }
+
+    // Cierra el menú (Botón X de la cortina)
+    if (closeMenuBtn) {
+      closeMenuBtn.addEventListener('click', () => {
+        fullScreenMenu.classList.remove('active');
+      });
+    }
+
   </script>
 </body>
 </html>
