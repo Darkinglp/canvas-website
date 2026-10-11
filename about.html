@@ -605,6 +605,37 @@
         gap: 1.2rem !important;
       }
     }
+    /* =========================================
+       CORRECCIONES FINALES: BOTONES Y PUNTO VERDE
+    ========================================= */
+    
+    /* 1. Reactivar los clics en el menú de celular (Romper el muro invisible) */
+    #burgerToggle, .luxury-burger, .burger-line {
+      pointer-events: all !important;
+      cursor: pointer !important;
+      z-index: 9999 !important;
+    }
+
+    /* 2. Achicar el punto verde y su aureola para que no choque con el logo */
+    .dot-pulse {
+      width: 4px !important;
+      height: 4px !important;
+    }
+    
+    .dot-pulse::after {
+      top: -2px !important;
+      left: -2px !important;
+      right: -2px !important;
+      bottom: -2px !important;
+      /* Llamamos a una nueva animación más pequeña */
+      animation: pulse-small 2s infinite ease-out !important; 
+    }
+
+    /* La nueva animación que se expande mucho menos (1.5 en vez de 2.4) */
+    @keyframes pulse-small {
+      0% { transform: scale(0.9); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; } 
+    }
   </style>
 </head>
 <body>
