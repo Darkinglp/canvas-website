@@ -636,85 +636,119 @@
       0% { transform: scale(0.9); opacity: 1; }
       100% { transform: scale(1.5); opacity: 0; } 
     }
+    /* =========================================
+       ESTILOS DEL MENÚ ELEGANTE (CORTINA)
+    ========================================= */
+    .luxury-curtain {
+      position: fixed;
+      inset: 0;
+      background: #050505; /* Fondo negro profundo y elegante */
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .luxury-curtain.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .curtain-links-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 2.5rem;
+    }
+
+    .curtain-link {
+      font-family: var(--font-display), sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #ffffff; /* Letra blanca elegante */
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .curtain-link:hover { color: #D4AF37; } /* Brillo dorado al pasar el mouse */
+
+    /* =========================================
+       REGLA DE HIERRO PARA EL CELULAR (MÓVIL)
+    ========================================= */
+    @media (max-width: 768px) {
+      /* 1. Arreglamos el logo para que NO se corte */
+      .brand-text { font-size: 1.2rem !important; letter-spacing: 0.05em !important; }
+      .brand-sub { font-size: 0.5rem !important; padding-left: 0.5rem !important; }
+      .brand { gap: 0.5rem !important; }
+      .nav-inner { padding: 1rem 4vw !important; }
+
+      /* 2. Escondemos la palabra MENU y mostramos las líneas (Hamburguesa) */
+      .desktop-btn { display: none !important; }
+      .mobile-btn { display: flex !important; }
+      
+      /* 3. Menú elegante ordenado en celular */
+      .curtain-links-container { gap: 2rem !important; }
+      .curtain-link { font-size: 2.2rem !important; }
+      
+      /* Evitar desbordes de pantalla */
+      html, body { overflow-x: hidden !important; width: 100vw !important; max-width: 100% !important; }
+    }
   </style>
 </head>
 <body>
 
- <!-- =========================================
-       NUEVO HEADER MINIMALISTA
+ 
+
+  <!-- =========================================
+       HEADER Y NAVEGACIÓN
   ========================================= -->
-  <header>
-    <div class="nav-inner">
+  <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; pointer-events: none;">
+    <div class="nav-inner" style="pointer-events: all; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5vw;">
+      
       <!-- LOGO -->
-      <a href="index.html" class="brand">
-        <span class="brand-text">Canvas</span>
-        <span class="brand-sub">
+      <a href="index.html" class="brand" style="display: flex; align-items: center; gap: 1rem; text-decoration: none;">
+        <span class="brand-text" style="color: #fff; font-family: 'Syne', sans-serif; font-weight: 900; text-transform: uppercase;">Canvas</span>
+        <span class="brand-sub" style="color: #D4AF37; display: flex; flex-direction: column; font-family: 'Space Grotesk', sans-serif; text-transform: uppercase; border-left: 1px solid rgba(212, 175, 55, 0.4); padding-left: 0.8rem;">
           <span>MANAGEMENT</span>
           <span>GROUP</span>
         </span>
       </a>
 
-      <!-- BOTONES A LA DERECHA -->
-     <!-- BOTONES A LA DERECHA -->
-      <div class="nav-actions-right" style="display: flex; align-items: center; gap: 2.5rem; margin-left: auto;">
+      <!-- BOTONES DERECHA -->
+      <div class="nav-actions-right" style="display: flex; align-items: center; gap: 2rem;">
+        <button id="openMenuBtn" class="desktop-btn" style="background: transparent; border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; cursor: pointer; text-transform: uppercase;">MENU</button>
         
-        <!-- BOTÓN DE MENÚ (Solo se verá en PC) -->
-        <button id="openMenuBtn" class="desktop-menu-btn nav-link" type="button" style="background: transparent; border: none; cursor: pointer; padding: 0;">
-          MENU
-        </button>
-        
-        <!-- BOTÓN DE CONTACTO (Intacto) -->
-        <button id="openContactBtn" class="contact-link" type="button" style="background: transparent; border: none; cursor: pointer; padding: 0;">
-          <span class="dot-pulse"></span>
+        <button id="openContactBtn" style="background: transparent; border: none; color: #fff; display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; cursor: pointer; text-transform: uppercase;">
+          <span class="dot-pulse" style="width: 4px; height: 4px; background: #34D399; border-radius: 50%; display: block;"></span>
           CONTACT
         </button>
 
-        <!-- HAMBURGUESA (Solo se verá en Celular) -->
-        <button class="luxury-burger" id="burgerToggle" type="button" aria-label="Toggle navigation">
-          <span class="burger-line burger-line-1"></span>
-          <span class="burger-line burger-line-2"></span>
+        <button id="burgerToggle" class="mobile-btn" style="background: transparent; border: none; cursor: pointer; display: none; flex-direction: column; gap: 6px; padding: 5px;">
+          <span style="width: 25px; height: 1.5px; background: #fff; display: block;"></span>
+          <span style="width: 15px; height: 1.5px; background: #fff; display: block; align-self: flex-end;"></span>
         </button>
       </div>
-      </div>
+
     </div>
   </header>
 
   <!-- =========================================
-       CORTINA INTERACTIVA FULL-SCREEN
+       MENÚ ELEGANTE FULL-SCREEN (NEGRO/BLANCO)
   ========================================= -->
-  <div class="luxury-nav-curtain" id="fullScreenMenu">
-    
-    <!-- Botón para cerrar (X) en la esquina -->
-    <button id="closeMenuBtn" class="nav-link" style="position: absolute; top: 40px; right: 5vw; background: transparent; border: none; cursor: pointer; font-size: 1.2rem;">
-      CLOSE [X]
-    </button>
+  <div id="fullScreenMenu" class="luxury-curtain">
+    <button id="closeMenuBtn" style="position: absolute; top: 2rem; right: 5vw; background: transparent; border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: 0.15em; cursor: pointer; z-index: 2001;">CLOSE [X]</button>
     
     <div class="curtain-links-container">
-      
-      <!-- ITEM 1 -->
-      <div class="menu-item">
-        <a href="index.html" class="curtain-link-item">HOME</a>
-        <span class="menu-hover-text">Return to the main canvas.</span>
-      </div>
-      
-      <!-- ITEM 2 -->
-      <div class="menu-item">
-        <a href="about.html" class="curtain-link-item">ABOUT</a>
-        <span class="menu-hover-text">Our philosophy and vision.</span>
-      </div>
-      
-      <!-- ITEM 3 -->
-      <div class="menu-item">
-        <a href="athletes.html" class="curtain-link-item">ROSTER &amp; CREATORS</a>
-        <span class="menu-hover-text">The elite talent we represent.</span>
-      </div>
-      
-      <!-- ITEM 4 -->
-      <div class="menu-item">
-        <a href="work.html" class="curtain-link-item">CAMPAIGNS &amp; DEALS</a>
-        <span class="menu-hover-text">Brand partnerships and success stories.</span>
-      </div>
-
+      <a href="index.html" class="curtain-link">HOME</a>
+      <a href="about.html" class="curtain-link">ABOUT</a>
+      <a href="athletes.html" class="curtain-link">THE ROSTER</a>
+      <a href="work.html" class="curtain-link">CAMPAIGNS</a>
     </div>
   </div>
 
@@ -888,160 +922,136 @@
     </div>
   </div>
 
-  <!-- SCRIPTS -->
   <script>
- 
-
-    // Modal de Contacto
-    const contactModal = document.getElementById('contactModal');
-    const openContactBtn = document.getElementById('openContactBtn');
-    const openContactMobileBtn = document.getElementById('openContactMobileBtn');
-    const closeContactBtn = document.getElementById('closeContactBtn');
-
-    function openModal() {
-      if (burgerToggle) burgerToggle.classList.remove('active');
-      if (luxuryCurtain) luxuryCurtain.classList.remove('active');
-      document.body.style.overflow = 'hidden';
-      contactModal.classList.add('active');
-    }
-
-    if (openContactBtn) openContactBtn.addEventListener('click', openModal);
-    if (openContactMobileBtn) openContactMobileBtn.addEventListener('click', openModal);
-    
-    if (closeContactBtn) {
-      closeContactBtn.addEventListener('click', () => {
-        contactModal.classList.remove('active');
-        document.body.style.overflow = '';
-      });
-    }
-
+    // =========================================
+    // 1. FUNCIÓN DEL FORMULARIO DE CONTACTO (Afuera para que el HTML la detecte)
+    // =========================================
     function handleContactSubmit(e) {
       e.preventDefault();
       alert('Message sent successfully. We will get back to you soon.');
-      contactModal.classList.remove('active');
+      const contactModal = document.getElementById('contactModal');
+      if (contactModal) contactModal.classList.remove('active');
       document.body.style.overflow = '';
       e.target.reset();
     }
-/// =========================================
-    // MOTOR DE SCROLL FLUIDO (EFECTO CÍRCULO / RUEDA)
-    // =========================================
-    const scrollWrapper = document.querySelector('.horizontal-scroll-wrapper');
-    const horizontalTrack = document.querySelector('.horizontal-track');
-    const marqueeItems = document.querySelectorAll('.marquee-item');
 
-    let currentX = 0;
-    let targetX = 0;
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      // =========================================
+      // 2. LÓGICA DEL MODAL DE CONTACTO
+      // =========================================
+      const contactModal = document.getElementById('contactModal');
+      const openContactBtn = document.getElementById('openContactBtn');
+      const openContactMobileBtn = document.getElementById('openContactMobileBtn');
+      const closeContactBtn = document.getElementById('closeContactBtn');
+      const burgerToggle = document.getElementById('burgerToggle');
+      const fullScreenMenu = document.getElementById('fullScreenMenu'); // El nuevo menú
 
-    function animateScroll() {
-      if (scrollWrapper && horizontalTrack) {
-        const wrapperTop = scrollWrapper.offsetTop;
-        const wrapperHeight = scrollWrapper.offsetHeight;
-        const scrollY = window.scrollY;
-        
-        // 1. Calculamos el deslizamiento horizontal con Inercia (LERP)
-        if (scrollY >= wrapperTop && scrollY <= (wrapperTop + wrapperHeight - window.innerHeight)) {
-          const progress = (scrollY - wrapperTop) / (wrapperHeight - window.innerHeight);
-          const maxTranslateX = horizontalTrack.scrollWidth - window.innerWidth + 200;
-          targetX = progress * maxTranslateX;
-        } else if (scrollY < wrapperTop) {
-          targetX = 0;
-        } else {
-          const maxTranslateX = horizontalTrack.scrollWidth - window.innerWidth + 200;
-          targetX = maxTranslateX;
-        }
+      function openModal() {
+        if (burgerToggle) burgerToggle.classList.remove('active');
+        if (fullScreenMenu) fullScreenMenu.classList.remove('active');
+        document.body.style.overflow = 'hidden';
+        if (contactModal) contactModal.classList.add('active');
+      }
 
-        currentX += (targetX - currentX) * 0.05;
-        horizontalTrack.style.transform = `translateX(-${currentX}px)`;
-
-        // 2. LA MAGIA DEL CÍRCULO: Animamos cada foto individualmente
-        marqueeItems.forEach(item => {
-          // Obtenemos la posición de la foto en la pantalla
-          const rect = item.getBoundingClientRect();
-          // Calculamos su posición relativa (0 es el borde izquierdo, 1 es el borde derecho)
-          // Le restamos 0.1 para que el "punto más alto" del círculo esté un poquito a la derecha, no pegado al borde.
-          const xPos = ((rect.left + rect.width / 2) / window.innerWidth) - 0.1;
-          
-          // FÓRMULAS DEL CUARTO DE CÍRCULO:
-          // Elevamos al cuadrado (curva) y multiplicamos por 400px (caída máxima)
-        const curveY = Math.pow(xPos, 2) * 180; // Suaviza la caída para que las fotos de la derecha queden más altas
-          // Rotamos la foto progresivamente (25 grados de inclinación máxima)
-       const rotation = xPos * 15;
-          
-          // Aplicamos la altura y el giro simulando el borde de una rueda gigante
-          item.style.transform = `translateY(${curveY}px) rotate(${rotation}deg)`;
+      if (openContactBtn) openContactBtn.addEventListener('click', openModal);
+      if (openContactMobileBtn) openContactMobileBtn.addEventListener('click', openModal);
+      
+      if (closeContactBtn) {
+        closeContactBtn.addEventListener('click', () => {
+          if (contactModal) contactModal.classList.remove('active');
+          document.body.style.overflow = '';
         });
       }
-      
-      requestAnimationFrame(animateScroll);
-    }
 
-    animateScroll();
+      // =========================================
+      // 3. NUEVA LÓGICA DEL MENÚ FULL-SCREEN
+      // =========================================
+      const openMenuBtn = document.getElementById('openMenuBtn');
+      const closeMenuBtn = document.getElementById('closeMenuBtn');
 
-    // =========================================
-    // RASTREADOR TÁCTIL PARA MÓVILES (Color al pasar el dedo)
-    // =========================================
-    const touchItems = document.querySelectorAll('.marquee-item');
+      const openMenu = () => { if(fullScreenMenu) fullScreenMenu.classList.add('active'); };
+      const closeMenu = () => { if(fullScreenMenu) fullScreenMenu.classList.remove('active'); };
 
-    // 1. Cuando tocas una foto (Toque simple)
-    touchItems.forEach(item => {
-      item.addEventListener('touchstart', () => {
-        touchItems.forEach(i => i.classList.remove('touch-active'));
-        item.classList.add('touch-active');
-      }, {passive: true});
-    });
+      if(openMenuBtn) openMenuBtn.addEventListener('click', openMenu);
+      if(burgerToggle) burgerToggle.addEventListener('click', openMenu);
+      if(closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
 
-    // 2. Cuando deslizas el dedo por la pantalla (Swipe)
-    document.addEventListener('touchmove', (e) => {
-      const touch = e.touches[0];
-      // Descubre qué elemento está exactamente debajo del dedo en tiempo real
-      const element = document.elementFromPoint(touch.clientX, touch.clientY);
-      
-      if (element && element.closest('.marquee-item')) {
-        const targetItem = element.closest('.marquee-item');
-        // Solo aplicamos el cambio si el dedo entra a una foto nueva
-        if (!targetItem.classList.contains('touch-active')) {
-          touchItems.forEach(i => i.classList.remove('touch-active'));
-          targetItem.classList.add('touch-active');
+
+      // =========================================
+      // 4. MOTOR DE SCROLL FLUIDO (EFECTO RUEDA) - ¡INTACTO!
+      // =========================================
+      const scrollWrapper = document.querySelector('.horizontal-scroll-wrapper');
+      const horizontalTrack = document.querySelector('.horizontal-track');
+      const marqueeItems = document.querySelectorAll('.marquee-item');
+
+      let currentX = 0;
+      let targetX = 0;
+
+      function animateScroll() {
+        if (scrollWrapper && horizontalTrack) {
+          const wrapperTop = scrollWrapper.offsetTop;
+          const wrapperHeight = scrollWrapper.offsetHeight;
+          const scrollY = window.scrollY;
+          
+          if (scrollY >= wrapperTop && scrollY <= (wrapperTop + wrapperHeight - window.innerHeight)) {
+            const progress = (scrollY - wrapperTop) / (wrapperHeight - window.innerHeight);
+            const maxTranslateX = horizontalTrack.scrollWidth - window.innerWidth + 200;
+            targetX = progress * maxTranslateX;
+          } else if (scrollY < wrapperTop) {
+            targetX = 0;
+          } else {
+            const maxTranslateX = horizontalTrack.scrollWidth - window.innerWidth + 200;
+            targetX = maxTranslateX;
+          }
+
+          currentX += (targetX - currentX) * 0.05;
+          horizontalTrack.style.transform = `translateX(-${currentX}px)`;
+
+          marqueeItems.forEach(item => {
+            const rect = item.getBoundingClientRect();
+            const xPos = ((rect.left + rect.width / 2) / window.innerWidth) - 0.1;
+            const curveY = Math.pow(xPos, 2) * 180; 
+            const rotation = xPos * 15;
+            item.style.transform = `translateY(${curveY}px) rotate(${rotation}deg)`;
+          });
         }
-      } else {
-        // Si el dedo sale de la zona de fotos, regresan a blanco y negro
-        touchItems.forEach(i => i.classList.remove('touch-active'));
+        requestAnimationFrame(animateScroll);
       }
-    }, {passive: true});
+      animateScroll();
 
-    // 3. Cuando levantas el dedo de la pantalla
-    document.addEventListener('touchend', () => {
-      touchItems.forEach(i => i.classList.remove('touch-active'));
+      // =========================================
+      // 5. RASTREADOR TÁCTIL PARA MÓVILES - ¡INTACTO!
+      // =========================================
+      const touchItems = document.querySelectorAll('.marquee-item');
+
+      touchItems.forEach(item => {
+        item.addEventListener('touchstart', () => {
+          touchItems.forEach(i => i.classList.remove('touch-active'));
+          item.classList.add('touch-active');
+        }, {passive: true});
+      });
+
+      document.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        const element = document.elementFromPoint(touch.clientX, touch.clientY);
+        
+        if (element && element.closest('.marquee-item')) {
+          const targetItem = element.closest('.marquee-item');
+          if (!targetItem.classList.contains('touch-active')) {
+            touchItems.forEach(i => i.classList.remove('touch-active'));
+            targetItem.classList.add('touch-active');
+          }
+        } else {
+          touchItems.forEach(i => i.classList.remove('touch-active'));
+        }
+      }, {passive: true});
+
+      document.addEventListener('touchend', () => {
+        touchItems.forEach(i => i.classList.remove('touch-active'));
+      });
+
     });
-// =========================================
-    // Lógica del Menú Full-Screen (PC y Móvil)
-    // =========================================
-    const openMenuBtn = document.getElementById('openMenuBtn');
-    const closeMenuBtn = document.getElementById('closeMenuBtn');
-    const burgerToggle = document.getElementById('burgerToggle');
-    const fullScreenMenu = document.getElementById('fullScreenMenu');
-
-    // Abre el menú desde PC (Palabra MENU)
-    if (openMenuBtn) {
-      openMenuBtn.addEventListener('click', () => {
-        fullScreenMenu.classList.add('active');
-      });
-    }
-
-    // Abre el menú desde Celular (Hamburguesa)
-    if (burgerToggle) {
-      burgerToggle.addEventListener('click', () => {
-        fullScreenMenu.classList.add('active');
-      });
-    }
-
-    // Cierra el menú (Botón X de la cortina)
-    if (closeMenuBtn) {
-      closeMenuBtn.addEventListener('click', () => {
-        fullScreenMenu.classList.remove('active');
-      });
-    }
-
   </script>
 </body>
 </html>

@@ -770,88 +770,119 @@ h1, h2, h3,
       0% { transform: scale(0.9); opacity: 1; }
       100% { transform: scale(1.5); opacity: 0; } 
     }
+    /* =========================================
+       ESTILOS DEL MENÚ ELEGANTE (CORTINA)
+    ========================================= */
+    .luxury-curtain {
+      position: fixed;
+      inset: 0;
+      background: #050505; /* Fondo negro profundo y elegante */
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .luxury-curtain.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .curtain-links-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 2.5rem;
+    }
+
+    .curtain-link {
+      font-family: var(--font-display), sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #ffffff; /* Letra blanca elegante */
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .curtain-link:hover { color: #D4AF37; } /* Brillo dorado al pasar el mouse */
+
+    /* =========================================
+       REGLA DE HIERRO PARA EL CELULAR (MÓVIL)
+    ========================================= */
+    @media (max-width: 768px) {
+      /* 1. Arreglamos el logo para que NO se corte */
+      .brand-text { font-size: 1.2rem !important; letter-spacing: 0.05em !important; }
+      .brand-sub { font-size: 0.5rem !important; padding-left: 0.5rem !important; }
+      .brand { gap: 0.5rem !important; }
+      .nav-inner { padding: 1rem 4vw !important; }
+
+      /* 2. Escondemos la palabra MENU y mostramos las líneas (Hamburguesa) */
+      .desktop-btn { display: none !important; }
+      .mobile-btn { display: flex !important; }
+      
+      /* 3. Menú elegante ordenado en celular */
+      .curtain-links-container { gap: 2rem !important; }
+      .curtain-link { font-size: 2.2rem !important; }
+      
+      /* Evitar desbordes de pantalla */
+      html, body { overflow-x: hidden !important; width: 100vw !important; max-width: 100% !important; }
+    }
 </style>
 </head>
 <body>
 
 <!-- =========================================
-       NUEVO HEADER MINIMALISTA
+       HEADER Y NAVEGACIÓN
   ========================================= -->
-  <header>
-    <div class="nav-inner">
+  <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; pointer-events: none;">
+    <div class="nav-inner" style="pointer-events: all; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5vw;">
+      
       <!-- LOGO -->
-      <a href="index.html" class="brand">
-        <span class="brand-text">Canvas</span>
-        <span class="brand-sub">
+      <a href="index.html" class="brand" style="display: flex; align-items: center; gap: 1rem; text-decoration: none;">
+        <span class="brand-text" style="color: #fff; font-family: 'Syne', sans-serif; font-weight: 900; text-transform: uppercase;">Canvas</span>
+        <span class="brand-sub" style="color: #D4AF37; display: flex; flex-direction: column; font-family: 'Space Grotesk', sans-serif; text-transform: uppercase; border-left: 1px solid rgba(212, 175, 55, 0.4); padding-left: 0.8rem;">
           <span>MANAGEMENT</span>
           <span>GROUP</span>
         </span>
       </a>
-<!-- BOTONES A LA DERECHA -->
-      <div class="nav-actions-right" style="display: flex; align-items: center; gap: 2.5rem; margin-left: auto;">
+
+      <!-- BOTONES DERECHA -->
+      <div class="nav-actions-right" style="display: flex; align-items: center; gap: 2rem;">
+        <button id="openMenuBtn" class="desktop-btn" style="background: transparent; border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; cursor: pointer; text-transform: uppercase;">MENU</button>
         
-        <!-- BOTÓN DE MENÚ (Solo se verá en PC) -->
-        <button id="openMenuBtn" class="desktop-menu-btn nav-link" type="button" style="background: transparent; border: none; cursor: pointer; padding: 0;">
-          MENU
-        </button>
-        
-        <!-- BOTÓN DE CONTACTO (Intacto) -->
-        <button id="openContactBtn" class="contact-link" type="button" style="background: transparent; border: none; cursor: pointer; padding: 0;">
-          <span class="dot-pulse"></span>
+        <button id="openContactBtn" style="background: transparent; border: none; color: #fff; display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; cursor: pointer; text-transform: uppercase;">
+          <span class="dot-pulse" style="width: 4px; height: 4px; background: #34D399; border-radius: 50%; display: block;"></span>
           CONTACT
         </button>
 
-        <!-- HAMBURGUESA (Solo se verá en Celular) -->
-        <button class="luxury-burger" id="burgerToggle" type="button" aria-label="Toggle navigation">
-          <span class="burger-line burger-line-1"></span>
-          <span class="burger-line burger-line-2"></span>
+        <button id="burgerToggle" class="mobile-btn" style="background: transparent; border: none; cursor: pointer; display: none; flex-direction: column; gap: 6px; padding: 5px;">
+          <span style="width: 25px; height: 1.5px; background: #fff; display: block;"></span>
+          <span style="width: 15px; height: 1.5px; background: #fff; display: block; align-self: flex-end;"></span>
         </button>
       </div>
 
-      </div>
     </div>
   </header>
 
   <!-- =========================================
-       CORTINA INTERACTIVA FULL-SCREEN
+       MENÚ ELEGANTE FULL-SCREEN (NEGRO/BLANCO)
   ========================================= -->
-  <div class="luxury-nav-curtain" id="fullScreenMenu">
-    
-    <!-- Botón para cerrar (X) en la esquina -->
-    <button id="closeMenuBtn" class="nav-link" style="position: absolute; top: 40px; right: 5vw; background: transparent; border: none; cursor: pointer; font-size: 1.2rem;">
-      CLOSE [X]
-    </button>
+  <div id="fullScreenMenu" class="luxury-curtain">
+    <button id="closeMenuBtn" style="position: absolute; top: 2rem; right: 5vw; background: transparent; border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: 0.15em; cursor: pointer; z-index: 2001;">CLOSE [X]</button>
     
     <div class="curtain-links-container">
-      
-      <!-- ITEM 1 -->
-      <div class="menu-item">
-        <a href="index.html" class="curtain-link-item">HOME</a>
-        <span class="menu-hover-text">Return to the main canvas.</span>
-      </div>
-      
-      <!-- ITEM 2 -->
-      <div class="menu-item">
-        <a href="about.html" class="curtain-link-item">ABOUT</a>
-        <span class="menu-hover-text">Our philosophy and vision.</span>
-      </div>
-      
-      <!-- ITEM 3 -->
-      <div class="menu-item">
-        <a href="athletes.html" class="curtain-link-item">ROSTER &amp; CREATORS</a>
-        <span class="menu-hover-text">The elite talent we represent.</span>
-      </div>
-      
-      <!-- ITEM 4 -->
-      <div class="menu-item">
-        <a href="work.html" class="curtain-link-item">CAMPAIGNS &amp; DEALS</a>
-        <span class="menu-hover-text">Brand partnerships and success stories.</span>
-      </div>
-
+      <a href="index.html" class="curtain-link">HOME</a>
+      <a href="about.html" class="curtain-link">ABOUT</a>
+      <a href="athletes.html" class="curtain-link">THE ROSTER</a>
+      <a href="work.html" class="curtain-link">CAMPAIGNS</a>
     </div>
   </div>
-
- 
 
   <main>
     <section class="container page-hero">
@@ -943,59 +974,52 @@ h1, h2, h3,
       </form>
     </div>
   </div>
-
-  <script>
+<script>
+    // =========================================
+    // 1. LÓGICA DEL PORTAL (Intacta)
+    // =========================================
     const portalModal = document.getElementById('portalModal');
     const openPortalBtn = document.getElementById('openPortalBtn');
     const closePortalBtn = document.getElementById('closePortalBtn');
+    
     if (openPortalBtn && portalModal) openPortalBtn.addEventListener('click', () => portalModal.classList.add('active'));
     if (closePortalBtn && portalModal) closePortalBtn.addEventListener('click', () => portalModal.classList.remove('active'));
     if (portalModal) portalModal.addEventListener('click', (e) => { if (e.target === portalModal) portalModal.classList.remove('active'); });
+    
     function handlePortalLogin(e) {
       e.preventDefault();
       alert('Verification required. Access credentials are provided directly by Canvas Management Group.');
       document.getElementById('portalModal').classList.remove('active');
     }
-   
 
-const openPortalMobileCurtain = document.getElementById('openPortalMobileCurtain');
-if (openPortalMobileCurtain && typeof portalModal !== 'undefined' && portalModal) {
-  openPortalMobileCurtain.addEventListener('click', () => {
-    if (burgerToggle) burgerToggle.classList.remove('active');
-    if (luxuryCurtain) luxuryCurtain.classList.remove('active');
-    document.body.style.overflow = '';
-    portalModal.classList.add('active');
-  });
-}
+    const openPortalMobileCurtain = document.getElementById('openPortalMobileCurtain');
+    if (openPortalMobileCurtain && typeof portalModal !== 'undefined' && portalModal) {
+      openPortalMobileCurtain.addEventListener('click', () => {
+        const burgerToggle = document.getElementById('burgerToggle');
+        if (burgerToggle) burgerToggle.classList.remove('active');
+        document.body.style.overflow = '';
+        portalModal.classList.add('active');
+      });
+    }
 
-// =========================================
-    // Lógica del Menú Full-Screen (PC y Móvil)
     // =========================================
-    const openMenuBtn = document.getElementById('openMenuBtn');
-    const closeMenuBtn = document.getElementById('closeMenuBtn');
-    const burgerToggle = document.getElementById('burgerToggle');
-    const fullScreenMenu = document.getElementById('fullScreenMenu');
+    // 2. NUEVA LÓGICA DEL MENÚ FULL-SCREEN
+    // =========================================
+    document.addEventListener("DOMContentLoaded", () => {
+      const fullScreenMenu = document.getElementById('fullScreenMenu');
+      const openMenuBtn = document.getElementById('openMenuBtn'); 
+      const burgerToggle = document.getElementById('burgerToggle'); 
+      const closeMenuBtn = document.getElementById('closeMenuBtn'); 
 
-    // Abre el menú desde PC (Palabra MENU)
-    if (openMenuBtn) {
-      openMenuBtn.addEventListener('click', () => {
-        fullScreenMenu.classList.add('active');
-      });
-    }
+      // Funciones para abrir y cerrar la cortina negra
+      const openMenu = () => { fullScreenMenu.classList.add('active'); };
+      const closeMenu = () => { fullScreenMenu.classList.remove('active'); };
 
-    // Abre el menú desde Celular (Hamburguesa)
-    if (burgerToggle) {
-      burgerToggle.addEventListener('click', () => {
-        fullScreenMenu.classList.add('active');
-      });
-    }
-
-    // Cierra el menú (Botón X de la cortina)
-    if (closeMenuBtn) {
-      closeMenuBtn.addEventListener('click', () => {
-        fullScreenMenu.classList.remove('active');
-      });
-    }
+      // Conectamos los clics a las funciones
+      if(openMenuBtn) openMenuBtn.addEventListener('click', openMenu);
+      if(burgerToggle) burgerToggle.addEventListener('click', openMenu);
+      if(closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
+    });
   </script>
 </body>
 </html>
