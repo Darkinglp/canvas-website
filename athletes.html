@@ -1051,6 +1051,48 @@ h1, h2, h3,
       /* Evitar desbordes de pantalla */
       html, body { overflow-x: hidden !important; width: 100vw !important; max-width: 100% !important; }
     }
+    /* =========================================
+       FIX MÓVIL: RULETA, MISIÓN Y ACERCA DE
+    ========================================= */
+    @media (max-width: 768px) {
+      /* 1. REPARAR LA RULETA TÁCTIL */
+      .horizontal-scroll-wrapper, main {
+        overflow: visible !important; 
+      }
+      
+      .sticky-container {
+        position: -webkit-sticky !important; /* Fix especial para iPhone/Safari */
+        position: sticky !important;
+        top: 0 !important;
+        height: 100dvh !important; 
+        overflow: hidden !important; 
+      }
+
+      .horizontal-track {
+        padding-left: 10vw !important;
+      }
+      
+      .marquee-item {
+        width: 240px !important; 
+        height: 320px !important;
+        margin-right: 1.5rem !important;
+      }
+
+      /* 2. REPARAR LAS LÁMINAS DE LA MISIÓN / ABOUT */
+      .mission-grid, .about-content-grid, .pillars-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2.5rem !important;
+        width: 100% !important;
+      }
+      
+      .mission-card, .pillar-card, .about-card {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -1243,6 +1285,51 @@ h1, h2, h3,
         <button type="submit" style="width: 100%; background: #FFFFFF; color: #000; border: none; padding: 0.85rem; font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; cursor: pointer;">Access Portal &rarr;</button>
       </form>
     </div>
+  </div>
+
+
+  <!-- =========================================
+       👇 PEGA EL MODAL DE CONTACTO EXACTAMENTE AQUÍ 👇
+  ========================================= -->
+  <div class="portal-modal-overlay" id="contactModal">
+    <div class="portal-modal-box" style="max-width: 480px; text-align: left; padding: 3.5rem 2.5rem; background: #050505; border: 1px solid rgba(255,255,255,0.1);">
+      
+      <!-- Botón de Cerrar -->
+      <button class="modal-close-btn" id="closeContactBtn" style="position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      
+      <span style="font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: #34D399; display: block; margin-bottom: 0.8rem;">&bull; Direct Inquiries</span>
+      <h3 style="font-family: var(--font-display), sans-serif; font-size: 2.2rem; text-transform: uppercase; font-weight: 900; margin-bottom: 0.5rem; color: #fff;">Contact Us</h3>
+      <p style="font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 2.5rem;">For representation, brand partnerships, or general inquiries, please leave a message below.</p>
+      
+      <form onsubmit="handleContactSubmit(event)">
+        <!-- Nombre -->
+        <div style="margin-bottom: 1.5rem;">
+          <input type="text" required placeholder="FULL NAME" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0.85rem 0; color: #fff; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; outline: none; transition: border-color 0.3s;">
+        </div>
+        
+        <!-- Correo -->
+        <div style="margin-bottom: 1.5rem;">
+          <input type="email" required placeholder="EMAIL ADDRESS" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0.85rem 0; color: #fff; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; outline: none; transition: border-color 0.3s;">
+        </div>
+        
+        <!-- Mensaje -->
+        <div style="margin-bottom: 2.5rem;">
+          <textarea required placeholder="HOW CAN WE HELP YOU?" rows="2" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0.85rem 0; color: #fff; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; outline: none; resize: none;"></textarea>
+        </div>
+        
+        <!-- Botón Enviar -->
+        <button type="submit" style="width: 100%; background: #fff; color: #000; border: none; padding: 1.2rem; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; cursor: pointer; transition: background 0.3s;">Send Message &rarr;</button>
+      </form>
+    </div>
+  </div>
+  <!-- 👆 AQUÍ TERMINA EL MODAL DE CONTACTO 👆 -->
+
+
+  <!-- =========================================
+       MENÚ ELEGANTE FULL-SCREEN (El que agregamos antes)
+  ========================================= -->
+  <div id="fullScreenMenu" class="luxury-curtain">
+       <!-- ... código de tu menú ... -->
   </div>
 
   <script>
