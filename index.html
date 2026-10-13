@@ -176,93 +176,120 @@
     .social-icon:hover { color: var(--accent-green); transform: translateY(-4px); }
 
 
-    /* =========================================
-       6. UNIFICACIÓN MÓVIL Y REPARACIÓN TOTAL
+   /* =========================================
+       6. UNIFICACIÓN MÓVIL Y REPARACIÓN DE BORDES
     ========================================= */
     @media (max-width: 768px) {
       
-      /* A. Anti-Desbordamiento Total (Arregla la pantalla corrida) */
-      html, body { 
+      /* A. Eliminar márgenes y rellenos que encogen la pantalla */
+      html, body, main { 
         width: 100% !important; 
         max-width: 100% !important; 
         overflow-x: hidden !important; 
         margin: 0 !important; 
         padding: 0 !important; 
       }
+
+      /* Las secciones de fondo ocupan el 100% real de borde a borde */
+      section, .split-splash-section, .hero-cinematic, .athletes-carousel-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        overflow-x: hidden !important;
+      }
       
-      main, .container, section, .pillar-box, .contact-card, .portal-modal-box {
+      /* Solo los contenedores de texto llevan margen interno seguro */
+      .container, .pillar-box, .contact-card {
         width: 100% !important; 
         max-width: 100% !important; 
         box-sizing: border-box !important;
-        padding-left: 1.5rem !important; 
-        padding-right: 1.5rem !important; 
-        overflow-x: hidden !important;
+        padding-left: 1.25rem !important; 
+        padding-right: 1.25rem !important; 
         margin-left: 0 !important;
         margin-right: 0 !important;
       }
 
-      /* B. Textos Largos Intactos (Arregla REPRESENTATION) */
+      /* B. Puertas de borde a borde y letras CAN | VAS completas */
+      .split-splash-section, #split-grid { 
+        width: 100vw !important;
+        height: 100dvh !important; 
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .door-text { 
+        font-size: 9.5vw !important; /* Medida exacta para que CAN y VAS no se corten */
+        padding: 0 2vw !important; 
+        white-space: nowrap !important;
+      }
+
+      /* C. Navbar superior ajustada para que no se corte el icono derecho */
+      header { 
+        background: transparent !important; 
+        backdrop-filter: blur(8px) !important; 
+        -webkit-backdrop-filter: blur(8px) !important; 
+        padding: 15px 0 !important;
+      }
+      .nav-inner { 
+        padding: 0.5rem 1.25rem !important; 
+        width: 100% !important; 
+        box-sizing: border-box !important;
+      }
+      .brand { gap: 0.5rem !important; }
+      .brand-text { font-size: 1.05rem !important; letter-spacing: 0.08em !important; }
+      .brand-sub { font-size: 0.42rem !important; padding-left: 0.5rem !important; letter-spacing: 0.15em !important; }
+      .nav-actions-right { gap: 0.8rem !important; }
+      .desktop-btn { display: none !important; }
+      .mobile-btn { display: flex !important; }
+      #openContactBtn { font-size: 9px !important; gap: 5px !important; }
+
+      /* D. Textos y Títulos internos sin cortes */
       h1, h2, h3, .hero-big-title, .page-title, .hero-title, .footer-huge {
         white-space: normal !important; 
-        word-break: keep-all !important; /* Mantiene la palabra 100% unida */
-        overflow-wrap: normal !important; /* Desactiva el corte de emergencia */
+        word-break: keep-all !important; 
+        overflow-wrap: normal !important; 
         hyphens: none !important;
-        line-height: 1 !important; 
+        line-height: 1.05 !important; 
         letter-spacing: -0.02em !important; 
         text-transform: uppercase !important;
       }
 
-      /* C. Ajuste Milimétrico de Fuente */
+      .middle-content-wrapper {
+        width: 100vw !important; 
+        min-width: 100vw !important; 
+      }
+      
+      .hero-content { 
+        width: 100% !important;
+        padding: 0 1.25rem !important; 
+        align-items: center !important; 
+        text-align: center !important; 
+      }
+
       .hero-big-title {
-        font-size: 10.5vw !important; /* Perfecto para ATHLETES */
+        font-size: 10vw !important; 
         text-align: center !important;
         padding: 0 !important;
       }
 
       h2, h3, .footer-huge, .panel-title, .contact-modal h3 {
-        font-size: 6.5vw !important; /* 6.5vw asegura que las 14 letras de REPRESENTATION no choquen con el borde */
+        font-size: 6.2vw !important; 
         text-align: left !important;
         padding: 0 !important; 
       }
 
-      /* D. Fix Anti-Apretón del Hero */
-      .middle-content-wrapper {
-        width: 100% !important; 
-        min-width: 100% !important; 
-      }
-      .hero-content { 
-        width: 100% !important;
-        padding: 0 1rem !important; 
-        align-items: center !important; 
-        text-align: center !important; 
-      }
-
-      /* E. Las Puertas Animadas */
-      .door-text { font-size: 14vw !important; padding: 0 1rem !important; }
-      .split-splash-section { height: 100dvh !important; }
-      #split-grid { height: 100dvh !important; }
-
-      /* F. Footer (Márgenes Seguros) */
+      /* E. Footer, Modal y Grillas */
       footer { padding: 4rem 0 5rem 0 !important; } 
-      .footer-grid { display: flex !important; flex-direction: column !important; gap: 3rem !important; }
+      .footer-grid { display: flex !important; flex-direction: column !important; gap: 2.5rem !important; }
       .social-icons-row { gap: 2rem !important; margin: 1.5rem 0 !important; }
-
-      /* G. Modal y Grillas */
-      .portal-modal-box { padding: 3rem 1.5rem !important; width: 90% !important; margin: 0 auto !important; }
-      .pillars-grid, .founder-grid { display: flex !important; flex-direction: column !important; width: 100% !important; gap: 2.5rem !important; }
-
-      /* H. Navbar y Menú */
-      header { background: transparent !important; backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important; }
-      .brand-text { font-size: 1.2rem !important; }
-      .brand-sub { font-size: 0.5rem !important; }
-      .nav-inner { padding: 1rem 1.5rem !important; }
-      .desktop-btn { display: none !important; }
-      .mobile-btn { display: flex !important; }
+      .portal-modal-box { padding: 2.5rem 1.5rem !important; width: 90% !important; margin: 0 auto !important; }
+      .pillars-grid, .founder-grid { display: flex !important; flex-direction: column !important; width: 100% !important; gap: 2rem !important; }
       .curtain-links-container { text-align: center !important; }
-      .curtain-link { font-size: 2.5rem !important; }
+      .curtain-link { font-size: 2.2rem !important; }
       .curtain-link::after { display: none !important; }
-      #openContactBtn { display: flex; font-size: 10px; }
-      .dot-pulse { display: none; } 
     }
   </style>
 </head>
