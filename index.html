@@ -1200,6 +1200,45 @@ header, .nav-inner {
         box-sizing: border-box !important;
       }
     }
+
+    /* =========================================
+       FIX: VENTANA FLOTANTE DE CONTACTO (MODAL)
+    ========================================= */
+    .portal-modal-overlay {
+      position: fixed !important;
+      inset: 0 !important; /* Lo estira por toda la pantalla */
+      background: rgba(3, 3, 3, 0.9) !important; /* Fondo oscuro transparente */
+      backdrop-filter: blur(8px) !important; /* Efecto vidrio empañado */
+      z-index: 99999 !important; /* Por encima de todo */
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease !important;
+    }
+
+    .portal-modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .portal-modal-box {
+      width: 90% !important;
+      max-width: 480px !important;
+      background: #050505 !important;
+      border: 1px solid rgba(212, 175, 55, 0.3) !important; /* Borde dorado */
+      padding: 3rem 2rem !important;
+      position: relative !important;
+      transform: translateY(30px);
+      transition: transform 0.4s ease !important;
+    }
+
+    .portal-modal-overlay.active .portal-modal-box {
+      transform: translateY(0);
+    }
+
+
   </style>
 </head>
 <body>
@@ -1611,54 +1650,41 @@ header, .nav-inner {
         });
       }
     // =========================================
-      // MOTOR DE APERTURA DE PUERTAS (SCROLL DESKTOP + TAP MÓVIL)
+      // NUEVO MOTOR: ANIMACIÓN 100% AUTOMÁTICA
       // =========================================
-      const splitSplash = document.querySelector('.split-splash-section');
       const splitGrid = document.getElementById('split-grid');
+      const hero = document.getElementById('heroCinematic');
+      const heroContent = document.querySelector('.hero-content');
+      
+      // Ocultar mensaje de "Tap" si quedó en el HTML
+      const tapMsg = document.querySelector('.tap-to-enter-msg');
+      if(tapMsg) tapMsg.style.display = 'none';
 
-      if (splitSplash && splitGrid) {
-        // Creamos el mensaje de Tap To Enter dinámicamente
-        const tapMsg = document.createElement('div');
-        tapMsg.className = 'tap-to-enter-msg';
-        tapMsg.innerText = 'Tap to Enter';
-        splitGrid.appendChild(tapMsg);
+      // 1. ABRIR LAS PUERTAS SOLAS A LOS 2 SEGUNDOS
+      setTimeout(() => {
+        if (splitGrid) {
+          // Animación suave de apertura
+          splitGrid.style.transition = 'grid-template-columns 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
+          splitGrid.style.gridTemplateColumns = '0fr 1fr 0fr'; 
+        }
+      }, 2000);
 
-        let isMobileOpened = false;
-
-        // Lógica de Scroll (Solo para Computadoras)
-        const handleSplitScroll = () => {
-          if (window.innerWidth <= 768) return; // Si es celular, ignorar el scroll
-          
-          const rect = splitSplash.getBoundingClientRect();
-          const viewHeight = window.innerHeight;
-          const currentProgress = -rect.top; 
-          let progress = currentProgress / viewHeight;
-          
-          if (progress < 0) progress = 0;
-          if (progress > 1) progress = 1;
-
-          // Código reparado sin saltos de línea (Abre las puertas)
-          splitGrid.style.gridTemplateColumns = `${1 - progress}fr ${progress}fr ${1 - progress}fr`;
-        };
-
-        // Lógica de Tocar (Solo para Celulares)
-        splitGrid.addEventListener('click', () => {
-          if (window.innerWidth <= 768 && !isMobileOpened) {
-            isMobileOpened = true;
-            // Animación suave al abrir con el dedo
-            splitGrid.style.transition = 'grid-template-columns 0.9s cubic-bezier(0.25, 1, 0.5, 1)';
-            splitGrid.style.gridTemplateColumns = '0fr 1fr 0fr'; // Abre al 100%
-            tapMsg.style.opacity = '0'; // Desaparece el texto
-            
-            // Limpieza del texto después de abrir
-            setTimeout(() => { tapMsg.remove(); }, 900);
-          }
-        });
-
-        window.addEventListener('scroll', handleSplitScroll, { passive: true });
-        window.addEventListener('resize', handleSplitScroll, { passive: true });
-        handleSplitScroll(); 
+      // 2. APARECER EL TEXTO DEL INICIO A LOS 4.5 SEGUNDOS
+      if (heroContent) {
+        // Inicialmente el texto está invisible y un poco arriba
+        heroContent.style.opacity = '0';
+        heroContent.style.transform = 'translateY(-30px)';
+        heroContent.style.transition = 'opacity 1.2s ease, transform 1.2s ease';
       }
+
+      setTimeout(() => {
+        if (hero) hero.classList.add('loaded'); // Quita el fondo borroso
+        if (heroContent) {
+          // El texto baja suavemente y aparece
+          heroContent.style.opacity = '1';
+          heroContent.style.transform = 'translateY(0)'; 
+        }
+      }, 4500);
   </script>
 
 </body>
