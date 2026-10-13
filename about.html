@@ -19,25 +19,32 @@
       --text-main: #FFFFFF;
       --text-dim: #848494;
       --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(212, 175, 55, 0.35);
+      --accent-gold: #D4AF37;
       --accent-neon: #E0E722;
       --accent-green: #34D399;
       --font-display: 'Syne', sans-serif;
       --font-body: 'Space Grotesk', sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box !important; margin: 0; padding: 0; }
     
-    /* IMPORTANTE: 'clip' permite el efecto Sándwich y evita cortes horizontales */
-    html, body {
+    /* IMPORTANTE: Sin overflow-y en html/body para no romper los elementos sticky en PC */
+    html {
+      scroll-behavior: smooth;
+      width: 100%;
+    }
+
+    body {
       background-color: var(--bg);
       color: var(--text-main);
       font-family: var(--font-body);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      overflow-x: clip !important;
-      max-width: 100vw !important;
-      width: 100% !important;
+      overflow-x: clip;
+      width: 100%;
       position: relative;
+      transition: background-color 0.5s ease;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -45,828 +52,511 @@
     .container { max-width: 1480px; margin: 0 auto; padding: 0 4%; width: 100%; }
 
     /* =========================================
-       2. NAVBAR MINIMALISTA (ALINEADA A LA DERECHA)
+       2. NAVBAR ADAPTATIVA (DARK / LIGHT MODE)
     ========================================= */
     header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 100;
-      background: transparent !important;
-      background-color: transparent !important;
-      padding: 30px 0;
-      transition: all 0.3s ease;
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      background: transparent;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 24px 0;
+      transition: background-color 0.45s ease, border-color 0.45s ease, padding 0.3s ease;
+      pointer-events: none;
     }
 
     .nav-inner {
-      display: flex;
-      justify-content: flex-end; /* Empuja el menú a la derecha */
-      align-items: center;
-      width: 100%;
-      max-width: 1480px;
-      margin: 0 auto;
-      padding: 0 4%;
+      display: flex; justify-content: space-between; align-items: center;
+      width: 100%; max-width: 1480px; margin: 0 auto; padding: 0 4%; pointer-events: all;
     }
 
-    .brand {
-      margin-right: auto; /* Logo a la izquierda */
-      display: inline-flex;
-      align-items: center;
-      gap: 1rem;
+    .brand { display: inline-flex; align-items: center; gap: 1rem; pointer-events: all; cursor: pointer; z-index: 9999; }
+    .brand-text { font-family: var(--font-display); font-size: 1.35rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #fff; transition: color 0.45s ease; }
+    .brand-sub { font-family: var(--font-body); font-size: 0.58rem; line-height: 1.25; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-gold); font-weight: 500; display: flex; flex-direction: column; border-left: 1px solid rgba(212, 175, 55, 0.4); padding-left: 0.9rem; transition: color 0.45s ease, border-color 0.45s ease; }
+
+    .nav-actions-right { display: flex; align-items: center; gap: 2rem; }
+    .desktop-btn, #openContactBtn, .mobile-btn { pointer-events: all !important; cursor: pointer !important; z-index: 9999; background: transparent; border: none; color: #fff; font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.45s ease; }
+    #openContactBtn { display: flex; align-items: center; gap: 8px; }
+
+    .dot-pulse { display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-green); position: relative; }
+    .dot-pulse::after { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; border-radius: 50%; border: 1px solid var(--accent-green); animation: pulse-small 2s infinite ease-out; }
+    @keyframes pulse-small { 0% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+    .mobile-btn { display: none; flex-direction: column; gap: 6px; padding: 5px; }
+    .burger-bar { background: #fff; transition: background-color 0.45s ease; }
+
+    /* ESTADO TEMA BLANCO EN LA NAVBAR (Cuando pasa por la Lámina 2) */
+    header.theme-light {
+      background: rgba(249, 248, 246, 0.82) !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    header.theme-light .brand-text,
+    header.theme-light .desktop-btn,
+    header.theme-light #openContactBtn {
+      color: #050505 !important;
+    }
+    header.theme-light .brand-sub {
+      color: #8A6914 !important;
+      border-left-color: rgba(138, 105, 20, 0.35) !important;
+    }
+    header.theme-light .burger-bar {
+      background: #050505 !important;
     }
 
-    .brand-text {
-      font-family: var(--font-display);
-      font-size: 1.35rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      line-height: 1;
-    }
-
-    .brand-sub {
-      font-family: var(--font-body);
-      font-size: 0.58rem;
-      line-height: 1.25;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #D4AF37;
-      font-weight: 500;
-      display: flex;
-      flex-direction: column;
-      border-left: 1px solid rgba(212, 175, 55, 0.4);
-      padding-left: 0.9rem;
-    }
-
-    .nav-menu {
-      display: flex;
-      gap: 2.5rem;
-      align-items: center;
-      margin: 0;
-    }
-
-    .nav-link, .contact-link {
-      font-family: var(--font-body);
-      font-size: 11px; 
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #ffffff;
-      transition: opacity 0.3s ease;
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-link:hover, .contact-link:hover { opacity: 0.6; }
-    .contact-link { gap: 8px; }
-
-    /* Punto Verde Aislado */
-    .dot-pulse {
-      display: block;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--accent-green);
-      position: relative;
-    }
-
-    .dot-pulse::after {
-      content: '';
-      position: absolute;
-      top: -4px;
-      left: -4px;
-      right: -4px;
-      bottom: -4px;
-      border-radius: 50%;
-      border: 1px solid var(--accent-green);
-      animation: pulse 2s infinite ease-out;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(0.9); opacity: 1; }
-      100% { transform: scale(2.4); opacity: 0; }
-    }
-
-    /* Menú Hamburguesa (Móviles) */
-    .luxury-burger {
-      display: none;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-      z-index: 250;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
-    }
-    .burger-line { display: block; height: 1.5px; background: #fff; transition: all 0.35s ease; }
-    .burger-line-1 { width: 26px; }
-    .burger-line-2 { width: 17px; }
-    .luxury-burger.active .burger-line-1 { transform: translateY(3.75px) rotate(45deg); width: 24px; }
-    .luxury-burger.active .burger-line-2 { transform: translateY(-3.75px) rotate(-45deg); width: 24px; }
-
-   /* =========================================
-       ESTILOS DEL MENÚ FULL-SCREEN
-    ========================================= */
-    .luxury-nav-curtain {
-      position: fixed;
-      inset: 0;
-      background: rgba(4, 4, 5, 0.98);
-      backdrop-filter: blur(28px);
-      z-index: 2000; /* Siempre por encima de todo */
-      display: flex;
-      align-items: center; /* Centra verticalmente */
-      justify-content: center; /* Centra horizontalmente */
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-
-    .luxury-nav-curtain.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .curtain-links-container {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      text-align: left; /* Alineamos a la izquierda para que el texto hover salga a la derecha */
-    }
-
-    .menu-item {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .curtain-link-item {
-      color: var(--text-dim, rgba(255, 255, 255, 0.4)); /* Texto gris atenuado por defecto */
-      font-size: clamp(3rem, 6vw, 5rem); /* Texto gigante responsivo */
-      font-family: var(--font-display);
-      font-weight: 900;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: color 0.3s ease, transform 0.3s ease;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Al pasar el mouse, la letra brilla blanca y se mueve un poco */
-    .curtain-link-item:hover {
-      color: #ffffff;
-      transform: translateX(20px); 
-    }
-
-    /* =========================================
-       TEXTO DESCRIPTIVO (HOVER EFFECT)
-    ========================================= */
-    .menu-hover-text {
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #D4AF37; /* Tu dorado corporativo */
-      margin-left: 3rem; /* Separación de la palabra gigante */
-      opacity: 0;
-      transform: translateX(-20px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      pointer-events: none;
-    }
-
-    /* Cuando pasas el mouse por el link gigante, aparece su descripción */
-    .curtain-link-item:hover + .menu-hover-text {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    /* Ajustes para móviles (donde no hay hover) */
-    @media (max-width: 768px) {
-      .curtain-links-container {
-        text-align: center;
-      }
-      .curtain-link-item {
-        font-size: 2.5rem;
-      }
-      .curtain-link-item:hover {
-        transform: none; /* Quitamos el movimiento en celular */
-      }
-      .menu-hover-text {
-        display: none; /* Escondemos las descripciones en celular para mantenerlo limpio */
-      }
-    }
-
+    /* Cortina Full-Screen */
+    .luxury-curtain { position: fixed; inset: 0; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(16px); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+    .luxury-curtain.active { opacity: 1; pointer-events: all; }
+    .curtain-links-container { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2.2rem; }
+    .curtain-link { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 900; text-transform: uppercase; color: #fff; transition: all 0.4s ease; position: relative; display: inline-block; }
+    .curtain-link:hover { color: var(--accent-gold); transform: translateX(-15px); }
+    .curtain-link::after { content: attr(data-info); position: absolute; left: 105%; top: 50%; transform: translateY(-50%) translateX(20px); font-family: var(--font-body); font-size: 0.85rem; color: var(--accent-gold); font-weight: 400; letter-spacing: 0.15em; opacity: 0; white-space: nowrap; transition: all 0.4s ease; pointer-events: none; }
+    .curtain-link:hover::after { opacity: 1; transform: translateY(-50%) translateX(10px); }
 
     /* =========================================
        3. HERO CINEMÁTICO (ESTADIO)
     ========================================= */
     .about-hero-cinematic {
-      position: relative;
-      width: 100%;
-      height: 100vh; /* Ocupa toda la pantalla inicialmente */
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding-bottom: 8rem;
-      background: #030303;
+      position: relative; width: 100%; height: 100dvh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding-bottom: 7rem; background: #030303; overflow: hidden;
     }
-    
-    .hero-real-img {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; z-index: 1; filter: grayscale(20%);
-    }
-    .hero-dark-overlay {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;
-      background: linear-gradient(180deg, rgba(3,3,3,0.7) 0%, rgba(3,3,3,0.4) 40%, rgba(3,3,3,1) 100%);
-    }
+    .hero-real-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; z-index: 1; filter: grayscale(15%); }
+    .hero-dark-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(180deg, rgba(3,3,3,0.65) 0%, rgba(3,3,3,0.35) 45%, rgba(3,3,3,1) 100%); }
     .about-hero-content { position: relative; z-index: 3; }
-    
-    .hero-tag { font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: #b1a15c; font-weight: 600; display: block; margin-bottom: 1.5rem; }
-    
-    /* TITULO QUE NO SE CORTA */
-    .hero-title {
-      font-family: var(--font-display); 
-      font-size: clamp(2.5rem, 5.5vw, 6rem);
-      font-weight: 900; 
-      text-transform: uppercase; 
-      line-height: 0.9; 
-      letter-spacing: -0.02em; 
-      color: #fff;
-      word-break: normal;
-      white-space: nowrap; /* Fuerza a no dividirse en PC */
-    }
+    .hero-tag { font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-gold); font-weight: 600; display: block; margin-bottom: 1.2rem; }
+    .hero-title { font-family: var(--font-display); font-size: clamp(2.5rem, 5.5vw, 5.8rem); font-weight: 900; text-transform: uppercase; line-height: 0.92; letter-spacing: -0.02em; color: #fff; }
 
     /* =========================================
-       4. EFECTO SÁNDWICH (STICKY PANELS)
+       4. LÁMINAS APILABLES (TEMA BLANCO EN LA 2DA LÁMINA)
     ========================================= */
-    .sticky-wrapper { position: relative; width: 100%; }
+    .sticky-wrapper {
+      position: relative;
+      width: 100%;
+    }
     
     .sticky-panel {
+      position: -webkit-sticky;
       position: sticky;
       top: 0;
       width: 100%;
-      height: 100vh; /* Altura de pantalla completa */
+      min-height: 100dvh;
       display: flex;
       align-items: center;
-      box-shadow: 0 -30px 60px rgba(0, 0, 0, 0.9); /* Sombra para el efecto de apilamiento */
+      border-radius: 36px 36px 0 0;
+      box-shadow: 0 -25px 70px rgba(0, 0, 0, 0.85);
       overflow: hidden;
+      transform-origin: center top;
+      will-change: transform, filter;
+      padding: 6rem 0;
     }
     
-    /* Capa 1: Who we are */
-    .panel-who { background: #08080a; z-index: 10; }
-    /* Capa 2: Mission */
-    .panel-mission { background: #0a0a0d; z-index: 20; border-top: 1px solid rgba(255,255,255,0.05); }
-    /* Capa 3: Fundador */
-    .panel-founder { background: #0f0f13; z-index: 30; border-top: 1px solid rgba(255,255,255,0.05); }
+    /* LÁMINA 1: Modo Oscuro */
+    .panel-who {
+      background: radial-gradient(circle at 20% 50%, #111116 0%, #070709 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 10;
+    }
+
+    /* LÁMINA 2: CAMBIO TOTAL A TEMA BLANCO (LIGHT MODE) */
+    .panel-mission {
+      background: #F9F8F6 !important;
+      color: #050505 !important;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 -30px 90px rgba(0, 0, 0, 0.75);
+      z-index: 20;
+    }
+    .panel-mission .panel-subtitle {
+      color: #9A7418 !important; /* Dorado oscuro editorial sobre blanco */
+      font-weight: 700;
+    }
+    .panel-mission .panel-title {
+      color: #050505 !important;
+    }
+    .panel-mission .panel-text {
+      color: #383840 !important;
+      font-weight: 400 !important;
+    }
+
+    /* LÁMINA 3: Regreso a Modo Oscuro (El Fundador) */
+    .panel-founder {
+      background: linear-gradient(160deg, #101015 0%, #050507 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 -35px 90px rgba(0, 0, 0, 0.65);
+      z-index: 30;
+    }
 
     .panel-content { width: 100%; max-width: 1480px; margin: 0 auto; padding: 0 4%; }
-    
-    .panel-subtitle { font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-neon); display: block; margin-bottom: 1.5rem; }
-    .panel-title { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; text-transform: uppercase; line-height: 0.95; margin-bottom: 2rem; word-break: keep-all; }
-    .panel-text { color: var(--text-dim); font-size: clamp(1.05rem, 1.3vw, 1.25rem); line-height: 1.7; max-width: 650px; }
+    .panel-subtitle { font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-neon); display: block; margin-bottom: 1.2rem; font-weight: 600; }
+    .panel-title { font-family: var(--font-display); font-size: clamp(2.2rem, 4.5vw, 4.2rem); font-weight: 900; text-transform: uppercase; line-height: 0.95; margin-bottom: 1.8rem; }
+    .panel-text-container { display: flex; flex-direction: column; gap: 1.1rem; max-width: 650px; }
+    .panel-text { color: var(--text-dim); font-size: clamp(0.92rem, 1.15vw, 1.05rem); line-height: 1.65; font-weight: 300; }
 
-    /* Estructura Especial para la lámina del Fundador */
-    .founder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-    /* FOTO DEL FUNDADOR A COLOR */
-    .founder-img-box img { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
-      /* Hemos eliminado el filter: grayscale para que siempre tenga color */
-      transition: transform 0.5s ease; 
+    /* =========================================
+       5. DISEÑO EDITORIAL DEL FUNDADOR (FOTO GRANDE)
+    ========================================= */
+    .founder-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 4.5rem;
+      align-items: center;
     }
-    .founder-img-box:hover img { transform: scale(1.05); }
 
-   /* =========================================
-       5. COLLAGE INTERACTIVO (HORIZONTAL STICKY)
+    .founder-img-box {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      height: 74vh;
+      max-height: 660px;
+      min-height: 460px;
+      margin-left: auto;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85);
+      background: #0a0a0d;
+    }
+
+    .founder-img-box::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(3, 3, 4, 0.92) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .founder-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: grayscale(0%) !important;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .founder-img-box:hover img {
+      transform: scale(1.04);
+    }
+
+    .founder-name-badge {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      z-index: 2;
+      padding: 1.2rem 1.5rem;
+      background: rgba(10, 10, 14, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .founder-name {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .founder-role {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    /* =========================================
+       6. CARRUSEL DE BALONES (FIJACIÓN INFALIBLE EN PC Y MÓVIL)
     ========================================= */
     .horizontal-scroll-wrapper {
       position: relative;
       width: 100%;
-      height: 400vh; /* La magia: crea mucho espacio para scrollear */
+      height: 420vh; /* Altura de recorrido horizontal */
       background: #030303;
       z-index: 40;
     }
 
     .sticky-container {
-      position: sticky; /* Esto bloquea la pantalla */
+      position: absolute;
       top: 0;
+      left: 0;
       height: 100vh;
       width: 100%;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      background: #030303;
     }
 
-    /* =========================================
-       TÍTULO FIJO EN EL FONDO (BACKGROUND WATERMARK)
-    ========================================= */
+    /* Estados controlados por JS para que jamás falle el freno en computadora */
+    .sticky-container.is-fixed {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100vh !important;
+      z-index: 45;
+    }
+
+    .sticky-container.is-bottom {
+      position: absolute !important;
+      top: auto !important;
+      bottom: 0 !important;
+      left: 0 !important;
+    }
+
+    /* Título de fondo visible antes de que entren los balones */
     .sticky-header {
       position: absolute;
-      top: 50%; /* Lo bajamos al centro exacto de la pantalla */
+      top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%); /* Centrado perfecto */
+      transform: translate(-50%, -50%);
       width: 100%;
+      padding: 0 5%;
       text-align: center;
-      z-index: 1; /* MAGIA: Lo enviamos al fondo */
-      pointer-events: none; /* Evita que el texto bloquee los clics en las fotos */
-    }.sticky-header .hero-tag {
-      color: var(--accent-neon); 
-      margin-bottom: 1rem; 
+      z-index: 1;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .sticky-header .hero-tag {
+      color: var(--accent-gold);
+      margin-bottom: 1rem;
       display: block;
-      opacity: 0.7;
+      opacity: 0.9;
     }
 
     .sticky-header .panel-title {
-      font-size: clamp(3rem, 9vw, 8rem) !important; /* Texto gigante para que luzca como fondo */
+      font-size: clamp(2.6rem, 7.5vw, 7rem);
       margin: 0;
-      opacity: 0.25; /* Semi-transparente para que no compita con los colores de las fotos */
-      white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
-    }
-/* =========================================
-       LA PISTA DE FOTOS
-    ========================================= */
-    .horizontal-scroll-wrapper {
-      position: relative;
-      width: 100%;
-      height: 450vh; /* Un poco más de altura de scroll porque hay más fotos */
-      background: #030303;
-      z-index: 40;
+      opacity: 0.9;
+      line-height: 0.95;
+      color: #ffffff;
+      transition: opacity 0.4s ease;
     }
 
- /* =========================================
-       LA PISTA DE FOTOS (EMPIEZA FUERA DE PANTALLA)
-    ========================================= */
+    /* Pista horizontal: empieza fuera de la pantalla (100vw) */
     .horizontal-track {
       display: flex;
-      align-items: flex-start;
-      gap: 2vw; 
-      
-      /* ¡LA MAGIA!: 100vw empuja la primera foto fuera de la pantalla */
-      padding-left: 100vw; 
-      
-      padding-top: 4vh;   
+      align-items: center;
+      gap: 4.5vw;
+      padding-left: 100vw !important;
       will-change: transform;
       transform: translateX(0);
       position: relative;
-      z-index: 10; 
+      z-index: 10;
     }
-    /* =========================================
-       TARJETAS REDUCIDAS UN 10%
-    ========================================= */
+
+    /* FOTOS REDONDAS SIMULANDO BALONES EN 3D */
     .marquee-item {
-      width: 21.5vw;  /* -10% (antes 24vw) */
-      min-width: 288px; /* -10% (antes 320px) */
-      height: 31.5vw; /* -10% (antes 35vw) */
-      min-height: 432px; /* -10% (antes 480px) */
+      width: 24vw;
+      height: 24vw;
+      min-width: 270px;
+      min-height: 270px;
+      max-width: 350px;
+      max-height: 350px;
+      aspect-ratio: 1 / 1;
       flex-shrink: 0;
       position: relative;
-      border: 1px solid var(--border);
+      border-radius: 50% !important;
+      border: 2px solid rgba(212, 175, 55, 0.35);
       background: #111;
-      border-radius: 12px;
+      overflow: hidden !important;
       cursor: pointer;
+      box-shadow: 0 25px 55px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(0, 0, 0, 0.75);
       transition: box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+
+    .marquee-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.22) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.7) 100%);
+      box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.85);
+      pointer-events: none;
+      z-index: 2;
     }
 
     .marquee-item img {
       width: 100%;
       height: 100%;
-      object-fit: cover; 
-      filter: grayscale(100%) brightness(0.6);
+      object-fit: cover;
+      border-radius: 50%;
+      filter: grayscale(100%) brightness(0.65);
       transition: filter 0.4s ease, transform 0.6s ease;
     }
-    /* =========================================
-       EFECTO DE COLOR (PC Y MÓVIL)
-    ========================================= */
+
     .marquee-item:hover,
     .marquee-item.touch-active {
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
-      border-color: #fff; /* O el color de borde que prefieras */
+      box-shadow: 0 30px 65px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.35);
+      border-color: var(--accent-gold);
       z-index: 5;
     }
 
     .marquee-item:hover img,
     .marquee-item.touch-active img {
-      filter: grayscale(0%) brightness(1); /* Recupera el color */
-      transform: scale(1.05); /* Pequeño zoom interior */
+      filter: grayscale(0%) brightness(1);
+      transform: scale(1.08);
     }
 
-    /* Ajustes móviles con la reducción del 10% */
-    @media (max-width: 768px) {
-      .marquee-item { 
-        width: 63vw; 
-        height: 90vw; 
-        min-width: 250px; 
-        min-height: 360px; 
-      }
-    }
-   
-    
- 
     /* =========================================
-       6. FOOTER Y MODAL (CON ICONOS)
+       7. FOOTER Y MODAL DE CONTACTO
     ========================================= */
-    footer { padding: 8rem 0 5rem 0; background: #020203; border-top: 1px solid var(--border); position: relative; z-index: 40; }
-    .footer-grid { display: grid; grid-template-columns: 1.4fr 1.6fr; gap: 4rem; align-items: center; }
-    .footer-huge { font-family: var(--font-display); font-size: clamp(2.3rem, 4.4vw, 4.6rem); font-weight: 900; text-transform: uppercase; line-height: 0.95; }
+    footer { padding: 8rem 0 5rem 0; background: #020203; border-top: 1px solid var(--border); position: relative; z-index: 50; }
+    .footer-grid { display: grid; grid-template-columns: 1.3fr 1.7fr; gap: 4rem; align-items: center; }
+    .footer-huge { font-family: var(--font-display); font-size: clamp(2.2rem, 4.2vw, 4.4rem); font-weight: 900; text-transform: uppercase; line-height: 0.95; }
     
-    .contact-card { border: 1px solid var(--border); padding: 3rem; background: var(--surface); }
+    .contact-card { border: 1px solid var(--border); padding: 3rem 2.5rem; background: var(--surface); }
     .social-icons-row { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: center; }
     .social-icon { color: var(--text-main); transition: color 0.3s, transform 0.3s; display: inline-flex; }
     .social-icon svg { width: 28px; height: 28px; fill: currentColor; }
     .social-icon:hover { color: var(--accent-green); transform: translateY(-4px); }
 
-    /* Modal */
-    .portal-modal-overlay { position: fixed; inset: 0; background: rgba(4, 4, 5, 0.9); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
-    .portal-modal-overlay.active { display: flex; }
-    .portal-modal-box { background: #0c0c10; border: 1px solid var(--border-accent); max-width: 440px; width: 100%; padding: 3rem 2.5rem; position: relative; }
-    .modal-close-btn { position: absolute; top: 1rem; right: 1.5rem; background: transparent; border: none; color: #fff; font-size: 2rem; cursor: pointer; }
+    .portal-modal-overlay { position: fixed; inset: 0; background: rgba(3, 3, 3, 0.9); backdrop-filter: blur(8px); z-index: 99999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+    .portal-modal-overlay.active { opacity: 1; pointer-events: all; }
+    .portal-modal-box { width: 90%; max-width: 480px; background: #050505; border: 1px solid rgba(212, 175, 55, 0.3); padding: 3rem 2rem; position: relative; transform: translateY(30px); transition: transform 0.4s ease; }
+    .portal-modal-overlay.active .portal-modal-box { transform: translateY(0); }
 
     /* =========================================
-       7. RESPONSIVE MÓVIL
-    ========================================= */
-    @media (max-width: 1024px) {
-      .nav-menu { display: none; }
-      .luxury-burger { display: flex; }
-      .founder-grid { grid-template-columns: 1fr; gap: 3rem; }
-      .founder-img-box { max-height: 50vh; }
-      .collage-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-      .collage-item:nth-child(1) { grid-column: span 2; grid-row: span 1; height: 300px; }
-      .collage-item:nth-child(3) { grid-column: span 2; height: 250px; }
-      .footer-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 768px) {
-      header { background: rgba(3,3,3,0.95); padding: 15px 0; }
-      .hero-title { font-size: clamp(2rem, 9vw, 2.5rem); white-space: normal; } /* Permite salto en móvil */
-      .panel-title { font-size: clamp(2.2rem, 8vw, 2.8rem); }
-      .collage-grid { grid-template-columns: 1fr; }
-      .collage-item { grid-column: span 1 !important; height: 250px !important; }
-    }
-    /* =========================================
-       AJUSTES DE TAMAÑO PARA EL MENÚ FULL-SCREEN
-    ========================================= */
-    .curtain-links-container {
-      gap: 1rem !important; /* Reducimos el espacio entre las opciones */
-    }
-
-    .curtain-link-item {
-      /* Reducimos el tamaño general. Mínimo 2rem, ideal 4.5vw, máximo 3.8rem */
-      font-size: clamp(2rem, 4.5vw, 3.8rem) !important; 
-    }
-
-    .menu-hover-text {
-      font-size: 0.8rem !important; /* Texto descriptivo un poco más sutil */
-    }
-
-    /* =========================================
-       AJUSTES ESTRICTOS PARA CELULARES
+       8. UNIFICACIÓN MÓVIL (SIN CORTES NI DESBORDES)
     ========================================= */
     @media (max-width: 768px) {
-      .luxury-nav-curtain {
-        /* Quitamos un poco de relleno arriba y abajo para dar más espacio */
-        padding: 6rem 1rem 2rem 1rem !important; 
-      }
-      .curtain-links-container {
-        gap: 1.5rem !important; 
-      }
-      .curtain-link-item {
-        /* Letra mucho más controlada en celular para que quepan las 4 opciones */
-        font-size: clamp(1.6rem, 7vw, 2.2rem) !important;
-      }
-    }
-    /* =========================================
-       REGLA DE HIERRO PARA TÍTULOS EN CELULAR
-       (Evita que se corten o salgan de pantalla)
-    ========================================= */
-    @media (max-width: 768px) {
-      h1, h2, h3, 
-      .hero-big-title, 
-      .page-title, 
-      .hero-title, 
-      .curtain-link-item,
-      .footer-huge {
-        /* 1. Tamaño seguro: 8vw asegura que palabras de 14 letras quepan enteras */
-        font-size: clamp(1.5rem, 8vw, 2.2rem) !important; 
-        line-height: 1.1 !important;
-        
-        /* 2. Prohibido cortar palabras o usar guiones */
-        word-break: keep-all !important; /* Mantiene la palabra junta */
-        overflow-wrap: normal !important;
-        hyphens: none !important;
-        white-space: normal !important;
-        
-        /* 3. Márgenes de seguridad laterales */
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
-      }
-
-      /* 4. Doble candado para evitar scroll horizontal en toda la página */
-      html, body {
-        overflow-x: hidden !important;
-        width: 100vw !important;
-        max-width: 100% !important;
-        position: relative !important;
-      }
-      /* =========================================
-       OCULTAR "MENU" EN CELULAR (REGLA INFALIBLE)
-    ========================================= */
-    @media (max-width: 768px) {
-      /* Atacamos directamente el ID del botón */
-      #openMenuBtn {
-        display: none !important; 
-        opacity: 0 !important;
-        pointer-events: none !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-      }
-      
-      /* Aseguramos que la hamburguesa sí se vea */
-      .luxury-burger {
-        display: flex !important;
-      }
-      
-      .nav-actions-right {
-        gap: 1.2rem !important;
-      }
-    }
-      
-      /* Aseguramos que la hamburguesa sea visible */
-      .luxury-burger {
-        display: flex !important;
-      }
-      
-      /* Juntamos un poco el botón de contacto y la hamburguesa */
-      .nav-actions-right {
-        gap: 1.2rem !important;
-      }
-    }
-    /* =========================================
-       CORRECCIONES FINALES: BOTONES Y PUNTO VERDE
-    ========================================= */
-    
-    /* 1. Reactivar los clics en el menú de celular (Romper el muro invisible) */
-    #burgerToggle, .luxury-burger, .burger-line {
-      pointer-events: all !important;
-      cursor: pointer !important;
-      z-index: 9999 !important;
-    }
-
-    /* 2. Achicar el punto verde y su aureola para que no choque con el logo */
-    .dot-pulse {
-      width: 4px !important;
-      height: 4px !important;
-    }
-    
-    .dot-pulse::after {
-      top: -2px !important;
-      left: -2px !important;
-      right: -2px !important;
-      bottom: -2px !important;
-      /* Llamamos a una nueva animación más pequeña */
-      animation: pulse-small 2s infinite ease-out !important; 
-    }
-
-    /* La nueva animación que se expande mucho menos (1.5 en vez de 2.4) */
-    @keyframes pulse-small {
-      0% { transform: scale(0.9); opacity: 1; }
-      100% { transform: scale(1.5); opacity: 0; } 
-    }
-    /* =========================================
-       ESTILOS DEL MENÚ ELEGANTE (CORTINA)
-    ========================================= */
-    .luxury-curtain {
-      position: fixed;
-      inset: 0;
-      background: #050505; /* Fondo negro profundo y elegante */
-      z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-    }
-
-    .luxury-curtain.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .curtain-links-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 2.5rem;
-    }
-
-    .curtain-link {
-      font-family: var(--font-display), sans-serif;
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      color: #ffffff; /* Letra blanca elegante */
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    
-    .curtain-link:hover { color: #D4AF37; } /* Brillo dorado al pasar el mouse */
-
-    /* =========================================
-       REGLA DE HIERRO PARA EL CELULAR (MÓVIL)
-    ========================================= */
-    @media (max-width: 768px) {
-      /* 1. Arreglamos el logo para que NO se corte */
-      .brand-text { font-size: 1.2rem !important; letter-spacing: 0.05em !important; }
-      .brand-sub { font-size: 0.5rem !important; padding-left: 0.5rem !important; }
+      header { padding: 15px 0 !important; }
+      .nav-inner { padding: 0.5rem 1.25rem !important; width: 100% !important; }
       .brand { gap: 0.5rem !important; }
-      .nav-inner { padding: 1rem 4vw !important; }
-
-      /* 2. Escondemos la palabra MENU y mostramos las líneas (Hamburguesa) */
+      .brand-text { font-size: 1.05rem !important; letter-spacing: 0.08em !important; }
+      .brand-sub { font-size: 0.42rem !important; padding-left: 0.5rem !important; letter-spacing: 0.15em !important; }
+      .nav-actions-right { gap: 0.8rem !important; }
       .desktop-btn { display: none !important; }
       .mobile-btn { display: flex !important; }
-      
-      /* 3. Menú elegante ordenado en celular */
-      .curtain-links-container { gap: 2rem !important; }
+      #openContactBtn { font-size: 9px !important; gap: 5px !important; }
       .curtain-link { font-size: 2.2rem !important; }
-      
-      /* Evitar desbordes de pantalla */
-      html, body { overflow-x: hidden !important; width: 100vw !important; max-width: 100% !important; }
-    }
-    /* =========================================
-       FIX MÓVIL: RULETA, MISIÓN Y ACERCA DE
-    ========================================= */
-    @media (max-width: 768px) {
-      /* 1. REPARAR LA RULETA TÁCTIL */
-      .horizontal-scroll-wrapper, main {
-        overflow: visible !important; 
+      .curtain-link::after { display: none !important; }
+
+      .container, .panel-content {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+        width: 100% !important;
       }
-      
-      .sticky-container {
-        position: -webkit-sticky !important; /* Fix especial para iPhone/Safari */
-        position: sticky !important;
-        top: 0 !important;
-        height: 100dvh !important; 
-        overflow: hidden !important; 
+
+      h1, h2, h3, .hero-title, .panel-title, .footer-huge {
+        white-space: normal !important;
+        word-break: keep-all !important;
+        overflow-wrap: normal !important;
+        hyphens: none !important;
+        line-height: 1.02 !important;
+        letter-spacing: -0.02em !important;
+      }
+
+      .hero-title { font-size: 6.8vw !important; }
+      .panel-title, .footer-huge { font-size: 6.5vw !important; }
+
+      .sticky-panel {
+        border-radius: 24px 24px 0 0;
+        padding: 4.5rem 0 3.5rem 0;
+      }
+
+      .panel-founder {
+        min-height: 100dvh;
+        height: auto !important;
+        padding: 5.5rem 0 4rem 0 !important;
+      }
+
+      .founder-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+
+      .founder-img-box {
+        max-width: 100% !important;
+        height: 52vh !important;
+        min-height: 360px !important;
+        margin: 0 auto !important;
+      }
+
+      .sticky-header .panel-title {
+        font-size: 8.5vw !important;
+        white-space: normal !important;
       }
 
       .horizontal-track {
-        padding-left: 10vw !important;
+        padding-left: 100vw !important;
+        gap: 8vw !important;
       }
-      
+
       .marquee-item {
-        width: 240px !important; 
-        height: 320px !important;
-        margin-right: 1.5rem !important;
+        width: 66vw !important;
+        height: 66vw !important;
+        min-width: 240px !important;
+        min-height: 240px !important;
+        max-width: 290px !important;
+        max-height: 290px !important;
       }
 
-      /* 2. REPARAR LAS LÁMINAS DE LA MISIÓN / ABOUT */
-      .mission-grid, .about-content-grid, .pillars-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 2.5rem !important;
-        width: 100% !important;
-      }
-      
-      .mission-card, .pillar-card, .about-card {
-        width: 100% !important;
-        box-sizing: border-box !important;
-        margin: 0 !important;
-      }
-    }
-/* =========================================
-       CIRUGÍA DE EMERGENCIA MÓVIL: TITULOS, RULETA Y FUNDADOR
-    ========================================= */
-    @media (max-width: 768px) {
-      
-      /* 1. EL TRUCO PARA SALVAR EL EFECTO STICKY Y QUITAR EL ESPACIO GIGANTE */
-      html, body {
-        /* Cambiamos 'hidden' por 'clip'. Hace lo mismo, pero NO rompe la ruleta */
-        overflow-x: clip !important; 
-        width: 100vw !important;
-      }
-
-      /* 2. FORZAR QUE LA RULETA SE QUEDE QUIETA AL BAJAR */
-      .horizontal-scroll-wrapper {
-        position: relative !important;
-        overflow: visible !important;
-      }
-      
-      /* Atrapamos al contenedor de la rueda para que frene obligatoriamente */
-      .horizontal-scroll-wrapper > div, .sticky-container {
-        position: -webkit-sticky !important;
-        position: sticky !important;
-        top: 0 !important;
-        height: 100dvh !important; 
-        overflow: hidden !important;
-      }
-
-      /* 3. RESCATAR LOS TÍTULOS QUE SE SALEN DE LA PANTALLA */
-      h1, h2, h3, .page-title, .hero-title {
-        font-size: clamp(2rem, 8vw, 3rem) !important; /* Tamaño fluido automático */
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        white-space: normal !important;
-        max-width: 100% !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        box-sizing: border-box !important;
-      }
-
-      /* 4. REPARAR LA SECCIÓN DEL FUNDADOR (Apilar hacia abajo) */
-      /* No importa qué clase tenga tu contenedor, atrapamos las más comunes */
-      .founder-section, .founder-wrapper, .founder-container, .founder-grid, .founder-content {
-        display: flex !important;
-        flex-direction: column !important;
-        width: 100% !important;
-        gap: 2rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        box-sizing: border-box !important;
-      }
-      
-      .founder-image img, .founder-photo {
-        width: 100% !important;
-        height: auto !important;
-      }
-
-      /* 5. DEVOLVERLE LA VIDA A LAS LÁMINAS APILABLES */
-      .cards-stack-container {
-        display: block !important; /* Quitamos flex para que el sticky funcione */
-      }
-      
-      .pro-card, .about-card, .mission-card, .sticky-card-1, .sticky-card-2, .sticky-card-3 {
-        position: -webkit-sticky !important;
-        position: sticky !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-      }
+      footer { padding: 4rem 0 5rem 0 !important; }
+      .footer-grid { display: flex !important; flex-direction: column !important; gap: 2.5rem !important; }
+      .contact-card { width: 100% !important; padding: 2.2rem 1.5rem !important; }
     }
   </style>
 </head>
 <body>
 
- 
-
   <!-- =========================================
        HEADER Y NAVEGACIÓN
   ========================================= -->
-  <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; pointer-events: none;">
-    <div class="nav-inner" style="pointer-events: all; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5vw;">
-      
-      <!-- LOGO -->
-      <a href="index.html" class="brand" style="display: flex; align-items: center; gap: 1rem; text-decoration: none;">
-        <span class="brand-text" style="color: #fff; font-family: 'Syne', sans-serif; font-weight: 900; text-transform: uppercase;">Canvas</span>
-        <span class="brand-sub" style="color: #D4AF37; display: flex; flex-direction: column; font-family: 'Space Grotesk', sans-serif; text-transform: uppercase; border-left: 1px solid rgba(212, 175, 55, 0.4); padding-left: 0.8rem;">
+  <header id="mainHeader">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-text">Canvas</span>
+        <span class="brand-sub">
           <span>MANAGEMENT</span>
           <span>GROUP</span>
         </span>
       </a>
 
-      <!-- BOTONES DERECHA -->
-      <div class="nav-actions-right" style="display: flex; align-items: center; gap: 2rem;">
-        <button id="openMenuBtn" class="desktop-btn" style="background: transparent; border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; cursor: pointer; text-transform: uppercase;">MENU</button>
+      <div class="nav-actions-right">
+        <button id="openMenuBtn" class="desktop-btn">MENU</button>
         
-        <button id="openContactBtn" style="background: transparent; border: none; color: #fff; display: flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; cursor: pointer; text-transform: uppercase;">
-          <span class="dot-pulse" style="width: 4px; height: 4px; background: #34D399; border-radius: 50%; display: block;"></span>
+        <button id="openContactBtn">
+          <span class="dot-pulse"></span>
           CONTACT
         </button>
 
-        <button id="burgerToggle" class="mobile-btn" style="background: transparent; border: none; cursor: pointer; display: none; flex-direction: column; gap: 6px; padding: 5px;">
-          <span style="width: 25px; height: 1.5px; background: #fff; display: block;"></span>
-          <span style="width: 15px; height: 1.5px; background: #fff; display: block; align-self: flex-end;"></span>
+        <button id="burgerToggle" class="mobile-btn">
+          <span class="burger-bar" style="width: 25px; height: 1.5px; display: block;"></span>
+          <span class="burger-bar" style="width: 15px; height: 1.5px; display: block; align-self: flex-end;"></span>
         </button>
       </div>
-
     </div>
   </header>
 
   <!-- =========================================
-       MENÚ ELEGANTE FULL-SCREEN (NEGRO/BLANCO)
+       MENÚ ELEGANTE FULL-SCREEN
   ========================================= -->
   <div id="fullScreenMenu" class="luxury-curtain">
     <button id="closeMenuBtn" style="position: absolute; top: 2rem; right: 5vw; background: transparent; border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: 0.15em; cursor: pointer; z-index: 2001;">CLOSE [X]</button>
     
     <div class="curtain-links-container">
-      <a href="index.html" class="curtain-link">HOME</a>
-      <a href="about.html" class="curtain-link">ABOUT</a>
-      <a href="athletes.html" class="curtain-link">THE ROSTER</a>
-      <a href="work.html" class="curtain-link">CAMPAIGNS</a>
+      <a href="index.html" class="curtain-link" data-info="Back to the main view">HOME</a>
+      <a href="about.html" class="curtain-link" data-info="Discover our vision">ABOUT</a>
+      <a href="athletes.html" class="curtain-link" data-info="Meet the talent">THE ROSTER</a>
+      <a href="work.html" class="curtain-link" data-info="View our latest projects">CAMPAIGNS</a>
     </div>
   </div>
-
- 
 
   <main>
     <!-- HERO CINEMÁTICO -->
     <section class="about-hero-cinematic">
-     <img src="img/Stadium.jpg" alt="Stadium" class="hero-real-img">
+      <img src="img/Stadium.jpg" alt="Stadium" class="hero-real-img">
       <div class="hero-dark-overlay"></div>
       <div class="container about-hero-content">
         <span class="hero-tag">Executive Thesis</span>
@@ -874,71 +564,67 @@
       </div>
     </section>
 
-    <!-- EFECTO SÁNDWICH (LÁMINAS APILABLES) -->
+    <!-- EFECTO SÁNDWICH 3D (LÁMINAS APILABLES) -->
     <div class="sticky-wrapper">
       
-  <!-- LÁMINA 1: WHO WE ARE -->
+      <!-- LÁMINA 1: WHO WE ARE -->
       <section class="sticky-panel panel-who">
-        <div class="panel-content" style="max-height: 90vh; display: flex; flex-direction: column; justify-content: center;">
+        <div class="panel-content">
           <span class="panel-subtitle">01 // Who We Are</span>
+          <h2 class="panel-title">More Than<br>A Contract.</h2>
           
-          <!-- TÍTULO MÁS PEQUEÑO Y COMPACTO -->
-          <h2 class="panel-title" style="font-size: clamp(2rem, 4.2vw, 3.8rem); margin-bottom: 1.5rem; line-height: 0.95;">
-            More Than<br>A Contract.
-          </h2>
-          
-          <div class="panel-text-container" style="display: flex; flex-direction: column; gap: 1rem; max-width: 620px;">
-            <!-- TEXTO EDITADO: Más corto, directo y con letra más pequeña (14px) -->
-            <p class="panel-text" style="font-size: clamp(0.85rem, 1.1vw, 0.95rem); line-height: 1.55; color: var(--text-dim); font-weight: 300;">
+          <div class="panel-text-container">
+            <p class="panel-text">
               Canvas Sports Agency is a full-service sports representation firm built on the belief that athletes deserve more than just a contract—they deserve a career roadmap, personal guidance, and a team that fights for them. Founded by Rashaad Ubah, an NBPA and FIBA-certified agent, we are dedicated to ensuring young athletes have the knowledge, tools, and protection to succeed.
             </p>
-            
-            <p class="panel-text" style="font-size: clamp(0.85rem, 1.1vw, 0.95rem); line-height: 1.55; color: var(--text-dim); font-weight: 300;">
+            <p class="panel-text">
               Unlike large agencies that focus on a few superstars, we work closely with every athlete we sign, treating them as family, not statistics. Rashaad's personal journey as a former athlete who navigated the complexities of sports business after an eligibility-altering NIL experience shaped his mission to protect and elevate young athletes so they never feel lost, exploited, or unprepared.
             </p>
           </div>
         </div>
       </section>
-      <!-- LÁMINA 2: MISSION STATEMENT -->
-      <section class="sticky-panel panel-mission">
-        <div class="panel-content" style="max-height: 90vh; display: flex; flex-direction: column; justify-content: center;">
+
+      <!-- LÁMINA 2: MISSION STATEMENT (TEMA BLANCO TOTAL) -->
+      <section class="sticky-panel panel-mission" id="whiteThemePanel">
+        <div class="panel-content">
           <span class="panel-subtitle">02 // Mission Statement</span>
-          <h2 class="panel-title" style="font-size: clamp(2rem, 4.2vw, 3.8rem); margin-bottom: 1.5rem; line-height: 0.95;">
-            Protecting<br>Futures.
-          </h2>
-          <div class="panel-text-container" style="display: flex; flex-direction: column; gap: 1rem; max-width: 650px;">
-            <p class="panel-text" style="font-size: clamp(0.85rem, 1.1vw, 0.95rem); line-height: 1.55; color: var(--text-dim); font-weight: 300;">
-              Empowering Athletes, Protecting Futures & Maximizing Potential. At Canvas Sports Agency, we don’t just represent athletes—we develop legacies. We believe every athlete is more than just their stats; they are brands, entrepreneurs, and future leaders.
+          <h2 class="panel-title">Protecting<br>Futures.</h2>
+          
+          <div class="panel-text-container">
+            <p class="panel-text">
+              Empowering Athletes, Protecting Futures &amp; Maximizing Potential. At Canvas Sports Agency, we don’t just represent athletes—we develop legacies. We believe every athlete is more than just their stats; they are brands, entrepreneurs, and future leaders.
             </p>
-            <p class="panel-text" style="font-size: clamp(0.85rem, 1.1vw, 0.95rem); line-height: 1.55; color: var(--text-dim); font-weight: 300;">
+            <p class="panel-text">
               Our mission is to provide personalized mentorship, strategic NIL opportunities, and long-term career planning that empower high school and college athletes to thrive both on and off the field. Canvas stands as a shield and a guide. We provide boutique, athlete-first representation, ensuring that our clients receive the attention, education, and protection they need.
             </p>
-            <p class="panel-text" style="font-size: clamp(0.85rem, 1.1vw, 0.95rem); line-height: 1.55; color: var(--text-dim); font-weight: 300;">
+            <p class="panel-text">
               At Canvas, every athlete is a priority, not a number. Your future, your brand, your success—we’re with you every step of the way.
             </p>
           </div>
         </div>
       </section>
 
-      <!-- LÁMINA 3: EL FUNDADOR -->
-      <section class="sticky-panel panel-founder">
+      <!-- LÁMINA 3: EL FUNDADOR (FOTO GRANDE Y ELEGANTE) -->
+      <section class="sticky-panel panel-founder" id="founderPanel">
         <div class="panel-content founder-grid">
           <div>
             <span class="panel-subtitle">03 // Leadership</span>
-            <h2 class="panel-title" style="font-size: clamp(2rem, 4.5vw, 4rem);">Architect of<br>Equity.</h2>
-            <p class="panel-text" style="margin-bottom: 1.5rem;">
-              Having competed across NCAA Division I athletics and structured brand acquisitions in New York, Christian founded Canvas to eliminate the transactional vulnerabilities athletes and creators face.
-            </p>
-            <p class="panel-text">
-              Under his guidance, Canvas operates strictly under non-disclosure, building a curated roster that merges athletic prestige with high-end digital media.
-            </p>
+            <h2 class="panel-title">Architect of<br>Equity.</h2>
+            <div class="panel-text-container">
+              <p class="panel-text">
+                Having competed across NCAA Division I athletics and structured brand acquisitions in New York, Rashaad founded Canvas to eliminate the transactional vulnerabilities athletes and creators face.
+              </p>
+              <p class="panel-text">
+                Under his guidance, Canvas operates strictly under non-disclosure, building a curated roster that merges athletic prestige with high-end digital media.
+              </p>
+            </div>
           </div>
+          
           <div class="founder-img-box">
-            <!-- REEMPLAZA ESTE ENLACE POR LA FOTO DE TU FUNDADOR -->
-            <img src=img/fundador.jpg alt="Rashaad Ubah, Founder & Managing Partner">
+            <img src="img/fundador.jpg" alt="Rashaad Ubah, Founder & Managing Partner">
             <div class="founder-name-badge">
               <div class="founder-name">Rashaad Ubah</div>
-              <div class="founder-role">Founder & Managing Partner</div>
+              <div class="founder-role">Founder &amp; Managing Partner</div>
             </div>
           </div>
         </div>
@@ -946,30 +632,26 @@
 
     </div>
 
-  <!-- COLLAGE INTERACTIVO (TIPO SELECCIÓN DE VIDEOJUEGO) -->
-    <section class="horizontal-scroll-wrapper">
-      <!-- Este contenedor es la "cámara" que se queda bloqueada en la pantalla -->
-      <div class="sticky-container">
+    <!-- CARRUSEL DE ESFERAS (BALONES) -->
+    <section class="horizontal-scroll-wrapper" id="ballScrollSection">
+      <div class="sticky-container" id="ballStickyPin">
         
-        <!-- El título se queda quieto arriba -->
-        <div class="sticky-header">
-          <span class="hero-tag" style="color: var(--text-dim); margin-bottom: 0.5rem; display: block;">The Canvas Network</span>
-          <h2 class="panel-title" style="font-size: clamp(2rem, 4vw, 3.5rem); margin: 0;">Trusted by Elite Talent</h2>
+        <!-- Título central despejado al inicio -->
+        <div class="sticky-header" id="trustedHeader">
+          <span class="hero-tag">The Canvas Network</span>
+          <h2 class="panel-title">Trusted by<br>Elite Talent</h2>
         </div>
         
-        <!-- La pista de fotos -->
-        <div class="horizontal-track">
-          <!-- 9 Fotos pegadas -->
+        <!-- Pista de Balones -->
+        <div class="horizontal-track" id="ballTrack">
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=800&q=80" alt="Client 1"></div>
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80" alt="Client 2"></div>
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1526976663112-00b8471b0b5c?auto=format&fit=crop&w=800&q=80" alt="Client 3"></div>
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Client 4"></div>
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80" alt="Client 5"></div>
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1515523110800-9415d13b84a8?auto=format&fit=crop&w=800&q=80" alt="Client 6"></div>
-         
           
-          <!-- Espacio extra al final para que la última foto se alcance a ver completa antes de desbloquear la pantalla -->
-          <div style="min-width: 25vw; height: 1px;"></div>
+          <div style="min-width: 30vw; height: 1px;"></div>
         </div>
         
       </div>
@@ -987,18 +669,13 @@
       <div class="contact-card">
         <span style="font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.5rem; display: block;">Direct Desk</span>
         
-        <!-- ICONOS DE REDES -->
         <div class="social-icons-row">
-          <!-- Correo -->
           <a href="mailto:talent@canvasmg.com" aria-label="Email" class="social-icon">
             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
           </a>
-          <!-- Instagram -->
           <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon">
             <svg viewBox="0 0 24 24"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5Z"/></svg>
           </a>
-          
-          
         </div>
         
         <p style="font-size: 0.85rem; color: var(--text-dim); line-height: 1.6;">
@@ -1008,15 +685,9 @@
     </div>
   </footer>
 
- 
-
-  <!-- =========================================
-       👇 PEGA EL MODAL DE CONTACTO EXACTAMENTE AQUÍ 👇
-  ========================================= -->
+  <!-- MODAL DE CONTACTO -->
   <div class="portal-modal-overlay" id="contactModal">
-    <div class="portal-modal-box" style="max-width: 480px; text-align: left; padding: 3.5rem 2.5rem; background: #050505; border: 1px solid rgba(255,255,255,0.1);">
-      
-      <!-- Botón de Cerrar -->
+    <div class="portal-modal-box">
       <button class="modal-close-btn" id="closeContactBtn" style="position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">&times;</button>
       
       <span style="font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: #34D399; display: block; margin-bottom: 0.8rem;">&bull; Direct Inquiries</span>
@@ -1024,40 +695,21 @@
       <p style="font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 2.5rem;">For representation, brand partnerships, or general inquiries, please leave a message below.</p>
       
       <form onsubmit="handleContactSubmit(event)">
-        <!-- Nombre -->
         <div style="margin-bottom: 1.5rem;">
-          <input type="text" required placeholder="FULL NAME" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0.85rem 0; color: #fff; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; outline: none; transition: border-color 0.3s;">
+          <input type="text" required placeholder="FULL NAME" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0.85rem 0; color: #fff; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; outline: none;">
         </div>
-        
-        <!-- Correo -->
         <div style="margin-bottom: 1.5rem;">
-          <input type="email" required placeholder="EMAIL ADDRESS" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0.85rem 0; color: #fff; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; outline: none; transition: border-color 0.3s;">
+          <input type="email" required placeholder="EMAIL ADDRESS" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0.85rem 0; color: #fff; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; outline: none;">
         </div>
-        
-        <!-- Mensaje -->
         <div style="margin-bottom: 2.5rem;">
           <textarea required placeholder="HOW CAN WE HELP YOU?" rows="2" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0.85rem 0; color: #fff; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; outline: none; resize: none;"></textarea>
         </div>
-        
-        <!-- Botón Enviar -->
-        <button type="submit" style="width: 100%; background: #fff; color: #000; border: none; padding: 1.2rem; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; cursor: pointer; transition: background 0.3s;">Send Message &rarr;</button>
+        <button type="submit" style="width: 100%; background: #fff; color: #000; border: none; padding: 1.2rem; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; cursor: pointer;">Send Message &rarr;</button>
       </form>
     </div>
   </div>
-  <!-- 👆 AQUÍ TERMINA EL MODAL DE CONTACTO 👆 -->
-
-
-  <!-- =========================================
-       MENÚ ELEGANTE FULL-SCREEN (El que agregamos antes)
-  ========================================= -->
-  <div id="fullScreenMenu" class="luxury-curtain">
-       <!-- ... código de tu menú ... -->
-  </div>
 
   <script>
-    // =========================================
-    // 1. FUNCIÓN DEL FORMULARIO DE CONTACTO (Afuera para que el HTML la detecte)
-    // =========================================
     function handleContactSubmit(e) {
       e.preventDefault();
       alert('Message sent successfully. We will get back to you soon.');
@@ -1068,83 +720,140 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      
-      // =========================================
-      // 2. LÓGICA DEL MODAL DE CONTACTO
-      // =========================================
+      // 1. MODAL Y MENÚ FULL-SCREEN
       const contactModal = document.getElementById('contactModal');
       const openContactBtn = document.getElementById('openContactBtn');
-      const openContactMobileBtn = document.getElementById('openContactMobileBtn');
       const closeContactBtn = document.getElementById('closeContactBtn');
       const burgerToggle = document.getElementById('burgerToggle');
-      const fullScreenMenu = document.getElementById('fullScreenMenu'); // El nuevo menú
-
-      function openModal() {
-        if (burgerToggle) burgerToggle.classList.remove('active');
-        if (fullScreenMenu) fullScreenMenu.classList.remove('active');
-        document.body.style.overflow = 'hidden';
-        if (contactModal) contactModal.classList.add('active');
-      }
-
-      if (openContactBtn) openContactBtn.addEventListener('click', openModal);
-      if (openContactMobileBtn) openContactMobileBtn.addEventListener('click', openModal);
-      
-      if (closeContactBtn) {
-        closeContactBtn.addEventListener('click', () => {
-          if (contactModal) contactModal.classList.remove('active');
-          document.body.style.overflow = '';
-        });
-      }
-
-      // =========================================
-      // 3. NUEVA LÓGICA DEL MENÚ FULL-SCREEN
-      // =========================================
+      const fullScreenMenu = document.getElementById('fullScreenMenu');
       const openMenuBtn = document.getElementById('openMenuBtn');
       const closeMenuBtn = document.getElementById('closeMenuBtn');
 
-      const openMenu = () => { if(fullScreenMenu) fullScreenMenu.classList.add('active'); };
-      const closeMenu = () => { if(fullScreenMenu) fullScreenMenu.classList.remove('active'); };
+      if (openContactBtn) {
+        openContactBtn.addEventListener('click', () => {
+          if (fullScreenMenu) fullScreenMenu.classList.remove('active');
+          if (contactModal) contactModal.classList.add('active');
+        });
+      }
+      if (closeContactBtn) {
+        closeContactBtn.addEventListener('click', () => {
+          if (contactModal) contactModal.classList.remove('active');
+        });
+      }
 
-      if(openMenuBtn) openMenuBtn.addEventListener('click', openMenu);
-      if(burgerToggle) burgerToggle.addEventListener('click', openMenu);
-      if(closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
+      const openMenu = () => { if (fullScreenMenu) fullScreenMenu.classList.add('active'); };
+      const closeMenu = () => { if (fullScreenMenu) fullScreenMenu.classList.remove('active'); };
 
+      if (openMenuBtn) openMenuBtn.addEventListener('click', openMenu);
+      if (burgerToggle) burgerToggle.addEventListener('click', openMenu);
+      if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
 
       // =========================================
-      // 4. MOTOR DE SCROLL FLUIDO (EFECTO RUEDA) - ¡INTACTO!
+      // 2. LÁMINAS 3D + CAMBIO A TEMA BLANCO EN LA WEB
       // =========================================
-      const scrollWrapper = document.querySelector('.horizontal-scroll-wrapper');
-      const horizontalTrack = document.querySelector('.horizontal-track');
+      const panels = document.querySelectorAll('.sticky-panel');
+      const mainHeader = document.getElementById('mainHeader');
+      const whitePanel = document.getElementById('whiteThemePanel');
+      const founderPanel = document.getElementById('founderPanel');
+
+      window.addEventListener('scroll', () => {
+        const viewHeight = window.innerHeight;
+
+        // A. Detectar si la Lámina 2 (Blanca) domina la pantalla para cambiar la Navbar a Tema Blanco
+        if (whitePanel && founderPanel && mainHeader) {
+          const whiteRect = whitePanel.getBoundingClientRect();
+          const founderRect = founderPanel.getBoundingClientRect();
+
+          if (whiteRect.top <= 90 && founderRect.top > 90) {
+            mainHeader.classList.add('theme-light');
+          } else {
+            mainHeader.classList.remove('theme-light');
+          }
+        }
+
+        // B. Efecto 3D de empuje en las láminas
+        panels.forEach((panel, index) => {
+          const nextPanel = panels[index + 1];
+          if (nextPanel) {
+            const nextRect = nextPanel.getBoundingClientRect();
+            if (nextRect.top < viewHeight && nextRect.top > 0) {
+              const coverProgress = 1 - (nextRect.top / viewHeight);
+              const scaleVal = 1 - (coverProgress * 0.06);
+              panel.style.transform = `scale(${scaleVal})`;
+            } else if (nextRect.top <= 0) {
+              panel.style.transform = 'scale(0.94)';
+            } else {
+              panel.style.transform = 'scale(1)';
+            }
+          }
+        });
+      }, { passive: true });
+
+      // =========================================
+      // 3. CARRUSEL DE BALONES (FIJACIÓN INFALIBLE EN PC Y MÓVIL)
+      // =========================================
+      const scrollWrapper = document.getElementById('ballScrollSection');
+      const stickyPin = document.getElementById('ballStickyPin');
+      const horizontalTrack = document.getElementById('ballTrack');
       const marqueeItems = document.querySelectorAll('.marquee-item');
+      const trustedHeader = document.getElementById('trustedHeader');
 
       let currentX = 0;
       let targetX = 0;
 
       function animateScroll() {
-        if (scrollWrapper && horizontalTrack) {
-          const wrapperTop = scrollWrapper.offsetTop;
-          const wrapperHeight = scrollWrapper.offsetHeight;
-          const scrollY = window.scrollY;
-          
-          if (scrollY >= wrapperTop && scrollY <= (wrapperTop + wrapperHeight - window.innerHeight)) {
-            const progress = (scrollY - wrapperTop) / (wrapperHeight - window.innerHeight);
-            const maxTranslateX = horizontalTrack.scrollWidth - window.innerWidth + 200;
-            targetX = progress * maxTranslateX;
-          } else if (scrollY < wrapperTop) {
-            targetX = 0;
+        if (scrollWrapper && stickyPin && horizontalTrack) {
+          const rect = scrollWrapper.getBoundingClientRect();
+          const viewHeight = window.innerHeight;
+          const totalScrollable = scrollWrapper.offsetHeight - viewHeight;
+
+          // Anclaje directo por coordenadas: garantiza que la pantalla se detenga en PC y Móvil
+          if (rect.top <= 0 && rect.bottom >= viewHeight) {
+            stickyPin.classList.add('is-fixed');
+            stickyPin.classList.remove('is-bottom');
+          } else if (rect.bottom < viewHeight) {
+            stickyPin.classList.remove('is-fixed');
+            stickyPin.classList.add('is-bottom');
           } else {
-            const maxTranslateX = horizontalTrack.scrollWidth - window.innerWidth + 200;
-            targetX = maxTranslateX;
+            stickyPin.classList.remove('is-fixed');
+            stickyPin.classList.remove('is-bottom');
           }
 
-          currentX += (targetX - currentX) * 0.05;
+          const scrolled = -rect.top;
+          let rawProgress = scrolled / totalScrollable;
+          if (rawProgress < 0) rawProgress = 0;
+          if (rawProgress > 1) rawProgress = 1;
+
+          // Primer 15% del recorrido muestra "Trusted by Elite Talent" despejado
+          const holdThreshold = 0.15;
+          let trackProgress = 0;
+
+          if (rawProgress <= holdThreshold) {
+            trackProgress = 0;
+            if (trustedHeader) {
+              trustedHeader.style.opacity = '1';
+              trustedHeader.style.transform = 'translate(-50%, -50%) scale(1)';
+            }
+          } else {
+            trackProgress = (rawProgress - holdThreshold) / (1 - holdThreshold);
+            if (trustedHeader) {
+              trustedHeader.style.opacity = '0.22';
+              trustedHeader.style.transform = 'translate(-50%, -50%) scale(0.94)';
+            }
+          }
+
+          const maxTranslateX = horizontalTrack.scrollWidth - window.innerWidth + 150;
+          targetX = trackProgress * maxTranslateX;
+
+          currentX += (targetX - currentX) * 0.07;
           horizontalTrack.style.transform = `translateX(-${currentX}px)`;
 
+          // Curva parabólica + rotación de balón rodando
           marqueeItems.forEach(item => {
-            const rect = item.getBoundingClientRect();
-            const xPos = ((rect.left + rect.width / 2) / window.innerWidth) - 0.1;
-            const curveY = Math.pow(xPos, 2) * 180; 
-            const rotation = xPos * 15;
+            const itemRect = item.getBoundingClientRect();
+            const xPos = ((itemRect.left + itemRect.width / 2) / window.innerWidth) - 0.5;
+            const curveY = Math.pow(xPos, 2) * 160; 
+            const rotation = xPos * 35;
             item.style.transform = `translateY(${curveY}px) rotate(${rotation}deg)`;
           });
         }
@@ -1153,41 +862,32 @@
       animateScroll();
 
       // =========================================
-      // 5. RASTREADOR TÁCTIL PARA MÓVILES - ¡INTACTO!
+      // 4. RASTREADOR TÁCTIL PARA MÓVILES
       // =========================================
-      const touchItems = document.querySelectorAll('.marquee-item');
-
-      touchItems.forEach(item => {
+      marqueeItems.forEach(item => {
         item.addEventListener('touchstart', () => {
-          touchItems.forEach(i => i.classList.remove('touch-active'));
+          marqueeItems.forEach(i => i.classList.remove('touch-active'));
           item.classList.add('touch-active');
-        }, {passive: true});
+        }, { passive: true });
       });
 
       document.addEventListener('touchmove', (e) => {
         const touch = e.touches[0];
         const element = document.elementFromPoint(touch.clientX, touch.clientY);
-        
         if (element && element.closest('.marquee-item')) {
           const targetItem = element.closest('.marquee-item');
           if (!targetItem.classList.contains('touch-active')) {
-            touchItems.forEach(i => i.classList.remove('touch-active'));
+            marqueeItems.forEach(i => i.classList.remove('touch-active'));
             targetItem.classList.add('touch-active');
           }
         } else {
-          touchItems.forEach(i => i.classList.remove('touch-active'));
+          marqueeItems.forEach(i => i.classList.remove('touch-active'));
         }
-      }, {passive: true});
+      }, { passive: true });
 
       document.addEventListener('touchend', () => {
-        touchItems.forEach(i => i.classList.remove('touch-active'));
+        marqueeItems.forEach(i => i.classList.remove('touch-active'));
       });
-
-
-
-
-      
-
     });
   </script>
 </body>
