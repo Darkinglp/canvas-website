@@ -771,7 +771,172 @@ header, .nav-inner {
         margin: 0 !important;
       }
     }
+/* =========================================
+       CIRUGÍA DE EMERGENCIA MÓVIL: TITULOS, RULETA Y FUNDADOR
+    ========================================= */
+    @media (max-width: 768px) {
+      
+      /* 1. EL TRUCO PARA SALVAR EL EFECTO STICKY Y QUITAR EL ESPACIO GIGANTE */
+      html, body {
+        /* Cambiamos 'hidden' por 'clip'. Hace lo mismo, pero NO rompe la ruleta */
+        overflow-x: clip !important; 
+        width: 100vw !important;
+      }
 
+      /* 2. FORZAR QUE LA RULETA SE QUEDE QUIETA AL BAJAR */
+      .horizontal-scroll-wrapper {
+        position: relative !important;
+        overflow: visible !important;
+      }
+      
+      /* Atrapamos al contenedor de la rueda para que frene obligatoriamente */
+      .horizontal-scroll-wrapper > div, .sticky-container {
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        top: 0 !important;
+        height: 100dvh !important; 
+        overflow: hidden !important;
+      }
+
+      /* 3. RESCATAR LOS TÍTULOS QUE SE SALEN DE LA PANTALLA */
+      h1, h2, h3, .page-title, .hero-title {
+        font-size: clamp(2rem, 8vw, 3rem) !important; /* Tamaño fluido automático */
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
+        max-width: 100% !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        box-sizing: border-box !important;
+      }
+
+      /* 4. REPARAR LA SECCIÓN DEL FUNDADOR (Apilar hacia abajo) */
+      /* No importa qué clase tenga tu contenedor, atrapamos las más comunes */
+      .founder-section, .founder-wrapper, .founder-container, .founder-grid, .founder-content {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 2rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        box-sizing: border-box !important;
+      }
+      
+      .founder-image img, .founder-photo {
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      /* 5. DEVOLVERLE LA VIDA A LAS LÁMINAS APILABLES */
+      .cards-stack-container {
+        display: block !important; /* Quitamos flex para que el sticky funcione */
+      }
+      
+      .pro-card, .about-card, .mission-card, .sticky-card-1, .sticky-card-2, .sticky-card-3 {
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+    }
+    /* =========================================
+       DISEÑO DE LAS PUERTAS Y ENVOLTORIO HERO
+    ========================================= */
+    .split-splash-section {
+      position: relative;
+      width: 100%;
+      height: 200dvh; /* Altura doble para permitir el scroll de apertura */
+      background: #050505;
+      z-index: 10;
+    }
+
+    #split-grid {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      display: grid;
+      grid-template-columns: 1fr 0fr 1fr; /* Empieza cerrado */
+      width: 100%;
+      height: 100dvh;
+      background: #050505;
+      overflow: hidden;
+      will-change: grid-template-columns;
+    }
+
+    .split-door {
+      width: 100%;
+      height: 100%;
+      background: #050505; /* Puertas negro mate */
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      z-index: 20;
+    }
+
+    .split-left { justify-content: flex-end; border-right: 1px solid rgba(212, 175, 55, 0.3); }
+    .split-right { justify-content: flex-start; border-left: 1px solid rgba(212, 175, 55, 0.3); }
+
+    .door-text {
+      font-family: var(--font-display), sans-serif;
+      font-size: clamp(4rem, 15vw, 12rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      padding: 0 1vw;
+    }
+
+    /* EL SECRETO PARA NO DEFORMAR TU HERO */
+    .split-middle {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* Corta visualmente lo que no cabe */
+      position: relative;
+    }
+
+    .middle-content-wrapper {
+      width: 100vw; /* Fuerza a que tu Hero mida siempre toda la pantalla */
+      height: 100dvh;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%); /* Lo mantiene centrado mientras se abren las puertas */
+    }
+
+    @media (max-width: 768px) {
+      .split-splash-section { height: 150dvh; } /* Scroll más rápido en móvil */
+    }
+    /* =========================================
+       FIX DEFINITIVO: PUERTAS QUE SE QUEDAN QUIETAS
+    ========================================= */
+    
+    /* 1. Evitar que el cuerpo de la página rompa el anclaje */
+    html, body {
+      overflow-x: clip !important;
+      overflow-y: visible !important;
+    }
+
+    /* Si usas la etiqueta <main>, también debe permitir desbordes */
+    main {
+      overflow: visible !important;
+    }
+
+    /* 2. Forzar a la sección a medir el doble de la pantalla */
+    .split-splash-section {
+      position: relative !important;
+      overflow: visible !important; 
+      height: 200vh !important; /* Usamos vh en vez de dvh para mayor estabilidad */
+      z-index: 100 !important;
+    }
+
+    /* 3. El anclaje absoluto y obligatorio de las puertas */
+    #split-grid {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 0 !important;
+      left: 0 !important;
+      height: 100vh !important; 
+      width: 100% !important;
+    }
   </style>
 </head>
 <body>
@@ -824,76 +989,175 @@ header, .nav-inner {
 
  
   <main>
-    <!-- HERO CINEMÁTICO -->
-    <section class="hero-cinematic" id="heroCinematic">
-      <div class="hero-bg-media"></div>
-      <div class="container hero-content">
-        <span class="hero-tagline">Private Representation &bull; Media House</span>
-        <h1 class="hero-big-title">Athletes.<br>Creators.<br>Equity.</h1>
-        <div class="hero-meta-row">
-          <p class="hero-description">
-            A selective management group engineering the modern intersection of athletic prestige, digital creator ownership, and institutional commercial partnerships.
-          </p>
-          <div style="text-align: right;">
-            <a href="athletes.html" style="display: inline-flex; align-items: center; gap: 0.75rem; border: 1px solid var(--border-accent); padding: 0.9rem 1.8rem; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase;">
-              Explore Roster &rarr;
-            </a>
+   <!-- =========================================
+         ENTRADA SPLIT DOORS (PRE-LOADER)
+    ========================================= -->
+    <section class="split-splash-section">
+      <div id="split-grid">
+        
+        <!-- Puerta Izquierda -->
+        <div class="split-door split-left">
+          <div class="door-text left-text">CAN</div>
+        </div>
+
+        <!-- El Centro (Aquí vive tu Hero protegido) -->
+        <div class="split-middle">
+          <div class="middle-content-wrapper">
+            
+            <!-- 👇 AQUÍ EMPIEZA TU HERO ORIGINAL INTACTO 👇 -->
+            <section class="hero-cinematic" id="heroCinematic">
+              <div class="hero-bg-media"></div>
+              <div class="container hero-content">
+                <span class="hero-tagline">Private Representation &bull; Media House</span>
+                <h1 class="hero-big-title">Athletes.<br>Creators.<br>Equity.</h1>
+                <div class="hero-meta-row">
+                  <p class="hero-description">
+                    A selective management group engineering the modern intersection of athletic prestige, digital creator ownership, and institutional commercial partnerships.
+                  </p>
+                  <div style="text-align: right;">
+                    <a href="athletes.html" style="display: inline-flex; align-items: center; gap: 0.75rem; border: 1px solid var(--border-accent); padding: 0.9rem 1.8rem; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase;">
+                      Explore Roster &rarr;
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <button class="hero-toggle-btn" id="heroToggleBtn" type="button">
+                <span id="heroToggleText">Show Details</span>
+                <span class="hero-toggle-icon" id="heroToggleIcon">&uarr;</span>
+              </button>
+            </section>
+            <!-- 👆 AQUÍ TERMINA TU HERO ORIGINAL 👆 -->
+
           </div>
         </div>
+
+        <!-- Puerta Derecha -->
+        <div class="split-door split-right">
+          <div class="door-text right-text">VAS</div>
+        </div>
+
       </div>
-      <button class="hero-toggle-btn" id="heroToggleBtn" type="button">
-        <span id="heroToggleText">Show Details</span>
-        <span class="hero-toggle-icon" id="heroToggleIcon">&uarr;</span>
-      </button>
     </section>
 
-    <!-- CARRUSEL VISUAL -->
-    <section class="athletes-carousel-section">
+ 
+
+      
+    </section>
+
+<!-- =========================================
+         CARRUSEL VISUAL INFINITO (SIN NOMBRES)
+    ========================================= -->
+    <section class="athletes-carousel-section" style="padding-bottom: 8rem; overflow: hidden; background: var(--bg);">
       <div class="carousel-track-wrapper">
         <div class="carousel-track">
+          
+          <!-- =========================================
+               GRUPO A: TUS 6 ATLETAS ORIGINALES
+          ========================================= -->
+
+        <!-- Tarjeta de Emanuel Ross -->
           <div class="carousel-photo-card">
-            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Marcus Vance">
+            <img src="img/emanuel-Ross-Syracuse1.jpg" alt="Emanuel Ross">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">SYRACUSE WR &bull; ACC</span>
+            </div>
+          </div>
+
+          <div class="carousel-photo-card">
+            <img src="img/jerome-palm.jpg" alt="Jerome Palm">
             <div class="carousel-photo-info">
               <span class="carousel-tag">SEC Basketball &bull; NIL</span>
-              <h4 class="carousel-name">Marcus Vance</h4>
             </div>
           </div>
+          
           <div class="carousel-photo-card">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Sienna Cole">
+            <img src="img/Luke-Bamgboye-VCU.jpg" alt="Luke Bamgboye">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Lifestyle Creator</span>
-              <h4 class="carousel-name">Sienna Cole</h4>
+              <span class="carousel-tag">VCU RAMS &bull; ELITE PROSPECT</span>
             </div>
           </div>
+          
           <div class="carousel-photo-card">
             <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Devon Sterling">
             <div class="carousel-photo-info">
               <span class="carousel-tag">Big Ten Forward</span>
-              <h4 class="carousel-name">Devon Sterling</h4>
             </div>
           </div>
+          
           <div class="carousel-photo-card">
             <img src="img/howie-fleming1.jpg" alt="Howie Fleming Jr.">
             <div class="carousel-photo-info">
               <span class="carousel-tag">UNLV REBELS &bull; ELITE PROSPECT</span>
-              <h4 class="carousel-name">Howie Fleming Jr.</h4>
             </div>
           </div>
-          <!-- Duplicados para el loop -->
+          
           <div class="carousel-photo-card">
             <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Marcus Vance">
             <div class="carousel-photo-info">
               <span class="carousel-tag">SEC Basketball &bull; NIL</span>
-              <h4 class="carousel-name">Marcus Vance</h4>
             </div>
           </div>
+          
           <div class="carousel-photo-card">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Sienna Cole">
+            <img src="img/david-coit-kansas.jpg" alt="David Coit">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Lifestyle Creator</span>
-              <h4 class="carousel-name">Sienna Cole</h4>
+              <span class="carousel-tag">KANSAS GUARD &bull; ELITE</span>
             </div>
           </div>
+
+          <!-- =========================================
+               GRUPO B: EL CLON EXACTO PARA EL LOOP INFINITO
+          ========================================= -->
+          <!-- Tarjeta de Emanuel Ross -->
+          <div class="carousel-photo-card">
+            <img src="img/emanuel-Ross-Syracuse1.jpg" alt="Emanuel Ross">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">SYRACUSE WR &bull; ACC</span>
+            </div>
+          </div>
+
+          <div class="carousel-photo-card">
+            <img src="img/jerome-palm.jpg" alt="Jerome Palm">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">SEC Basketball &bull; NIL</span>
+            </div>
+          </div>
+          
+          <div class="carousel-photo-card">
+            <img src="img/Luke-Bamgboye-VCU.jpg" alt="Luke Bamgboye">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">VCU RAMS &bull; ELITE PROSPECT</span>
+            </div>
+          </div>
+          
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Devon Sterling">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">Big Ten Forward</span>
+            </div>
+          </div>
+          
+          <div class="carousel-photo-card">
+            <img src="img/howie-fleming1.jpg" alt="Howie Fleming Jr.">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">UNLV REBELS &bull; ELITE PROSPECT</span>
+            </div>
+          </div>
+          
+          <div class="carousel-photo-card">
+            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Marcus Vance">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">SEC Basketball &bull; NIL</span>
+            </div>
+          </div>
+          
+          <div class="carousel-photo-card">
+            <img src="img/david-coit-kansas.jpg" alt="David Coit">
+            <div class="carousel-photo-info">
+              <span class="carousel-tag">KANSAS GUARD &bull; ELITE</span>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
@@ -1057,6 +1321,53 @@ header, .nav-inner {
       });
     }, { threshold: 0.15 });
     document.querySelectorAll('.scroll-reveal-section').forEach(sec => observer.observe(sec));
+// =========================================
+      // 2. LÓGICA DEL MODAL DE CONTACTO
+      // =========================================
+      const contactModal = document.getElementById('contactModal');
+      const openContactBtn = document.getElementById('openContactBtn');
+      const openContactMobileBtn = document.getElementById('openContactMobileBtn');
+      const closeContactBtn = document.getElementById('closeContactBtn');
+      const burgerToggle = document.getElementById('burgerToggle');
+      const fullScreenMenu = document.getElementById('fullScreenMenu'); // El nuevo menú
+
+      function openModal() {
+        if (burgerToggle) burgerToggle.classList.remove('active');
+        if (fullScreenMenu) fullScreenMenu.classList.remove('active');
+        document.body.style.overflow = 'hidden';
+        if (contactModal) contactModal.classList.add('active');
+      }
+
+      if (openContactBtn) openContactBtn.addEventListener('click', openModal);
+      if (openContactMobileBtn) openContactMobileBtn.addEventListener('click', openModal);
+      
+      if (closeContactBtn) {
+        closeContactBtn.addEventListener('click', () => {
+          if (contactModal) contactModal.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      }
+    // =========================================
+      // MOTOR DE APERTURA DE PUERTAS
+      // =========================================
+      const splitSplash = document.querySelector('.split-splash-section');
+      const splitGrid = document.getElementById('split-grid');
+
+      if (splitSplash && splitGrid) {
+        window.addEventListener('scroll', () => {
+          const heroTop = splitSplash.offsetTop;
+          // Esto controla qué tan rápido se abren. 0.8 es ideal.
+          const maxScroll = window.innerHeight * 0.8; 
+          let progress = (window.scrollY - heroTop) / maxScroll;
+          
+          if (progress < 0) progress = 0;
+          if (progress > 1) progress = 1;
+
+          // Transición fluida de cerrado a abierto
+          splitGrid.style.gridTemplateColumns = `${1 - progress}fr ${progress}fr ${1 - progress}fr`;
+        }, { passive: true });
+      }
   </script>
+
 </body>
 </html>
