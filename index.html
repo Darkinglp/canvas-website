@@ -1275,6 +1275,60 @@ header, .nav-inner {
         line-height: 1.6 !important;
       }
     }
+    /* =========================================
+       FIX DEFINITIVO: NAVBAR TRANSPARENTE Y TÍTULOS
+    ========================================= */
+    
+    /* 1. NAVBAR FLOTANTE Y TRANSPARENTE */
+    header {
+      background: transparent !important;
+      background-color: transparent !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+    }
+
+    @media (max-width: 768px) {
+      
+      /* 2. TÍTULOS GIGANTES (Architecture, Representation, etc.) */
+      h2, h3, .footer-huge, .panel-title {
+        font-size: 6.8vw !important; /* Reducido para que quepa perfecto sin salirse */
+        line-height: 1.15 !important;
+        white-space: normal !important;
+        word-break: normal !important;
+        overflow-wrap: break-word !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+      }
+
+      /* 3. ARREGLAR EL FOOTER Y LOS ICONOS DE CONTACTO */
+      footer {
+        padding: 5rem 1.5rem 6rem 1.5rem !important; /* Espacio extra abajo para que no lo tape la barra de iOS */
+      }
+
+      .footer-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 3rem !important;
+      }
+
+      .contact-card {
+        width: 100% !important;
+        padding: 2.5rem 1.5rem !important;
+        box-sizing: border-box !important;
+      }
+
+      .social-icons-row {
+        display: flex !important;
+        gap: 2rem !important;
+        margin-top: 1.5rem !important;
+        margin-bottom: 1.5rem !important;
+      }
+
+      .social-icon svg {
+        width: 32px !important;
+        height: 32px !important;
+      }
+    }
   </style>
 </head>
 <body>
