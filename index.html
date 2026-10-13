@@ -1329,6 +1329,66 @@ header, .nav-inner {
         height: 32px !important;
       }
     }
+
+    /* =========================================
+       ESTILO "BEST SPORTS AGENCY" (MÓVIL DEFINITIVO)
+    ========================================= */
+    @media (max-width: 768px) {
+      
+      /* 1. EL SECRETO DEL ESTILO AGENCIA: Bloques sólidos y apretados */
+      h1, h2, h3, .hero-big-title, .page-title, .hero-title, .footer-huge {
+        line-height: 0.95 !important; /* Interlineado cerrado para que se apile como un bloque */
+        letter-spacing: -0.02em !important; /* Letras ligeramente más juntas */
+        text-transform: uppercase !important;
+        white-space: normal !important; /* Permite salto de línea natural y elegante */
+        word-break: break-word !important;
+        margin: 0 0 1rem 0 !important;
+      }
+
+      /* 2. ANTI-APRETÓN (Para la animación de las puertas) */
+      .middle-content-wrapper {
+        width: 100vw !important;
+        min-width: 100vw !important;
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important; /* Fija el contenedor; las puertas se abrirán como un telón sin apretar el texto */
+      }
+
+      .hero-content {
+        width: 100vw !important;
+        padding: 0 6vw !important; /* Usa el ancho de la pantalla para el margen */
+        box-sizing: border-box !important;
+      }
+
+      /* 3. TAMAÑOS MATEMÁTICOS DE FUENTE */
+      .hero-big-title {
+        font-size: 12vw !important; /* Tamaño exacto para "ATHLETES." */
+        text-align: left !important;
+      }
+
+      h2, h3, .footer-huge, .panel-title, .contact-modal h3 {
+        /* 7vw es la medida matemática perfecta para que "REPRESENTATION" (14 letras) quepa en cualquier iPhone */
+        font-size: 7vw !important; 
+        padding-left: 6vw !important;
+        padding-right: 6vw !important;
+        text-align: left !important;
+      }
+
+      /* 4. MÁRGENES DE SEGURIDAD GENERALES */
+      .container, .pillar-box, .contact-card, .portal-modal-box {
+        padding-left: 6vw !important;
+        padding-right: 6vw !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+      }
+      
+      .door-text {
+        font-size: 14vw !important; 
+        padding: 0 6vw !important;
+      }
+    }
   </style>
 </head>
 <body>
