@@ -1061,6 +1061,47 @@ header, .nav-inner {
         overflow-wrap: normal !important;
       }
     }
+    /* =========================================
+       UPGRADE DE LUJO Y FIX DE TEXTO CORTADO
+    ========================================= */
+    
+    /* 1. Fondo premium (Efecto de viñeta profunda en lugar de negro plano) */
+    .split-door {
+      background: radial-gradient(circle at 50% 50%, #161618 0%, #030303 100%) !important;
+    }
+
+    /* 2. Línea dorada central con degradado luminoso */
+    .split-left { 
+      border-right: 1px solid transparent !important;
+      border-image: linear-gradient(to bottom, transparent 15%, rgba(212, 175, 55, 0.8) 50%, transparent 85%) 1 !important;
+    }
+    .split-right { 
+      border-left: 1px solid transparent !important;
+      border-image: linear-gradient(to bottom, transparent 15%, rgba(212, 175, 55, 0.8) 50%, transparent 85%) 1 !important;
+    }
+
+    /* 3. Ligero resplandor en las letras blancas */
+    .door-text {
+      text-shadow: 0 0 40px rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* 4. FIX PARA EL TEXTO CORTADO EN MÓVIL */
+    @media (max-width: 768px) {
+      .door-text {
+        /* Bajamos de 16vw a 11.5vw para asegurar márgenes perfectos */
+        font-size: 11.5vw !important; 
+        /* Separación de las orillas y del centro */
+        padding: 0 4vw !important;
+      }
+      
+      /* Toque premium al botón "Tap to Enter" */
+      .tap-to-enter-msg {
+        letter-spacing: 0.45em !important;
+        font-size: 0.75rem !important;
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.5) !important;
+        color: #E2C76A !important;
+      }
+    }
   </style>
 </head>
 <body>
