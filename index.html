@@ -1155,6 +1155,51 @@ header, .nav-inner {
         padding: 2.5rem 1.5rem !important;
       }
     }
+    /* =========================================
+       ESTILO AGENCIA TOP (BLOQUES APILADOS Y ALINEADOS)
+    ========================================= */
+    @media (max-width: 768px) {
+      /* 1. LIBERAR EL TEXTO: Permitir que baje de línea de forma natural */
+      h1, h2, h3, .hero-big-title, .page-title, .hero-title, .footer-huge, .door-text {
+        white-space: normal !important; /* Elimina la restricción que sacaba el texto de la pantalla */
+        word-break: normal !important; 
+        overflow-wrap: break-word !important; /* Candado de seguridad */
+        box-sizing: border-box !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+
+      /* 2. PUERTAS DE ENTRADA (CAN | VAS) */
+      .door-text {
+        font-size: 14vw !important; /* Ajuste para que la C y la S respiren */
+        padding: 0 4vw !important;
+      }
+
+      /* 3. HERO CINEMÁTICO (ATHLETES. CREATORS. EQUITY.) */
+      .hero-big-title {
+        font-size: 11.5vw !important; 
+        line-height: 1.05 !important;
+        padding: 0 1.5rem !important;
+        text-align: center !important;
+      }
+
+      /* 4. TÍTULOS LARGOS COMO "REPRESENTATION" Y "PARTNERSHIPS" */
+      h2, h3, .footer-huge {
+        /* 8.5vw garantiza que 14 letras de 'Syne' quepan en el ancho del celular */
+        font-size: 8.5vw !important; 
+        line-height: 1.15 !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+        text-align: left !important;
+      }
+
+      /* 5. MÁRGENES PERFECTOS (Para que nada empuje la pantalla a los lados) */
+      .container, .pillar-box, .deal-feature-card, .contact-card, section {
+        max-width: 100vw !important;
+        box-sizing: border-box !important;
+      }
+    }
   </style>
 </head>
 <body>
