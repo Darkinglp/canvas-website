@@ -291,6 +291,130 @@
       .curtain-link { font-size: 2.2rem !important; }
       .curtain-link::after { display: none !important; }
     }
+    /* =========================================
+       7. DESBLOQUEO DE SCROLL VERTICAL Y BOTÓN CENTRAL DE LUJO
+    ========================================= */
+    
+    /* 1. Liberar el scroll vertical en móvil y escritorio */
+    html, body {
+      overflow-x: clip !important;
+      overflow-y: auto !important;
+      height: auto !important;
+      touch-action: pan-y !important;
+    }
+
+    main, section, .athletes-carousel-section {
+      overflow: visible !important;
+      touch-action: pan-y !important;
+    }
+
+    /* Como las puertas abren solas, quitamos los 200vh que trababan el inicio */
+    .split-splash-section, #split-grid, .hero-cinematic {
+      height: 100dvh !important;
+      min-height: 100dvh !important;
+      max-height: 100dvh !important;
+      position: relative !important;
+      overflow: hidden !important;
+      touch-action: pan-y !important;
+    }
+
+    /* Las puertas abiertas no deben interceptar el dedo */
+    .split-door {
+      pointer-events: none !important;
+    }
+
+    /* 2. Diseño del Botón Central Elegante (Estilo Agencia) */
+    .hero-toggle-btn {
+      position: absolute !important;
+      top: 54% !important;
+      bottom: auto !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      z-index: 30 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 1rem !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 1rem !important;
+      cursor: pointer !important;
+      backdrop-filter: none !important;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .hero-toggle-btn.visible {
+      opacity: 1 !important;
+      pointer-events: all !important;
+    }
+
+    /* Cuando el texto está visible, el botón baja suavemente para no estorbar */
+    .hero-toggle-btn.active-mode {
+      top: 88% !important;
+      transform: translate(-50%, -50%) scale(0.85) !important;
+    }
+
+    .luxury-ring-wrap {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .luxury-ring-core {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(10, 10, 13, 0.55);
+      border: 1px solid rgba(212, 175, 55, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 300;
+      transition: transform 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+    }
+
+    .hero-toggle-btn:hover .luxury-ring-core {
+      transform: scale(1.08);
+      background: rgba(212, 175, 55, 0.15);
+      border-color: #D4AF37;
+    }
+
+    /* Anillos concéntricos pulsantes */
+    .luxury-ring-pulse {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      animation: luxuryRipple 2.6s infinite cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .luxury-ring-pulse.delay {
+      animation-delay: 1.3s;
+    }
+
+    @keyframes luxuryRipple {
+      0% { transform: scale(0.75); opacity: 1; }
+      100% { transform: scale(1.65); opacity: 0; }
+    }
+
+    .luxury-btn-label {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -375,8 +499,14 @@
                 </div>
               </div>
               <button class="hero-toggle-btn" id="heroToggleBtn" type="button">
-                <span id="heroToggleText">Show Details</span>
-                <span class="hero-toggle-icon" id="heroToggleIcon">&uarr;</span>
+                <span class="luxury-ring-wrap">
+                  <span class="luxury-ring-pulse"></span>
+                  <span class="luxury-ring-pulse delay"></span>
+                  <span class="luxury-ring-core">
+                    <span class="hero-toggle-icon" id="heroToggleIcon">+</span>
+                  </span>
+                </span>
+                <span id="heroToggleText" class="luxury-btn-label">Reveal Story</span>
               </button>
             </section>
             <!-- 👆 AQUÍ TERMINA TU HERO ORIGINAL 👆 -->
@@ -619,103 +749,23 @@
     document.addEventListener('DOMContentLoaded', () => {
       
       // =========================================
-      // 1. TEMPORIZADOR HÉROE 3.5s (Intacto)
+      // 1. MOTOR DE ENTRADA, CAÍDA Y BOTÓN CENTRAL
       // =========================================
+      const splitGrid = document.getElementById('split-grid');
       const hero = document.getElementById('heroCinematic');
       const heroContent = document.querySelector('.hero-content');
       const heroToggleBtn = document.getElementById('heroToggleBtn');
       const heroToggleText = document.getElementById('heroToggleText');
       const heroToggleIcon = document.getElementById('heroToggleIcon');
 
-      setTimeout(() => {
-        if (hero) hero.classList.add('loaded');
-        if (heroContent) heroContent.classList.add('slide-down');
-        if (heroToggleBtn) heroToggleBtn.classList.add('visible');
-      }, 3500);
-
-      if (heroToggleBtn && heroContent) {
-        heroToggleBtn.addEventListener('click', () => {
-          const isHidden = heroContent.classList.contains('slide-down');
-          if (isHidden) {
-            heroContent.classList.remove('slide-down');
-            if (heroToggleText) heroToggleText.textContent = 'Hide Details';
-            if (heroToggleIcon) heroToggleIcon.innerHTML = '&darr;';
-          } else {
-            heroContent.classList.add('slide-down');
-            if (heroToggleText) heroToggleText.textContent = 'Show Details';
-            if (heroToggleIcon) heroToggleIcon.innerHTML = '&uarr;';
-          }
-        });
-      }
-
-      // =========================================
-      // 2. LÓGICA DEL MENÚ FULL-SCREEN
-      // =========================================
-      const fullScreenMenu = document.getElementById('fullScreenMenu');
-      const openMenuBtn = document.getElementById('openMenuBtn');
-      const burgerToggle = document.getElementById('burgerToggle');
-      const closeMenuBtn = document.getElementById('closeMenuBtn');
-
-      const openMenu = () => { if(fullScreenMenu) fullScreenMenu.classList.add('active'); };
-      const closeMenu = () => { if(fullScreenMenu) fullScreenMenu.classList.remove('active'); };
-
-      if(openMenuBtn) openMenuBtn.addEventListener('click', openMenu);
-      if(burgerToggle) burgerToggle.addEventListener('click', openMenu);
-      if(closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
-
-    });
-
-    // =========================================
-    // 3. SCROLL REVEAL (Intacto)
-    // =========================================
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('in-view');
-      });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.scroll-reveal-section').forEach(sec => observer.observe(sec));
-// =========================================
-      // 2. LÓGICA DEL MODAL DE CONTACTO
-      // =========================================
-      const contactModal = document.getElementById('contactModal');
-      const openContactBtn = document.getElementById('openContactBtn');
-      const openContactMobileBtn = document.getElementById('openContactMobileBtn');
-      const closeContactBtn = document.getElementById('closeContactBtn');
-      const burgerToggle = document.getElementById('burgerToggle');
-      const fullScreenMenu = document.getElementById('fullScreenMenu'); // El nuevo menú
-
-      function openModal() {
-        if (burgerToggle) burgerToggle.classList.remove('active');
-        if (fullScreenMenu) fullScreenMenu.classList.remove('active');
-        document.body.style.overflow = 'hidden';
-        if (contactModal) contactModal.classList.add('active');
-      }
-
-      if (openContactBtn) openContactBtn.addEventListener('click', openModal);
-      if (openContactMobileBtn) openContactMobileBtn.addEventListener('click', openModal);
-      
-      if (closeContactBtn) {
-        closeContactBtn.addEventListener('click', () => {
-          if (contactModal) contactModal.classList.remove('active');
-          document.body.style.overflow = '';
-        });
-      }
-    // =========================================
-      // MOTOR DEFINITIVO: APERTURA, APARICIÓN Y CAÍDA
-      // =========================================
-      const splitGrid = document.getElementById('split-grid');
-      const hero = document.getElementById('heroCinematic');
-      const heroContent = document.querySelector('.hero-content');
-      const heroToggleBtn = document.getElementById('heroToggleBtn');
-
-      // Preparar el texto para que entre desde arriba
+      // Estado inicial del texto antes de abrir puertas
       if (heroContent) {
         heroContent.style.opacity = '0';
         heroContent.style.transform = 'translateY(-30px)';
-        heroContent.style.transition = 'opacity 1.2s ease, transform 1.2s ease';
+        heroContent.style.transition = 'opacity 1.1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1)';
       }
 
-      // 1. ABRIR LAS PUERTAS (A los 2 segundos)
+      // A. Abrir las puertas a los 2 segundos
       setTimeout(() => {
         if (splitGrid) {
           splitGrid.style.transition = 'grid-template-columns 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
@@ -723,28 +773,103 @@
         }
       }, 2000);
 
-      // 2. APARECER EL TEXTO (A los 4.5 segundos)
+      // B. Mostrar el texto del Hero a los 4.2 segundos
       setTimeout(() => {
         if (hero) hero.classList.add('loaded'); 
         if (heroContent) {
           heroContent.style.opacity = '1';
           heroContent.style.transform = 'translateY(0)'; 
         }
-      }, 4500);
+      }, 4200);
 
-      // 3. BAJAR EL TEXTO Y MOSTRAR EL FONDO (A los 7 segundos)
+      // C. Bajar el texto a los 7 segundos y mostrar el botón central de lujo
       setTimeout(() => {
         if (heroContent) {
-          // El texto cae suavemente y desaparece
+          heroContent.classList.add('slide-down');
           heroContent.style.opacity = '0';
-          heroContent.style.transform = 'translateY(120px)'; 
-          heroContent.classList.add('slide-down'); 
+          heroContent.style.transform = 'translateY(120px)';
+          heroContent.style.pointerEvents = 'none';
         }
         if (heroToggleBtn) {
-          // Muestra el botón por si el cliente quiere volver a subir el texto
           heroToggleBtn.classList.add('visible'); 
         }
       }, 7000);
+
+      // D. Interacción al tocar el botón central
+      if (heroToggleBtn && heroContent) {
+        heroToggleBtn.addEventListener('click', () => {
+          const isHidden = heroContent.classList.contains('slide-down');
+          
+          if (isHidden) {
+            // Mostrar contenido
+            heroContent.classList.remove('slide-down');
+            heroContent.style.opacity = '1';
+            heroContent.style.transform = 'translateY(0)';
+            heroContent.style.pointerEvents = 'all';
+            
+            heroToggleBtn.classList.add('active-mode');
+            if (heroToggleText) heroToggleText.textContent = 'Hide Story';
+            if (heroToggleIcon) heroToggleIcon.textContent = '—';
+          } else {
+            // Ocultar contenido y devolver botón al centro
+            heroContent.classList.add('slide-down');
+            heroContent.style.opacity = '0';
+            heroContent.style.transform = 'translateY(120px)';
+            heroContent.style.pointerEvents = 'none';
+            
+            heroToggleBtn.classList.remove('active-mode');
+            if (heroToggleText) heroToggleText.textContent = 'Reveal Story';
+            if (heroToggleIcon) heroToggleIcon.textContent = '+';
+          }
+        });
+      }
+
+      // =========================================
+      // 2. MENÚ CORTINA FULL-SCREEN
+      // =========================================
+      const fullScreenMenu = document.getElementById('fullScreenMenu');
+      const openMenuBtn = document.getElementById('openMenuBtn');
+      const burgerToggle = document.getElementById('burgerToggle');
+      const closeMenuBtn = document.getElementById('closeMenuBtn');
+
+      const openMenu = () => { if (fullScreenMenu) fullScreenMenu.classList.add('active'); };
+      const closeMenu = () => { if (fullScreenMenu) fullScreenMenu.classList.remove('active'); };
+
+      if (openMenuBtn) openMenuBtn.addEventListener('click', openMenu);
+      if (burgerToggle) burgerToggle.addEventListener('click', openMenu);
+      if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
+
+      // =========================================
+      // 3. MODAL DE CONTACTO
+      // =========================================
+      const contactModal = document.getElementById('contactModal');
+      const openContactBtn = document.getElementById('openContactBtn');
+      const closeContactBtn = document.getElementById('closeContactBtn');
+
+      if (openContactBtn) {
+        openContactBtn.addEventListener('click', () => {
+          if (fullScreenMenu) fullScreenMenu.classList.remove('active');
+          if (contactModal) contactModal.classList.add('active');
+        });
+      }
+
+      if (closeContactBtn) {
+        closeContactBtn.addEventListener('click', () => {
+          if (contactModal) contactModal.classList.remove('active');
+        });
+      }
+
+      // =========================================
+      // 4. SCROLL REVEAL DE LAS SECCIONES
+      // =========================================
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('in-view');
+        });
+      }, { threshold: 0.15 });
+      
+      document.querySelectorAll('.scroll-reveal-section').forEach(sec => observer.observe(sec));
+    });
   </script>
 
 </body>
