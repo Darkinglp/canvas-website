@@ -772,205 +772,170 @@ header, .nav-inner {
       }
     }
 /* =========================================
-       CIRUGÍA DE EMERGENCIA MÓVIL: TITULOS, RULETA Y FUNDADOR
-    ========================================= */
-    @media (max-width: 768px) {
-      
-      /* 1. EL TRUCO PARA SALVAR EL EFECTO STICKY Y QUITAR EL ESPACIO GIGANTE */
-      html, body {
-        /* Cambiamos 'hidden' por 'clip'. Hace lo mismo, pero NO rompe la ruleta */
-        overflow-x: clip !important; 
-        width: 100vw !important;
-      }
+   DISEÑO DE LAS PUERTAS Y ENVOLTORIO HERO (ESCRITORIO)
+========================================= */
+.split-splash-section {
+  position: relative;
+  width: 100%;
+  height: 200dvh; 
+  background: #050505;
+  z-index: 10;
+}
 
-      /* 2. FORZAR QUE LA RULETA SE QUEDE QUIETA AL BAJAR */
-      .horizontal-scroll-wrapper {
-        position: relative !important;
-        overflow: visible !important;
-      }
-      
-      /* Atrapamos al contenedor de la rueda para que frene obligatoriamente */
-      .horizontal-scroll-wrapper > div, .sticky-container {
-        position: -webkit-sticky !important;
-        position: sticky !important;
-        top: 0 !important;
-        height: 100dvh !important; 
-        overflow: hidden !important;
-      }
+#split-grid {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: 1fr 0fr 1fr;
+  width: 100%;
+  height: 100dvh;
+  background: #050505;
+  overflow: hidden;
+  will-change: grid-template-columns;
+}
 
-      /* 3. RESCATAR LOS TÍTULOS QUE SE SALEN DE LA PANTALLA */
-      h1, h2, h3, .page-title, .hero-title {
-        font-size: clamp(2rem, 8vw, 3rem) !important; /* Tamaño fluido automático */
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        white-space: normal !important;
-        max-width: 100% !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        box-sizing: border-box !important;
-      }
+.split-door {
+  width: 100%;
+  height: 100%;
+  background: #050505;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 20;
+}
 
-      /* 4. REPARAR LA SECCIÓN DEL FUNDADOR (Apilar hacia abajo) */
-      /* No importa qué clase tenga tu contenedor, atrapamos las más comunes */
-      .founder-section, .founder-wrapper, .founder-container, .founder-grid, .founder-content {
-        display: flex !important;
-        flex-direction: column !important;
-        width: 100% !important;
-        gap: 2rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        box-sizing: border-box !important;
-      }
-      
-      .founder-image img, .founder-photo {
-        width: 100% !important;
-        height: auto !important;
-      }
+.split-left { justify-content: flex-end; border-right: 1px solid rgba(212, 175, 55, 0.3); }
+.split-right { justify-content: flex-start; border-left: 1px solid rgba(212, 175, 55, 0.3); }
 
-      /* 5. DEVOLVERLE LA VIDA A LAS LÁMINAS APILABLES */
-      .cards-stack-container {
-        display: block !important; /* Quitamos flex para que el sticky funcione */
-      }
-      
-      .pro-card, .about-card, .mission-card, .sticky-card-1, .sticky-card-2, .sticky-card-3 {
-        position: -webkit-sticky !important;
-        position: sticky !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-      }
-    }
-    /* =========================================
-       DISEÑO DE LAS PUERTAS Y ENVOLTORIO HERO
-    ========================================= */
-    .split-splash-section {
-      position: relative;
-      width: 100%;
-      height: 200dvh; /* Altura doble para permitir el scroll de apertura */
-      background: #050505;
-      z-index: 10;
-    }
+.door-text {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(4rem, 15vw, 12rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  padding: 0 1vw;
+}
 
-    #split-grid {
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      display: grid;
-      grid-template-columns: 1fr 0fr 1fr; /* Empieza cerrado */
-      width: 100%;
-      height: 100dvh;
-      background: #050505;
-      overflow: hidden;
-      will-change: grid-template-columns;
-    }
+.split-middle {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
 
-    .split-door {
-      width: 100%;
-      height: 100%;
-      background: #050505; /* Puertas negro mate */
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      position: relative;
-      z-index: 20;
-    }
+.middle-content-wrapper {
+  width: 100vw;
+  height: 100dvh;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-    .split-left { justify-content: flex-end; border-right: 1px solid rgba(212, 175, 55, 0.3); }
-    .split-right { justify-content: flex-start; border-left: 1px solid rgba(212, 175, 55, 0.3); }
 
-    .door-text {
-      font-family: var(--font-display), sans-serif;
-      font-size: clamp(4rem, 15vw, 12rem);
-      font-weight: 900;
-      color: #fff;
-      line-height: 1;
-      padding: 0 1vw;
-    }
-
-    /* EL SECRETO PARA NO DEFORMAR TU HERO */
-    .split-middle {
-      width: 100%;
-      height: 100%;
-      overflow: hidden; /* Corta visualmente lo que no cabe */
-      position: relative;
-    }
-
-    .middle-content-wrapper {
-      width: 100vw; /* Fuerza a que tu Hero mida siempre toda la pantalla */
-      height: 100dvh;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%); /* Lo mantiene centrado mientras se abren las puertas */
-    }
-
-    @media (max-width: 768px) {
+/* =========================================
+   CIRUGÍA DE EMERGENCIA MÓVIL (FIX DEFINITIVO iOS)
+========================================= */
+@media (max-width: 768px) {
   
-    
-   /* 1. SOLUCIÓN A PALABRAS ROTAS Y TAMAÑO DE TÍTULOS */
-  h1, h2, h3, .hero-big-title, .page-title, .door-text {
-    /* Reduce el tamaño máximo en móviles pero lo mantiene fluido */
-    font-size: clamp(1.8rem, 9vw, 2.5rem) !important; 
-    
-    /* Obliga a mantener las palabras juntas y no romper letras sueltas */
-    word-break: keep-all !important; 
-    overflow-wrap: break-word !important;
-    white-space: normal !important;
-    hyphens: auto !important; /* Agrega guiones solo si es estrictamente necesario */
-    
-    /* Contención estricta */
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    padding: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-
-  /* 2. SOLUCIÓN AL DESBORDAMIENTO DERECHO (SCROLL HORIZONTAL) */
+  /* 1. SALVAR EL EFECTO STICKY EN IPHONE */
+  /* iOS prohíbe el anclaje si el body tiene overflow oculto */
   html, body {
-    overflow-x: hidden !important;
-    width: 100vw !important;
-    max-width: 100vw !important;
+    overflow-x: visible !important;
+    width: 100% !important;
   }
 
-  .container, section, .hero-content, .founder-section {
+  /* Ocultamos el desborde SOLO en los contenedores, NO en el body */
+  main, .container, .founder-section, .hero-content, section:not(.split-splash-section) {
+    overflow-x: hidden !important; 
     width: 100% !important;
     max-width: 100vw !important;
-    padding-left: 1.5rem !important;
-    padding-right: 1.5rem !important;
     box-sizing: border-box !important;
-    overflow-x: hidden !important;
   }
 
-  /* 3. SOLUCIÓN A LA SUPERPOSICIÓN DEL MENÚ */
+  /* 2. REPARACIÓN DE LAS PUERTAS (Para que se queden quietas) */
+  .split-splash-section {
+    position: relative !important;
+    height: 150dvh !important;
+    overflow: visible !important; /* Vital para iOS */
+  }
+
+  #split-grid {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    width: 100% !important;
+  }
+
+  .door-text {
+    font-size: 18vw !important; 
+  }
+
+  /* 3. ARREGLO DE TEXTOS (REPRESENTATION, ENTERPRISE, ETC) */
+  h1, h2, h3, .hero-big-title, .page-title, .main-hero-title {
+    font-size: min(10vw, 3rem) !important; 
+    line-height: 1.1 !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    white-space: normal !important;
+    hyphens: none !important; 
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 4. EVITAR QUE EL MENÚ SE SUPERPONGA AL TEXTO */
   header, .nav, .top-bar {
-    background-color: #050505 !important; /* Fondo negro sólido */
-    z-index: 9999 !important; /* Asegura que el menú siempre esté por encima del texto */
+    background-color: #050505 !important; 
+    z-index: 9999 !important; 
   }
 
-    /* Si usas la etiqueta <main>, también debe permitir desbordes */
-    main {
-      overflow: visible !important;
-    }
-      .split-splash-section { height: 150dvh; } /* Scroll más rápido en móvil */
-    }
+  /* 5. FORZAR QUE LA RULETA SE QUEDE QUIETA AL BAJAR */
+  .horizontal-scroll-wrapper {
+    position: relative !important;
+    overflow: visible !important;
+  }
+  
+  .horizontal-scroll-wrapper > div, .sticky-container {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    height: 100dvh !important; 
+    overflow: hidden !important;
+  }
 
-    /* 2. Forzar a la sección a medir el doble de la pantalla */
-    .split-splash-section {
-      position: relative !important;
-      overflow: visible !important; 
-      height: 200vh !important; /* Usamos vh en vez de dvh para mayor estabilidad */
-      z-index: 100 !important;
-    }
+  /* 6. REPARAR LA SECCIÓN DEL FUNDADOR */
+  .founder-section, .founder-wrapper, .founder-container, .founder-grid, .founder-content {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 2rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    box-sizing: border-box !important;
+  }
+  
+  .founder-image img, .founder-photo {
+    width: 100% !important;
+    height: auto !important;
+  }
 
-    /* 3. El anclaje absoluto y obligatorio de las puertas */
-    #split-grid {
-      position: -webkit-sticky !important;
-      position: sticky !important;
-      top: 0 !important;
-      left: 0 !important;
-      height: 100vh !important; 
-      width: 100% !important;
-    }
+  /* 7. DEVOLVERLE LA VIDA A LAS LÁMINAS APILABLES */
+  .cards-stack-container {
+    display: block !important; 
+  }
+  
+  .pro-card, .about-card, .mission-card, .sticky-card-1, .sticky-card-2, .sticky-card-3 {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
   </style>
 </head>
 <body>
