@@ -10,7 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
   
   <style>
-    /* =========================================
+  
+  /* =========================================
        1. VARIABLES Y RESET GENERAL
     ========================================= */
     :root {
@@ -29,7 +30,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; overflow-x: hidden; width: 100vw; max-width: 100vw; }
+    html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; max-width: 100vw; }
     body {
       background-color: var(--bg);
       color: var(--text-main);
@@ -122,7 +123,7 @@
     
     .door-text { font-family: var(--font-display), sans-serif; font-size: clamp(4rem, 15vw, 12rem); font-weight: 900; color: #fff; line-height: 1; padding: 0 1vw; text-shadow: 0 0 40px rgba(255, 255, 255, 0.15); }
     .split-middle { width: 100%; height: 100%; overflow: hidden; position: relative; }
-    .middle-content-wrapper { width: 100vw; height: 100vh; position: absolute; left: 50%; transform: translateX(-50%); }
+    .middle-content-wrapper { width: 100%; height: 100vh; position: absolute; left: 50%; transform: translateX(-50%); }
 
     .hero-cinematic { position: relative; width: 100%; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 4rem; padding-top: 8rem; overflow: hidden; background-color: #030303; }
     .hero-bg-media { position: absolute; inset: 0; z-index: 1; background-image: linear-gradient(180deg, rgba(3, 3, 3, 0.25) 0%, rgba(3, 3, 3, 0.8) 100%), url('https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=2200&q=85'); background-size: cover; background-position: center; filter: blur(14px) brightness(0.7); transform: scale(1.08); transition: filter 1.6s ease, transform 1.6s ease; }
@@ -176,20 +177,20 @@
     @media (max-width: 768px) {
       
       /* 6.1 Seguros de desbordamiento horizontal */
-      html, body { overflow-x: hidden !important; width: 100vw !important; position: relative !important; }
+      html, body { overflow-x: hidden !important; width: 100% !important; position: relative !important; margin: 0; padding: 0; }
       
       main, .container, section, .pillar-box, .contact-card, .portal-modal-box {
-        width: 100vw !important; max-width: 100vw !important; box-sizing: border-box !important;
+        width: 100% !important; max-width: 100vw !important; box-sizing: border-box !important;
         padding-left: 6vw !important; padding-right: 6vw !important; overflow-x: hidden !important;
       }
 
       /* 6.2 Flujo natural del texto (El truco de Best Sports) */
       h1, h2, h3, .hero-big-title, .page-title, .hero-title, .footer-huge, .door-text {
         white-space: normal !important; 
-        word-break: break-word !important; 
+        word-wrap: break-word !important;
         overflow-wrap: break-word !important;
         hyphens: none !important;
-        line-height: 0.95 !important; /* Ladrillos sólidos */
+        line-height: 1.1 !important; /* Ladrillos sólidos */
         letter-spacing: -0.02em !important; 
         text-transform: uppercase !important;
         box-sizing: border-box !important;
@@ -204,7 +205,7 @@
       }
 
       h2, h3, .footer-huge, .panel-title, .contact-modal h3 {
-        font-size: 7vw !important; /* 7vw garantiza que "REPRESENTATION" quepa perfecto */
+        font-size: 8vw !important; /* 7vw garantiza que "REPRESENTATION" quepa perfecto */
         text-align: left !important;
         padding: 0 !important; /* Ya tienen padding global por el container */
       }
@@ -284,13 +285,12 @@
     <button id="closeMenuBtn" style="position: absolute; top: 2rem; right: 5vw; background: transparent; border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: 0.15em; cursor: pointer; z-index: 2001;">CLOSE [X]</button>
     
     <div class="curtain-links-container">
-      <a href="index.html" class="curtain-link">HOME</a>
-      <a href="about.html" class="curtain-link">ABOUT</a>
-      <a href="athletes.html" class="curtain-link">THE ROSTER</a>
-      <a href="work.html" class="curtain-link">CAMPAIGNS</a>
+      <a href="index.html" class="curtain-link" data-info="Back to the main view">HOME</a>
+      <a href="about.html" class="curtain-link" data-info="Discover our vision">ABOUT</a>
+      <a href="athletes.html" class="curtain-link" data-info="Meet the talent">THE ROSTER</a>
+      <a href="work.html" class="curtain-link" data-info="View our latest projects">CAMPAIGNS</a>
     </div>
   </div>
-
  
   <main>
    <!-- =========================================
