@@ -837,28 +837,94 @@ header, .nav-inner {
 /* =========================================
    CIRUGÍA DE EMERGENCIA MÓVIL (FIX DEFINITIVO iOS)
 ========================================= */
+/* =========================================
+   DISEÑO DE LAS PUERTAS Y ENVOLTORIO HERO (ESCRITORIO)
+========================================= */
+.split-splash-section {
+  position: relative;
+  width: 100%;
+  height: 200vh; /* Altura doble para permitir el scroll de apertura */
+  background: #050505;
+  z-index: 10;
+}
+
+#split-grid {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: 1fr 0fr 1fr; /* Empieza cerrado */
+  width: 100%;
+  height: 100vh;
+  background: #050505;
+  overflow: hidden;
+  will-change: grid-template-columns;
+}
+
+.split-door {
+  width: 100%;
+  height: 100%;
+  background: #050505; /* Puertas negro mate */
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 20;
+}
+
+.split-left { justify-content: flex-end; border-right: 1px solid rgba(212, 175, 55, 0.3); }
+.split-right { justify-content: flex-start; border-left: 1px solid rgba(212, 175, 55, 0.3); }
+
+.door-text {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(4rem, 15vw, 12rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  padding: 0 1vw;
+}
+
+.split-middle {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Corta visualmente lo que no cabe */
+  position: relative;
+}
+
+.middle-content-wrapper {
+  width: 100vw; /* Fuerza a que tu Hero mida siempre toda la pantalla */
+  height: 100vh;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* Lo mantiene centrado mientras se abren las puertas */
+}
+
+
+/* =========================================
+   CIRUGÍA DE EMERGENCIA MÓVIL (FIX DEFINITIVO iOS)
+========================================= */
 @media (max-width: 768px) {
   
   /* 1. SALVAR EL EFECTO STICKY EN IPHONE */
-  /* iOS prohíbe el anclaje si el body tiene overflow oculto */
+  /* Quitamos cualquier restricción al html y body para que iOS no anule el sticky */
   html, body {
-    overflow-x: visible !important;
+    overflow-x: hidden !important; /* Desactiva el scroll hacia el lado lateral del teléfono */
     width: 100% !important;
+    position: relative !important;
   }
 
-  /* Ocultamos el desborde SOLO en los contenedores, NO en el body */
-  main, .container, .founder-section, .hero-content, section:not(.split-splash-section) {
-    overflow-x: hidden !important; 
+  /* Blindamos las secciones contra el scroll horizontal que corta las letras */
+  main, .container, .founder-section, .hero-content, section {
     width: 100% !important;
     max-width: 100vw !important;
     box-sizing: border-box !important;
   }
 
-  /* 2. REPARACIÓN DE LAS PUERTAS (Para que se queden quietas) */
+  /* 2. REPARACIÓN DE LAS PUERTAS (Para que se queden quietas en celular) */
   .split-splash-section {
     position: relative !important;
-    height: 150dvh !important;
-    overflow: visible !important; /* Vital para iOS */
+    height: 180vh !important; /* Más o menos de altura para el móvil según desees */
+    overflow: visible !important; /* Obligatorio en móviles iOS para permitir anclaje */
   }
 
   #split-grid {
@@ -868,23 +934,27 @@ header, .nav-inner {
     left: 0 !important;
     height: 100vh !important;
     width: 100% !important;
+    overflow: hidden !important;
+    will-change: grid-template-columns;
   }
 
   .door-text {
-    font-size: 18vw !important; 
+    font-size: 16vw !important; /* Reducimos el tamaño de la letra para evitar cortes feos */
+    padding: 0 0.5rem !important;
   }
 
   /* 3. ARREGLO DE TEXTOS (REPRESENTATION, ENTERPRISE, ETC) */
   h1, h2, h3, .hero-big-title, .page-title, .main-hero-title {
-    font-size: min(10vw, 3rem) !important; 
+    /* min(8vw, ...) hace que las palabras súper largas se compriman y nunca se corten al final */
+    font-size: min(8vw, 2.5rem) !important; 
     line-height: 1.1 !important;
     word-break: normal !important;
-    overflow-wrap: normal !important;
+    overflow-wrap: break-word !important;
     white-space: normal !important;
     hyphens: none !important; 
     width: 100% !important;
-    margin: 0 !important;
-    padding: 0 1rem !important;
+    margin: 0 0 1rem 0 !important;
+    padding: 0 1.2rem !important; /* Espacio extra para que no roce la orilla */
     box-sizing: border-box !important;
   }
 
@@ -904,7 +974,7 @@ header, .nav-inner {
     position: -webkit-sticky !important;
     position: sticky !important;
     top: 0 !important;
-    height: 100dvh !important; 
+    height: 100vh !important; 
     overflow: hidden !important;
   }
 
@@ -914,8 +984,8 @@ header, .nav-inner {
     flex-direction: column !important;
     width: 100% !important;
     gap: 2rem !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
     box-sizing: border-box !important;
   }
   
@@ -1347,24 +1417,35 @@ header, .nav-inner {
         });
       }
     // =========================================
-      // MOTOR DE APERTURA DE PUERTAS
+      // MOTOR DE APERTURA DE PUERTAS (OPTIMIZADO iOS)
       // =========================================
       const splitSplash = document.querySelector('.split-splash-section');
       const splitGrid = document.getElementById('split-grid');
 
       if (splitSplash && splitGrid) {
-        window.addEventListener('scroll', () => {
-          const heroTop = splitSplash.offsetTop;
-          // Esto controla qué tan rápido se abren. 0.8 es ideal.
-          const maxScroll = window.innerHeight * 0.8; 
-          let progress = (window.scrollY - heroTop) / maxScroll;
+        // Ejecutar inmediatamente al cargar y al hacer scroll
+        const handleSplitScroll = () => {
+          // getBoundingClientRect().top es la única forma 100% fiable en iOS
+          const rect = splitSplash.getBoundingClientRect();
+          const viewHeight = window.innerHeight;
+          
+          // La sección mide 200vh (2 veces el alto de pantalla)
+          // Cuando top está en 0, el usuario empieza a bajar por el bloque "sticky"
+          const totalScrollableDistance = viewHeight; // scrollable span (100vh)
+          const currentProgress = -rect.top; // Cuánto ha subido la sección fuera de la pantalla
+
+          let progress = currentProgress / totalScrollableDistance;
           
           if (progress < 0) progress = 0;
           if (progress > 1) progress = 1;
 
-          // Transición fluida de cerrado a abierto
+          // Transición fluida de cerrado (1-0-1) a abierto (0-1-0)
           splitGrid.style.gridTemplateColumns = `${1 - progress}fr ${progress}fr ${1 - progress}fr`;
-        }, { passive: true });
+        };
+
+        window.addEventListener('scroll', handleSplitScroll, { passive: true });
+        window.addEventListener('resize', handleSplitScroll, { passive: true });
+        handleSplitScroll(); // Ejecución inicial
       }
   </script>
 
