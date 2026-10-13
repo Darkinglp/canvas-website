@@ -84,7 +84,7 @@
     .mobile-btn { display: none; flex-direction: column; gap: 6px; padding: 5px; }
     .burger-bar { background: #fff; transition: background-color 0.4s ease; }
 
-    /* Estado cuando el usuario baja por la sección Blanca */
+    /* Letras negras cuando pasa por la sección Blanca (sin fondo ni blur) */
     header.theme-light {
       background: transparent !important;
       backdrop-filter: none !important;
@@ -96,6 +96,7 @@
     header.theme-light .brand-sub { color: #8A6914 !important; border-left-color: rgba(138, 105, 20, 0.4) !important; }
     header.theme-light .burger-bar { background: #050505 !important; }
 
+    /* Cortina Full-Screen */
     .luxury-curtain { position: fixed; inset: 0; background: rgba(5,5,5,0.98); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(15px); }
     .luxury-curtain.active { opacity: 1; pointer-events: all; }
     .curtain-links-container { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2.5rem; }
@@ -116,7 +117,7 @@
     .curtain-link:hover::after { opacity: 1; transform: translateY(-50%) translateX(10px); }
 
     /* =========================================
-       3. PUERTAS Y HERO CINEMÁTICO (100% INTACTO)
+       3. PUERTAS + HERO CON LETRAS 3D EN NEGATIVO
     ========================================= */
     .split-splash-section, #split-grid, .hero-cinematic {
       height: 100dvh !important;
@@ -148,15 +149,116 @@
     .split-middle { width: 100%; height: 100%; overflow: hidden; position: relative; }
     .middle-content-wrapper { width: 100vw; height: 100dvh; position: absolute; left: 50%; transform: translateX(-50%); }
 
-    .hero-bg-media { position: absolute; inset: 0; z-index: 1; background-image: linear-gradient(180deg, rgba(3, 3, 3, 0.25) 0%, rgba(3, 3, 3, 0.8) 100%), url('https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=2200&q=85'); background-size: cover; background-position: center; filter: blur(14px) brightness(0.7); transform: scale(1.08); transition: filter 1.6s ease, transform 1.6s ease; }
-    .hero-cinematic.loaded .hero-bg-media { filter: blur(0px) brightness(1); transform: scale(1); }
+    /* Fondo con alto contraste para que el efecto negativo dentro de las letras brille al máximo */
+    .hero-bg-media {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background-image: 
+        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.08) 0%, rgba(3, 3, 3, 0.72) 85%),
+        url('https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=2200&q=85');
+      background-size: cover;
+      background-position: center;
+      filter: blur(14px) brightness(0.75) contrast(1.15);
+      transform: scale(1.08);
+      transition: filter 1.6s ease, transform 1.6s ease;
+    }
+    .hero-cinematic.loaded .hero-bg-media {
+      filter: blur(0px) brightness(1.08) contrast(1.18);
+      transform: scale(1);
+    }
 
-    .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; height: 100dvh; transition: transform 0.8s ease, opacity 0.8s ease; }
-    .hero-content.slide-down { transform: translateY(120px); opacity: 0; pointer-events: none; }
+    /* IMPORTANTE: mix-blend-mode: difference en el contenedor principal permite que las letras inviertan el fondo real */
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      height: 100dvh;
+      mix-blend-mode: difference;
+      perspective: 1000px;
+      transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease;
+    }
+
+    /* Cuando baja y se esconde a los 7 segundos */
+    .hero-content.slide-down {
+      transform: translateY(150px) rotateX(-22deg) scale(0.92) !important;
+      opacity: 0 !important;
+      pointer-events: none;
+    }
     
-    .hero-tagline { font-size: clamp(1rem, 1.6vw, 1.8rem); font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; color: #ffffff; margin-bottom: 2rem; }
-    .hero-big-title { font-family: var(--font-display); font-size: clamp(3.2rem, 9.5vw, 10.5rem); font-weight: 900; text-transform: uppercase; line-height: 0.88; margin: 0 auto 2rem auto; width: 100%; color: #ffffff; letter-spacing: -0.02em; mix-blend-mode: difference; }
-    .hero-description { font-size: clamp(0.95rem, 1.25vw, 1.3rem); line-height: 1.6; color: rgba(255, 255, 255, 0.85); max-width: 780px; margin: 0 auto 2rem auto; font-weight: 300; }
+    .hero-tagline {
+      font-size: clamp(0.85rem, 1.4vw, 1.35rem);
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin-bottom: 1.8rem;
+    }
+
+    /* LETRAS 3D ARQUITECTÓNICAS CON RELLENO EN NEGATIVO DEL FONDO */
+    .hero-3d-stage {
+      position: relative;
+      display: inline-block;
+      transform-style: preserve-3d;
+      animation: float3DText 6s ease-in-out infinite alternate;
+      margin: 0 auto 2rem auto;
+      width: 100%;
+    }
+
+    @keyframes float3DText {
+      0% { transform: rotateX(7deg) rotateY(-5deg) translateZ(0px); }
+      100% { transform: rotateX(-5deg) rotateY(6deg) translateZ(18px); }
+    }
+
+    .hero-big-title {
+      position: relative;
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 9.5vw, 10.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.88;
+      width: 100%;
+      /* Blanco puro (#fff) dentro de mix-blend-mode: difference invierte al 100% los colores del fondo dentro de la letra */
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      transform-style: preserve-3d;
+      /* Capas de extrusión 3D escalonadas para darle volumen sólido en el espacio */
+      text-shadow:
+        1px 1px 0px rgba(212, 175, 55, 0.85),
+        2px 2px 0px rgba(212, 175, 55, 0.75),
+        3px 3px 0px rgba(212, 175, 55, 0.65),
+        4px 4px 0px rgba(212, 175, 55, 0.55),
+        6px 6px 0px rgba(212, 175, 55, 0.4),
+        8px 8px 0px rgba(212, 175, 55, 0.25),
+        12px 14px 28px rgba(0, 0, 0, 0.65);
+      transition: transform 0.25s ease-out;
+    }
+
+    /* Contorno fantasma 3D desplazado detrás de las letras para acentuar la profundidad */
+    .hero-big-title::before {
+      content: "ATHLETES.\A CREATORS.\A EQUITY.";
+      white-space: pre;
+      position: absolute;
+      inset: 0;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(212, 175, 55, 0.45);
+      transform: translate3d(-10px, -8px, -35px);
+      pointer-events: none;
+    }
+
+    .hero-description {
+      font-size: clamp(0.95rem, 1.25vw, 1.25rem);
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 760px;
+      margin: 0 auto 2rem auto;
+      font-weight: 400;
+    }
 
     /* Botón Central Luxury */
     .hero-toggle-btn {
@@ -178,7 +280,7 @@
     .luxury-btn-label { font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(255, 255, 255, 0.85); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8); white-space: nowrap; }
 
     /* =========================================
-       4. RULETA INTERACTIVA CON TICKER DE FONDO
+       4. RULETA MISTERIOSA (SOLO ETIQUETAS, SIN NOMBRES)
     ========================================= */
     .athletes-carousel-section {
       position: relative;
@@ -187,7 +289,6 @@
       overflow: hidden;
     }
 
-    /* Cinta gigante en el fondo moviéndose en sentido inverso */
     .bg-kinetic-ticker {
       position: absolute;
       top: 52%;
@@ -337,48 +438,35 @@
     .carousel-photo-info {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, transparent 42%, rgba(4, 4, 6, 0.96) 92%);
+      background: linear-gradient(180deg, transparent 55%, rgba(4, 4, 6, 0.94) 95%);
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 1.6rem;
+      padding: 1.5rem;
       z-index: 2;
     }
 
     .carousel-tag {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      color: var(--accent-gold);
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      color: var(--accent-neon);
       text-transform: uppercase;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-    }
-
-    .carousel-athlete-name {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      color: #fff;
-      line-height: 1.05;
-      margin-bottom: 0.6rem;
-    }
-
-    .carousel-hover-cta {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #fff;
-      border-top: 1px solid rgba(255, 255, 255, 0.14);
-      padding-top: 0.65rem;
+      font-weight: 700;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
       display: flex;
       justify-content: space-between;
-      opacity: 0.75;
-      transition: opacity 0.3s ease, color 0.3s ease;
+      align-items: center;
     }
-    .carousel-photo-card:hover .carousel-hover-cta {
-      opacity: 1;
+
+    .carousel-tag::after {
+      content: '↗';
       color: var(--accent-gold);
+      font-size: 0.85rem;
+      transition: transform 0.3s ease;
+    }
+    .carousel-photo-card:hover .carousel-tag::after {
+      transform: translate(3px, -3px);
     }
 
     /* =========================================
@@ -423,7 +511,6 @@
       color: #050505;
     }
 
-    /* Banda de Contadores en Vivo dentro del Tema Blanco */
     .live-metrics-strip {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -481,7 +568,6 @@
       transition: width 1.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Tarjetas Interactivas de los 3 Pilares */
     .pillars-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -613,7 +699,6 @@
         padding-right: 1.25rem !important; 
       }
 
-      /* Puertas CAN | VAS sin cortes */
       .split-splash-section, #split-grid { 
         width: 100vw !important;
         height: 100dvh !important; 
@@ -624,7 +709,6 @@
         white-space: nowrap !important;
       }
 
-      /* Navbar 100% transparente en móvil */
       header { padding: 15px 0 !important; }
       .nav-inner { padding: 0.5rem 1.25rem !important; width: 100% !important; }
       .brand { gap: 0.5rem !important; }
@@ -635,7 +719,6 @@
       .mobile-btn { display: flex !important; }
       #openContactBtn { font-size: 9px !important; gap: 5px !important; }
 
-      /* Títulos sin cortes de sílabas */
       h1, h2, h3, .hero-big-title, .white-main-title, .footer-huge {
         white-space: normal !important; 
         word-break: keep-all !important; 
@@ -649,10 +732,10 @@
       .middle-content-wrapper { width: 100vw !important; min-width: 100vw !important; }
       .hero-content { width: 100% !important; padding: 0 1.25rem !important; }
       .hero-big-title { font-size: 10vw !important; text-align: center !important; }
+      .hero-big-title::before { transform: translate3d(-5px, -4px, -20px); }
 
       .white-main-title, .footer-huge { font-size: 6.4vw !important; text-align: left !important; }
 
-      /* Ruleta y Sección Blanca en móvil */
       .carousel-photo-card { width: 250px !important; height: 350px !important; }
       .white-theme-section { border-radius: 26px 26px 0 0; padding: 4.5rem 0 5rem 0 !important; }
       .live-metrics-strip, .pillars-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
@@ -712,7 +795,7 @@
 
   <main>
     <!-- =========================================
-         ENTRADA SPLIT DOORS + HERO (INTACTO)
+         ENTRADA SPLIT DOORS + LETRAS 3D EN NEGATIVO
     ========================================= -->
     <section class="split-splash-section">
       <div id="split-grid">
@@ -726,15 +809,21 @@
             
             <section class="hero-cinematic" id="heroCinematic">
               <div class="hero-bg-media"></div>
-              <div class="container hero-content">
+              
+              <!-- Contenedor con mix-blend-mode: difference real y perspectiva 3D -->
+              <div class="container hero-content" id="heroContent3D">
                 <span class="hero-tagline">Private Representation &bull; Media House</span>
-                <h1 class="hero-big-title">Athletes.<br>Creators.<br>Equity.</h1>
+                
+                <div class="hero-3d-stage" id="hero3DStage">
+                  <h1 class="hero-big-title" id="heroBigTitle3D">Athletes.<br>Creators.<br>Equity.</h1>
+                </div>
+
                 <div class="hero-meta-row">
                   <p class="hero-description">
                     A selective management group engineering the modern intersection of athletic prestige, digital creator ownership, and institutional commercial partnerships.
                   </p>
                   <div>
-                    <a href="athletes.html" style="display: inline-flex; align-items: center; gap: 0.75rem; border: 1px solid var(--border-accent); padding: 0.9rem 1.8rem; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase;">
+                    <a href="athletes.html" style="display: inline-flex; align-items: center; gap: 0.75rem; border: 1px solid rgba(255,255,255,0.45); padding: 0.9rem 1.8rem; font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: #fff;">
                       Explore Roster &rarr;
                     </a>
                   </div>
@@ -765,7 +854,7 @@
     </section>
 
     <!-- =========================================
-         RULETA INTERACTIVA Y ANIMADA DE ATLETAS
+         RULETA MISTERIOSA (SOLO ETIQUETAS, SIN NOMBRES)
     ========================================= -->
     <section class="athletes-carousel-section">
       
@@ -777,8 +866,8 @@
 
       <div class="container carousel-header-bar">
         <div>
-          <span style="font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-gold); display: block; margin-bottom: 0.4rem;">&bull; Live Roster Feed</span>
-          <h2 style="font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.6rem); text-transform: uppercase; font-weight: 900;">Represented Talent</h2>
+          <span style="font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-gold); display: block; margin-bottom: 0.4rem;">&bull; Classified Roster Feed</span>
+          <h2 style="font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.6rem); text-transform: uppercase; font-weight: 900;">Select Representation</h2>
         </div>
 
         <!-- Controles interactivos de la ruleta -->
@@ -792,145 +881,117 @@
       <div class="carousel-track-wrapper">
         <div class="carousel-track" id="interactiveCarouselTrack">
           
-          <!-- GRUPO A -->
-          <a href="athletes.html" class="carousel-photo-card">
+          <!-- GRUPO A (SIN NOMBRES, SOLO LA ETIQUETA MISTERIOSA) -->
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">01</span><span class="live-status-pill">ACC</span></div>
-            <img src="img/emanuel-Ross-Syracuse1.jpg" onerror="this.src='https://images.unsplash.com/photo-1566577739112-5180d4bf9390?auto=format&fit=crop&w=800&q=80'" alt="Emanuel Ross">
+            <img src="img/emanuel-Ross-Syracuse1.jpg" onerror="this.src='https://images.unsplash.com/photo-1566577739112-5180d4bf9390?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 01">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Syracuse WR &bull; Football</span>
-              <div class="carousel-athlete-name">Emanuel Ross</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">SYRACUSE WR &bull; ACC</span>
             </div>
           </a>
 
-          <a href="athletes.html" class="carousel-photo-card">
-            <div class="card-top-serial"><span class="serial-num">02</span><span class="live-status-pill">D-I NIL</span></div>
-            <img src="img/jerome-palm.jpg" onerror="this.src='https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'" alt="Jerome Palm">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
+            <div class="card-top-serial"><span class="serial-num">02</span><span class="live-status-pill">NIL</span></div>
+            <img src="img/jerome-palm.jpg" onerror="this.src='https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 02">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Collegiate &bull; Forward</span>
-              <div class="carousel-athlete-name">Jerome Palm</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">SEC BASKETBALL &bull; NIL</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">03</span><span class="live-status-pill">A-10</span></div>
-            <img src="img/Luke-Bamgboye-VCU.jpg" onerror="this.src='https://images.unsplash.com/photo-1519766304817-4f37bda74a29?auto=format&fit=crop&w=800&q=80'" alt="Luke Bamgboye">
+            <img src="img/Luke-Bamgboye-VCU.jpg" onerror="this.src='https://images.unsplash.com/photo-1519766304817-4f37bda74a29?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 03">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">VCU Rams &bull; Elite Prospect</span>
-              <div class="carousel-athlete-name">Luke Bamgboye</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">VCU RAMS &bull; ELITE PROSPECT</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">04</span><span class="live-status-pill">BIG TEN</span></div>
-            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Devon Sterling">
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Classified Talent 04">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Michigan State &bull; Forward</span>
-              <div class="carousel-athlete-name">Devon Sterling</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">BIG TEN FORWARD</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">05</span><span class="live-status-pill">MWC</span></div>
-            <img src="img/howie-fleming1.jpg" onerror="this.src='https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80'" alt="Howie Fleming Jr.">
+            <img src="img/howie-fleming1.jpg" onerror="this.src='https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 05">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">UNLV Rebels &bull; Guard</span>
-              <div class="carousel-athlete-name">Howie Fleming Jr.</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">UNLV REBELS &bull; ELITE PROSPECT</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
-            <div class="card-top-serial"><span class="serial-num">06</span><span class="live-status-pill">SEC NIL</span></div>
-            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Marcus Vance">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
+            <div class="card-top-serial"><span class="serial-num">06</span><span class="live-status-pill">SEC</span></div>
+            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Classified Talent 06">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">SEC Basketball &bull; Dual Threat</span>
-              <div class="carousel-athlete-name">Marcus Vance</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">SEC BASKETBALL &bull; NIL</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">07</span><span class="live-status-pill">BIG 12</span></div>
-            <img src="img/david-coit-kansas.jpg" onerror="this.src='https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80'" alt="David Coit">
+            <img src="img/david-coit-kansas.jpg" onerror="this.src='https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 07">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Kansas Guard &bull; Elite</span>
-              <div class="carousel-athlete-name">David Coit</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">KANSAS GUARD &bull; ELITE</span>
             </div>
           </a>
 
-          <!-- GRUPO B (CLON PARA LOOP INFINITO) -->
-          <a href="athletes.html" class="carousel-photo-card">
+          <!-- GRUPO B (CLON PARA LOOP INFINITO SIN NOMBRES) -->
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">01</span><span class="live-status-pill">ACC</span></div>
-            <img src="img/emanuel-Ross-Syracuse1.jpg" onerror="this.src='https://images.unsplash.com/photo-1566577739112-5180d4bf9390?auto=format&fit=crop&w=800&q=80'" alt="Emanuel Ross">
+            <img src="img/emanuel-Ross-Syracuse1.jpg" onerror="this.src='https://images.unsplash.com/photo-1566577739112-5180d4bf9390?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 01">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Syracuse WR &bull; Football</span>
-              <div class="carousel-athlete-name">Emanuel Ross</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">SYRACUSE WR &bull; ACC</span>
             </div>
           </a>
 
-          <a href="athletes.html" class="carousel-photo-card">
-            <div class="card-top-serial"><span class="serial-num">02</span><span class="live-status-pill">D-I NIL</span></div>
-            <img src="img/jerome-palm.jpg" onerror="this.src='https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'" alt="Jerome Palm">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
+            <div class="card-top-serial"><span class="serial-num">02</span><span class="live-status-pill">NIL</span></div>
+            <img src="img/jerome-palm.jpg" onerror="this.src='https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 02">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Collegiate &bull; Forward</span>
-              <div class="carousel-athlete-name">Jerome Palm</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">SEC BASKETBALL &bull; NIL</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">03</span><span class="live-status-pill">A-10</span></div>
-            <img src="img/Luke-Bamgboye-VCU.jpg" onerror="this.src='https://images.unsplash.com/photo-1519766304817-4f37bda74a29?auto=format&fit=crop&w=800&q=80'" alt="Luke Bamgboye">
+            <img src="img/Luke-Bamgboye-VCU.jpg" onerror="this.src='https://images.unsplash.com/photo-1519766304817-4f37bda74a29?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 03">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">VCU Rams &bull; Elite Prospect</span>
-              <div class="carousel-athlete-name">Luke Bamgboye</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">VCU RAMS &bull; ELITE PROSPECT</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">04</span><span class="live-status-pill">BIG TEN</span></div>
-            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Devon Sterling">
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Classified Talent 04">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Michigan State &bull; Forward</span>
-              <div class="carousel-athlete-name">Devon Sterling</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">BIG TEN FORWARD</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">05</span><span class="live-status-pill">MWC</span></div>
-            <img src="img/howie-fleming1.jpg" onerror="this.src='https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80'" alt="Howie Fleming Jr.">
+            <img src="img/howie-fleming1.jpg" onerror="this.src='https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 05">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">UNLV Rebels &bull; Guard</span>
-              <div class="carousel-athlete-name">Howie Fleming Jr.</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">UNLV REBELS &bull; ELITE PROSPECT</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
-            <div class="card-top-serial"><span class="serial-num">06</span><span class="live-status-pill">SEC NIL</span></div>
-            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Marcus Vance">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
+            <div class="card-top-serial"><span class="serial-num">06</span><span class="live-status-pill">SEC</span></div>
+            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80" alt="Classified Talent 06">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">SEC Basketball &bull; Dual Threat</span>
-              <div class="carousel-athlete-name">Marcus Vance</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">SEC BASKETBALL &bull; NIL</span>
             </div>
           </a>
           
-          <a href="athletes.html" class="carousel-photo-card">
+          <a href="athletes.html" class="carousel-photo-card" aria-label="View Roster">
             <div class="card-top-serial"><span class="serial-num">07</span><span class="live-status-pill">BIG 12</span></div>
-            <img src="img/david-coit-kansas.jpg" onerror="this.src='https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80'" alt="David Coit">
+            <img src="img/david-coit-kansas.jpg" onerror="this.src='https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80'" alt="Classified Talent 07">
             <div class="carousel-photo-info">
-              <span class="carousel-tag">Kansas Guard &bull; Elite</span>
-              <div class="carousel-athlete-name">David Coit</div>
-              <div class="carousel-hover-cta"><span>Open Dossier</span><span>&rarr;</span></div>
+              <span class="carousel-tag">KANSAS GUARD &bull; ELITE</span>
             </div>
           </a>
 
@@ -978,7 +1039,7 @@
           </div>
         </div>
 
-        <!-- 3 Pilares Interactivos (Se iluminan en negro/oro al tocarlos o pasar el mouse) -->
+        <!-- 3 Pilares Interactivos -->
         <div class="pillars-grid">
           <div class="pillar-box active-pillar">
             <div>
@@ -1025,7 +1086,7 @@
   </main>
 
   <!-- =========================================
-       FOOTER (REGRESO A TEMA OSCURO)
+       FOOTER
   ========================================= -->
   <footer id="mainFooter">
     <div class="container footer-grid">
@@ -1089,21 +1150,22 @@
     document.addEventListener('DOMContentLoaded', () => {
       
       // =========================================
-      // 1. PUERTAS, CAÍDA Y BOTÓN CENTRAL (INTACTO)
+      // 1. PUERTAS, LETRAS 3D NEGATIVAS, CAÍDA Y BOTÓN CENTRAL
       // =========================================
       const splitGrid = document.getElementById('split-grid');
       const hero = document.getElementById('heroCinematic');
-      const heroContent = document.querySelector('.hero-content');
+      const heroContent = document.getElementById('heroContent3D');
+      const heroBigTitle3D = document.getElementById('heroBigTitle3D');
       const heroToggleBtn = document.getElementById('heroToggleBtn');
       const heroToggleText = document.getElementById('heroToggleText');
       const heroToggleIcon = document.getElementById('heroToggleIcon');
 
       if (heroContent) {
         heroContent.style.opacity = '0';
-        heroContent.style.transform = 'translateY(-30px)';
-        heroContent.style.transition = 'opacity 1.1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1)';
+        heroContent.style.transform = 'translateY(-35px) rotateX(15deg)';
       }
 
+      // Abrir puertas a los 2s
       setTimeout(() => {
         if (splitGrid) {
           splitGrid.style.transition = 'grid-template-columns 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
@@ -1111,46 +1173,57 @@
         }
       }, 2000);
 
+      // Mostrar letras 3D con interior en negativo a los 4.2s
       setTimeout(() => {
         if (hero) hero.classList.add('loaded'); 
         if (heroContent) {
           heroContent.style.opacity = '1';
-          heroContent.style.transform = 'translateY(0)'; 
+          /* Dejar transform en 'none' cuando está activo permite que mix-blend-mode: difference invierta la foto del fondo */
+          heroContent.style.transform = 'none'; 
         }
       }, 4200);
 
+      // Bajar y esconder las letras 3D a los 7.2s
       setTimeout(() => {
         if (heroContent) {
           heroContent.classList.add('slide-down');
-          heroContent.style.opacity = '0';
-          heroContent.style.transform = 'translateY(120px)';
-          heroContent.style.pointerEvents = 'none';
         }
         if (heroToggleBtn) {
           heroToggleBtn.classList.add('visible'); 
         }
-      }, 7000);
+      }, 7200);
 
+      // Botón central para mostrar/esconder las letras 3D
       if (heroToggleBtn && heroContent) {
         heroToggleBtn.addEventListener('click', () => {
           const isHidden = heroContent.classList.contains('slide-down');
           if (isHidden) {
             heroContent.classList.remove('slide-down');
             heroContent.style.opacity = '1';
-            heroContent.style.transform = 'translateY(0)';
+            heroContent.style.transform = 'none';
             heroContent.style.pointerEvents = 'all';
             heroToggleBtn.classList.add('active-mode');
             if (heroToggleText) heroToggleText.textContent = 'Hide Story';
             if (heroToggleIcon) heroToggleIcon.textContent = '—';
           } else {
             heroContent.classList.add('slide-down');
-            heroContent.style.opacity = '0';
-            heroContent.style.transform = 'translateY(120px)';
             heroContent.style.pointerEvents = 'none';
             heroToggleBtn.classList.remove('active-mode');
             if (heroToggleText) heroToggleText.textContent = 'Reveal Story';
             if (heroToggleIcon) heroToggleIcon.textContent = '+';
           }
+        });
+      }
+
+      // Inclinación 3D interactiva al mover el mouse sobre el Hero
+      if (hero && heroBigTitle3D && window.innerWidth > 768) {
+        hero.addEventListener('mousemove', (e) => {
+          const xAxis = (window.innerWidth / 2 - e.clientX) / 28;
+          const yAxis = (window.innerHeight / 2 - e.clientY) / 28;
+          heroBigTitle3D.style.transform = `rotateY(${-xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+        hero.addEventListener('mouseleave', () => {
+          heroBigTitle3D.style.transform = 'rotateY(0deg) rotateX(0deg)';
         });
       }
 
@@ -1213,7 +1286,6 @@
             if (entry.isIntersecting && !metricsAnimated) {
               metricsAnimated = true;
               
-              // Animar números
               document.querySelectorAll('.metric-light-num').forEach(el => {
                 const target = parseInt(el.getAttribute('data-target'), 10);
                 const prefix = el.getAttribute('data-prefix') || '';
@@ -1231,7 +1303,6 @@
                 }, 28);
               });
 
-              // Animar barras doradas
               document.querySelectorAll('.metric-progress-fill').forEach(bar => {
                 bar.style.width = bar.getAttribute('data-width');
               });
