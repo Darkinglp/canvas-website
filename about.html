@@ -28,12 +28,7 @@
     }
 
     * { box-sizing: border-box !important; margin: 0; padding: 0; }
-    
-    /* IMPORTANTE: Sin overflow-y en html/body para no romper los elementos sticky en PC */
-    html {
-      scroll-behavior: smooth;
-      width: 100%;
-    }
+    html { scroll-behavior: smooth; width: 100%; }
 
     body {
       background-color: var(--bg);
@@ -52,15 +47,18 @@
     .container { max-width: 1480px; margin: 0 auto; padding: 0 4%; width: 100%; }
 
     /* =========================================
-       2. NAVBAR ADAPTATIVA (DARK / LIGHT MODE)
+       2. NAVBAR 100% TRANSPARENTE (DARK / LIGHT MODE)
     ========================================= */
     header {
       position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-      background: transparent;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: transparent !important;
+      background-color: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: none !important;
+      box-shadow: none !important;
       padding: 24px 0;
-      transition: background-color 0.45s ease, border-color 0.45s ease, padding 0.3s ease;
+      transition: padding 0.3s ease;
       pointer-events: none;
     }
 
@@ -70,11 +68,11 @@
     }
 
     .brand { display: inline-flex; align-items: center; gap: 1rem; pointer-events: all; cursor: pointer; z-index: 9999; }
-    .brand-text { font-family: var(--font-display); font-size: 1.35rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #fff; transition: color 0.45s ease; }
-    .brand-sub { font-family: var(--font-body); font-size: 0.58rem; line-height: 1.25; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-gold); font-weight: 500; display: flex; flex-direction: column; border-left: 1px solid rgba(212, 175, 55, 0.4); padding-left: 0.9rem; transition: color 0.45s ease, border-color 0.45s ease; }
+    .brand-text { font-family: var(--font-display); font-size: 1.35rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; color: #fff; transition: color 0.4s ease; }
+    .brand-sub { font-family: var(--font-body); font-size: 0.58rem; line-height: 1.25; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-gold); font-weight: 500; display: flex; flex-direction: column; border-left: 1px solid rgba(212, 175, 55, 0.4); padding-left: 0.9rem; transition: color 0.4s ease, border-color 0.4s ease; }
 
     .nav-actions-right { display: flex; align-items: center; gap: 2rem; }
-    .desktop-btn, #openContactBtn, .mobile-btn { pointer-events: all !important; cursor: pointer !important; z-index: 9999; background: transparent; border: none; color: #fff; font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.45s ease; }
+    .desktop-btn, #openContactBtn, .mobile-btn { pointer-events: all !important; cursor: pointer !important; z-index: 9999; background: transparent; border: none; color: #fff; font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.4s ease; }
     #openContactBtn { display: flex; align-items: center; gap: 8px; }
 
     .dot-pulse { display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-green); position: relative; }
@@ -82,25 +80,19 @@
     @keyframes pulse-small { 0% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
 
     .mobile-btn { display: none; flex-direction: column; gap: 6px; padding: 5px; }
-    .burger-bar { background: #fff; transition: background-color 0.45s ease; }
+    .burger-bar { background: #fff; transition: background-color 0.4s ease; }
 
-    /* ESTADO TEMA BLANCO EN LA NAVBAR (Cuando pasa por la Lámina 2) */
+    /* Letras oscuras cuando pasa por la Lámina Blanca (manteniendo fondo 100% transparente) */
     header.theme-light {
-      background: rgba(249, 248, 246, 0.82) !important;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
     header.theme-light .brand-text,
     header.theme-light .desktop-btn,
-    header.theme-light #openContactBtn {
-      color: #050505 !important;
-    }
-    header.theme-light .brand-sub {
-      color: #8A6914 !important;
-      border-left-color: rgba(138, 105, 20, 0.35) !important;
-    }
-    header.theme-light .burger-bar {
-      background: #050505 !important;
-    }
+    header.theme-light #openContactBtn { color: #050505 !important; }
+    header.theme-light .brand-sub { color: #8A6914 !important; border-left-color: rgba(138, 105, 20, 0.4) !important; }
+    header.theme-light .burger-bar { background: #050505 !important; }
 
     /* Cortina Full-Screen */
     .luxury-curtain { position: fixed; inset: 0; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(16px); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
@@ -112,26 +104,157 @@
     .curtain-link:hover::after { opacity: 1; transform: translateY(-50%) translateX(10px); }
 
     /* =========================================
-       3. HERO CINEMÁTICO (ESTADIO)
+       3. NUEVO HERO CINEMÁTICO (SPOTLIGHT & VIEWFINDER)
     ========================================= */
     .about-hero-cinematic {
-      position: relative; width: 100%; height: 100dvh;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding-bottom: 7rem; background: #030303; overflow: hidden;
-    }
-    .hero-real-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; z-index: 1; filter: grayscale(15%); }
-    .hero-dark-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(180deg, rgba(3,3,3,0.65) 0%, rgba(3,3,3,0.35) 45%, rgba(3,3,3,1) 100%); }
-    .about-hero-content { position: relative; z-index: 3; }
-    .hero-tag { font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-gold); font-weight: 600; display: block; margin-bottom: 1.2rem; }
-    .hero-title { font-family: var(--font-display); font-size: clamp(2.5rem, 5.5vw, 5.8rem); font-weight: 900; text-transform: uppercase; line-height: 0.92; letter-spacing: -0.02em; color: #fff; }
-
-    /* =========================================
-       4. LÁMINAS APILABLES (TEMA BLANCO EN LA 2DA LÁMINA)
-    ========================================= */
-    .sticky-wrapper {
       position: relative;
       width: 100%;
+      min-height: 95dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 9rem 0 3.5rem 0;
+      background: #030303;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
     }
+
+    /* Imagen con efecto Ken Burns (Zoom lento cinematográfico) */
+    .hero-real-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+      z-index: 1;
+      filter: grayscale(10%) brightness(0.42) contrast(1.12);
+      transform: scale(1.16);
+      animation: kenBurnsStadium 18s ease-out forwards;
+    }
+
+    @keyframes kenBurnsStadium {
+      0% { transform: scale(1.16); filter: blur(8px) brightness(0.28); }
+      15% { filter: blur(0px) brightness(0.44); }
+      100% { transform: scale(1.0); filter: blur(0px) brightness(0.44); }
+    }
+
+    /* Haz de luz dorado + Rejilla táctica sutil */
+    .hero-dark-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background-image:
+        linear-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+        radial-gradient(circle at 50% 35%, rgba(212, 175, 55, 0.16) 0%, transparent 58%),
+        linear-gradient(180deg, rgba(3, 3, 3, 0.78) 0%, rgba(3, 3, 3, 0.28) 45%, rgba(3, 3, 3, 0.98) 100%);
+      background-size: 64px 64px, 64px 64px, 100% 100%, 100% 100%;
+      pointer-events: none;
+    }
+
+    /* Líneas arquitectónicas que se dibujan al entrar */
+    .hero-frame-line {
+      position: absolute;
+      z-index: 3;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.45), transparent);
+      height: 1px;
+      width: 0%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: drawHeroLine 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.35s;
+    }
+    .hero-frame-line.top { top: 14%; }
+    .hero-frame-line.bottom { bottom: 18%; }
+
+    @keyframes drawHeroLine {
+      to { width: 92%; }
+    }
+
+    .about-hero-center {
+      position: relative;
+      z-index: 4;
+      text-align: center;
+      margin: auto 0;
+      padding: 2rem 0;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      font-weight: 600;
+      padding: 0.45rem 1.15rem;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 999px;
+      background: rgba(10, 10, 14, 0.55);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      transform: translateY(25px);
+      animation: heroRevealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 7.2vw, 6.8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+      opacity: 0;
+      transform: translateY(35px);
+      animation: heroRevealUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s;
+    }
+
+    .hero-sublead {
+      font-size: clamp(0.95rem, 1.25vw, 1.2rem);
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 680px;
+      margin: 0 auto;
+      font-weight: 300;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroRevealUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.65s;
+    }
+
+    @keyframes heroRevealUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .about-hero-footer {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 1.5rem;
+      opacity: 0;
+      animation: heroRevealUp 1s ease forwards 0.9s;
+    }
+
+    .hero-QuickStats { display: flex; gap: 3rem; }
+    .quick-stat-item span { display: block; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.2rem; }
+    .quick-stat-item strong { font-family: var(--font-display); font-size: 1.2rem; color: #fff; text-transform: uppercase; }
+
+    .scroll-down-cue {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--accent-gold); cursor: pointer; transition: transform 0.3s ease;
+    }
+    .scroll-down-cue:hover { transform: translateY(4px); }
+
+    /* =========================================
+       4. LÁMINAS APILABLES 3D (TEMA BLANCO EN LA 2DA)
+    ========================================= */
+    .sticky-wrapper { position: relative; width: 100%; }
     
     .sticky-panel {
       position: -webkit-sticky;
@@ -149,14 +272,13 @@
       padding: 6rem 0;
     }
     
-    /* LÁMINA 1: Modo Oscuro */
     .panel-who {
       background: radial-gradient(circle at 20% 50%, #111116 0%, #070709 100%);
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       z-index: 10;
     }
 
-    /* LÁMINA 2: CAMBIO TOTAL A TEMA BLANCO (LIGHT MODE) */
+    /* LÁMINA 2: TEMA BLANCO EDITORIAL */
     .panel-mission {
       background: #F9F8F6 !important;
       color: #050505 !important;
@@ -164,19 +286,11 @@
       box-shadow: 0 -30px 90px rgba(0, 0, 0, 0.75);
       z-index: 20;
     }
-    .panel-mission .panel-subtitle {
-      color: #9A7418 !important; /* Dorado oscuro editorial sobre blanco */
-      font-weight: 700;
-    }
-    .panel-mission .panel-title {
-      color: #050505 !important;
-    }
-    .panel-mission .panel-text {
-      color: #383840 !important;
-      font-weight: 400 !important;
-    }
+    .panel-mission .panel-subtitle { color: #9A7418 !important; font-weight: 700; }
+    .panel-mission .panel-title { color: #050505 !important; }
+    .panel-mission .panel-text { color: #383840 !important; font-weight: 400 !important; }
 
-    /* LÁMINA 3: Regreso a Modo Oscuro (El Fundador) */
+    /* LÁMINA 3: EL FUNDADOR */
     .panel-founder {
       background: linear-gradient(160deg, #101015 0%, #050507 100%);
       border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -193,220 +307,81 @@
     /* =========================================
        5. DISEÑO EDITORIAL DEL FUNDADOR (FOTO GRANDE)
     ========================================= */
-    .founder-grid {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 4.5rem;
-      align-items: center;
-    }
+    .founder-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 4.5rem; align-items: center; }
 
     .founder-img-box {
-      position: relative;
-      width: 100%;
-      max-width: 520px;
-      height: 74vh;
-      max-height: 660px;
-      min-height: 460px;
-      margin-left: auto;
-      border-radius: 20px;
-      overflow: hidden;
+      position: relative; width: 100%; max-width: 520px; height: 74vh;
+      max-height: 660px; min-height: 460px; margin-left: auto;
+      border-radius: 20px; overflow: hidden;
       border: 1px solid rgba(212, 175, 55, 0.35);
       box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85);
       background: #0a0a0d;
     }
 
     .founder-img-box::after {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background: linear-gradient(180deg, transparent 55%, rgba(3, 3, 4, 0.92) 100%);
-      pointer-events: none;
-      z-index: 1;
+      pointer-events: none; z-index: 1;
     }
 
     .founder-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-      filter: grayscale(0%) !important;
-      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%; height: 100%; object-fit: cover; object-position: center top;
+      filter: grayscale(0%) !important; transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    .founder-img-box:hover img {
-      transform: scale(1.04);
-    }
+    .founder-img-box:hover img { transform: scale(1.04); }
 
     .founder-name-badge {
-      position: absolute;
-      bottom: 1.5rem;
-      left: 1.5rem;
-      right: 1.5rem;
-      z-index: 2;
-      padding: 1.2rem 1.5rem;
-      background: rgba(10, 10, 14, 0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
+      position: absolute; bottom: 1.5rem; left: 1.5rem; right: 1.5rem; z-index: 2;
+      padding: 1.2rem 1.5rem; background: rgba(10, 10, 14, 0.65);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px;
+      display: flex; flex-direction: column; gap: 0.25rem;
     }
-
-    .founder-name {
-      font-family: var(--font-display);
-      font-size: 1.35rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: #fff;
-      letter-spacing: 0.04em;
-    }
-
-    .founder-role {
-      font-family: var(--font-body);
-      font-size: 0.7rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent-gold);
-      font-weight: 600;
-    }
+    .founder-name { font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; text-transform: uppercase; color: #fff; letter-spacing: 0.04em; }
+    .founder-role { font-family: var(--font-body); font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-gold); font-weight: 600; }
 
     /* =========================================
-       6. CARRUSEL DE BALONES (FIJACIÓN INFALIBLE EN PC Y MÓVIL)
+       6. CARRUSEL DE BALONES 3D
     ========================================= */
-    .horizontal-scroll-wrapper {
-      position: relative;
-      width: 100%;
-      height: 420vh; /* Altura de recorrido horizontal */
-      background: #030303;
-      z-index: 40;
-    }
+    .horizontal-scroll-wrapper { position: relative; width: 100%; height: 420vh; background: #030303; z-index: 40; }
 
     .sticky-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100vh;
-      width: 100%;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      background: #030303;
+      position: absolute; top: 0; left: 0; height: 100vh; width: 100%;
+      overflow: hidden; display: flex; flex-direction: column; justify-content: center; background: #030303;
     }
+    .sticky-container.is-fixed { position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100vh !important; z-index: 45; }
+    .sticky-container.is-bottom { position: absolute !important; top: auto !important; bottom: 0 !important; left: 0 !important; }
 
-    /* Estados controlados por JS para que jamás falle el freno en computadora */
-    .sticky-container.is-fixed {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100% !important;
-      height: 100vh !important;
-      z-index: 45;
-    }
-
-    .sticky-container.is-bottom {
-      position: absolute !important;
-      top: auto !important;
-      bottom: 0 !important;
-      left: 0 !important;
-    }
-
-    /* Título de fondo visible antes de que entren los balones */
     .sticky-header {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      padding: 0 5%;
-      text-align: center;
-      z-index: 1;
-      pointer-events: none;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 100%; padding: 0 5%; text-align: center; z-index: 1;
+      pointer-events: none; transition: opacity 0.4s ease, transform 0.4s ease;
     }
+    .sticky-header .hero-tag { color: var(--accent-gold); margin-bottom: 1rem; display: block; opacity: 0.9; font-size: 0.72rem; letter-spacing: 0.28em; text-transform: uppercase; }
+    .sticky-header .panel-title { font-size: clamp(2.6rem, 7.5vw, 7rem); margin: 0; opacity: 0.9; line-height: 0.95; color: #ffffff; transition: opacity 0.4s ease; }
 
-    .sticky-header .hero-tag {
-      color: var(--accent-gold);
-      margin-bottom: 1rem;
-      display: block;
-      opacity: 0.9;
-    }
-
-    .sticky-header .panel-title {
-      font-size: clamp(2.6rem, 7.5vw, 7rem);
-      margin: 0;
-      opacity: 0.9;
-      line-height: 0.95;
-      color: #ffffff;
-      transition: opacity 0.4s ease;
-    }
-
-    /* Pista horizontal: empieza fuera de la pantalla (100vw) */
     .horizontal-track {
-      display: flex;
-      align-items: center;
-      gap: 4.5vw;
-      padding-left: 100vw !important;
-      will-change: transform;
-      transform: translateX(0);
-      position: relative;
-      z-index: 10;
+      display: flex; align-items: center; gap: 4.5vw;
+      padding-left: 100vw !important; will-change: transform;
+      transform: translateX(0); position: relative; z-index: 10;
     }
 
-    /* FOTOS REDONDAS SIMULANDO BALONES EN 3D */
     .marquee-item {
-      width: 24vw;
-      height: 24vw;
-      min-width: 270px;
-      min-height: 270px;
-      max-width: 350px;
-      max-height: 350px;
-      aspect-ratio: 1 / 1;
-      flex-shrink: 0;
-      position: relative;
-      border-radius: 50% !important;
-      border: 2px solid rgba(212, 175, 55, 0.35);
-      background: #111;
-      overflow: hidden !important;
-      cursor: pointer;
+      width: 24vw; height: 24vw; min-width: 270px; min-height: 270px; max-width: 350px; max-height: 350px;
+      aspect-ratio: 1 / 1; flex-shrink: 0; position: relative;
+      border-radius: 50% !important; border: 2px solid rgba(212, 175, 55, 0.35);
+      background: #111; overflow: hidden !important; cursor: pointer;
       box-shadow: 0 25px 55px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(0, 0, 0, 0.75);
       transition: box-shadow 0.4s ease, border-color 0.4s ease;
     }
-
     .marquee-item::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
       background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.22) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.7) 100%);
-      box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.85);
-      pointer-events: none;
-      z-index: 2;
+      box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.85); pointer-events: none; z-index: 2;
     }
-
-    .marquee-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-      filter: grayscale(100%) brightness(0.65);
-      transition: filter 0.4s ease, transform 0.6s ease;
-    }
-
-    .marquee-item:hover,
-    .marquee-item.touch-active {
-      box-shadow: 0 30px 65px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.35);
-      border-color: var(--accent-gold);
-      z-index: 5;
-    }
-
-    .marquee-item:hover img,
-    .marquee-item.touch-active img {
-      filter: grayscale(0%) brightness(1);
-      transform: scale(1.08);
-    }
+    .marquee-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: grayscale(100%) brightness(0.65); transition: filter 0.4s ease, transform 0.6s ease; }
+    .marquee-item:hover, .marquee-item.touch-active { box-shadow: 0 30px 65px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.35); border-color: var(--accent-gold); z-index: 5; }
+    .marquee-item:hover img, .marquee-item.touch-active img { filter: grayscale(0%) brightness(1); transform: scale(1.08); }
 
     /* =========================================
        7. FOOTER Y MODAL DE CONTACTO
@@ -414,7 +389,6 @@
     footer { padding: 8rem 0 5rem 0; background: #020203; border-top: 1px solid var(--border); position: relative; z-index: 50; }
     .footer-grid { display: grid; grid-template-columns: 1.3fr 1.7fr; gap: 4rem; align-items: center; }
     .footer-huge { font-family: var(--font-display); font-size: clamp(2.2rem, 4.2vw, 4.4rem); font-weight: 900; text-transform: uppercase; line-height: 0.95; }
-    
     .contact-card { border: 1px solid var(--border); padding: 3rem 2.5rem; background: var(--surface); }
     .social-icons-row { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: center; }
     .social-icon { color: var(--text-main); transition: color 0.3s, transform 0.3s; display: inline-flex; }
@@ -427,7 +401,7 @@
     .portal-modal-overlay.active .portal-modal-box { transform: translateY(0); }
 
     /* =========================================
-       8. UNIFICACIÓN MÓVIL (SIN CORTES NI DESBORDES)
+       8. RESPONSIVE MÓVIL (SIN CORTES NI DESBORDES)
     ========================================= */
     @media (max-width: 768px) {
       header { padding: 15px 0 !important; }
@@ -442,65 +416,32 @@
       .curtain-link { font-size: 2.2rem !important; }
       .curtain-link::after { display: none !important; }
 
-      .container, .panel-content {
-        padding-left: 1.25rem !important;
-        padding-right: 1.25rem !important;
-        width: 100% !important;
-      }
+      .container, .panel-content { padding-left: 1.25rem !important; padding-right: 1.25rem !important; width: 100% !important; }
 
       h1, h2, h3, .hero-title, .panel-title, .footer-huge {
         white-space: normal !important;
         word-break: keep-all !important;
         overflow-wrap: normal !important;
         hyphens: none !important;
-        line-height: 1.02 !important;
+        line-height: 0.96 !important;
         letter-spacing: -0.02em !important;
       }
 
-      .hero-title { font-size: 6.8vw !important; }
+      .about-hero-cinematic { min-height: 88dvh; padding: 7.5rem 0 2.5rem 0; }
+      .hero-title { font-size: 9.8vw !important; }
       .panel-title, .footer-huge { font-size: 6.5vw !important; }
 
-      .sticky-panel {
-        border-radius: 24px 24px 0 0;
-        padding: 4.5rem 0 3.5rem 0;
-      }
+      .about-hero-footer { flex-direction: column; align-items: center; gap: 1.8rem; text-align: center; }
+      .hero-QuickStats { gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
 
-      .panel-founder {
-        min-height: 100dvh;
-        height: auto !important;
-        padding: 5.5rem 0 4rem 0 !important;
-      }
+      .sticky-panel { border-radius: 24px 24px 0 0; padding: 4.5rem 0 3.5rem 0; }
+      .panel-founder { min-height: 100dvh; height: auto !important; padding: 5.5rem 0 4rem 0 !important; }
+      .founder-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+      .founder-img-box { max-width: 100% !important; height: 52vh !important; min-height: 360px !important; margin: 0 auto !important; }
 
-      .founder-grid {
-        grid-template-columns: 1fr !important;
-        gap: 2rem !important;
-      }
-
-      .founder-img-box {
-        max-width: 100% !important;
-        height: 52vh !important;
-        min-height: 360px !important;
-        margin: 0 auto !important;
-      }
-
-      .sticky-header .panel-title {
-        font-size: 8.5vw !important;
-        white-space: normal !important;
-      }
-
-      .horizontal-track {
-        padding-left: 100vw !important;
-        gap: 8vw !important;
-      }
-
-      .marquee-item {
-        width: 66vw !important;
-        height: 66vw !important;
-        min-width: 240px !important;
-        min-height: 240px !important;
-        max-width: 290px !important;
-        max-height: 290px !important;
-      }
+      .sticky-header .panel-title { font-size: 8.5vw !important; white-space: normal !important; }
+      .horizontal-track { padding-left: 100vw !important; gap: 8vw !important; }
+      .marquee-item { width: 66vw !important; height: 66vw !important; min-width: 240px !important; min-height: 240px !important; max-width: 290px !important; max-height: 290px !important; }
 
       footer { padding: 4rem 0 5rem 0 !important; }
       .footer-grid { display: flex !important; flex-direction: column !important; gap: 2.5rem !important; }
@@ -510,9 +451,7 @@
 </head>
 <body>
 
-  <!-- =========================================
-       HEADER Y NAVEGACIÓN
-  ========================================= -->
+  <!-- HEADER 100% TRANSPARENTE -->
   <header id="mainHeader">
     <div class="nav-inner">
       <a href="index.html" class="brand">
@@ -525,12 +464,10 @@
 
       <div class="nav-actions-right">
         <button id="openMenuBtn" class="desktop-btn">MENU</button>
-        
         <button id="openContactBtn">
           <span class="dot-pulse"></span>
           CONTACT
         </button>
-
         <button id="burgerToggle" class="mobile-btn">
           <span class="burger-bar" style="width: 25px; height: 1.5px; display: block;"></span>
           <span class="burger-bar" style="width: 15px; height: 1.5px; display: block; align-self: flex-end;"></span>
@@ -539,12 +476,9 @@
     </div>
   </header>
 
-  <!-- =========================================
-       MENÚ ELEGANTE FULL-SCREEN
-  ========================================= -->
+  <!-- MENÚ FULL-SCREEN -->
   <div id="fullScreenMenu" class="luxury-curtain">
     <button id="closeMenuBtn" style="position: absolute; top: 2rem; right: 5vw; background: transparent; border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: 0.15em; cursor: pointer; z-index: 2001;">CLOSE [X]</button>
-    
     <div class="curtain-links-container">
       <a href="index.html" class="curtain-link" data-info="Back to the main view">HOME</a>
       <a href="about.html" class="curtain-link" data-info="Discover our vision">ABOUT</a>
@@ -554,18 +488,53 @@
   </div>
 
   <main>
-    <!-- HERO CINEMÁTICO -->
+    <!-- =========================================
+         NUEVO HERO CINEMÁTICO (SPOTLIGHT & VIEWFINDER)
+    ========================================= -->
     <section class="about-hero-cinematic">
-      <img src="img/Stadium.jpg" alt="Stadium" class="hero-real-img">
+      <img src="img/Stadium.jpg" onerror="this.src='https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=2200&q=85'" alt="Stadium" class="hero-real-img">
       <div class="hero-dark-overlay"></div>
-      <div class="container about-hero-content">
-        <span class="hero-tag">Executive Thesis</span>
+      
+      <!-- Líneas arquitectónicas animadas -->
+      <div class="hero-frame-line top"></div>
+      <div class="hero-frame-line bottom"></div>
+
+      <div class="container about-hero-center">
+        <div class="hero-eyebrow">
+          <span class="dot-pulse"></span>
+          Executive Thesis &bull; Boutique Representation
+        </div>
         <h1 class="hero-title">Guiding Talent.<br>Building Legacy.</h1>
+        <p class="hero-sublead">
+          A selective sports &amp; creator management firm engineered to protect futures, structure institutional NIL partnerships, and build lasting enterprise equity.
+        </p>
+      </div>
+
+      <div class="container about-hero-footer">
+        <div class="hero-QuickStats">
+          <div class="quick-stat-item">
+            <span>Certification</span>
+            <strong>NBPA &amp; FIBA Licensed</strong>
+          </div>
+          <div class="quick-stat-item">
+            <span>Representation</span>
+            <strong>Family-First &bull; 360° Care</strong>
+          </div>
+          <div class="quick-stat-item">
+            <span>Architecture</span>
+            <strong>NIL &bull; Pro &bull; Brand Equity</strong>
+          </div>
+        </div>
+
+        <a href="#thesisPanels" class="scroll-down-cue">
+          <span>Explore Thesis</span>
+          <span>&darr;</span>
+        </a>
       </div>
     </section>
 
     <!-- EFECTO SÁNDWICH 3D (LÁMINAS APILABLES) -->
-    <div class="sticky-wrapper">
+    <div class="sticky-wrapper" id="thesisPanels">
       
       <!-- LÁMINA 1: WHO WE ARE -->
       <section class="sticky-panel panel-who">
@@ -604,7 +573,7 @@
         </div>
       </section>
 
-      <!-- LÁMINA 3: EL FUNDADOR (FOTO GRANDE Y ELEGANTE) -->
+      <!-- LÁMINA 3: EL FUNDADOR -->
       <section class="sticky-panel panel-founder" id="founderPanel">
         <div class="panel-content founder-grid">
           <div>
@@ -621,7 +590,7 @@
           </div>
           
           <div class="founder-img-box">
-            <img src="img/fundador.jpg" alt="Rashaad Ubah, Founder & Managing Partner">
+            <img src="img/fundador.jpg" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80'" alt="Rashaad Ubah, Founder & Managing Partner">
             <div class="founder-name-badge">
               <div class="founder-name">Rashaad Ubah</div>
               <div class="founder-role">Founder &amp; Managing Partner</div>
@@ -636,13 +605,11 @@
     <section class="horizontal-scroll-wrapper" id="ballScrollSection">
       <div class="sticky-container" id="ballStickyPin">
         
-        <!-- Título central despejado al inicio -->
         <div class="sticky-header" id="trustedHeader">
           <span class="hero-tag">The Canvas Network</span>
           <h2 class="panel-title">Trusted by<br>Elite Talent</h2>
         </div>
         
-        <!-- Pista de Balones -->
         <div class="horizontal-track" id="ballTrack">
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=800&q=80" alt="Client 1"></div>
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80" alt="Client 2"></div>
@@ -650,7 +617,6 @@
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Client 4"></div>
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80" alt="Client 5"></div>
           <div class="marquee-item"><img src="https://images.unsplash.com/photo-1515523110800-9415d13b84a8?auto=format&fit=crop&w=800&q=80" alt="Client 6"></div>
-          
           <div style="min-width: 30vw; height: 1px;"></div>
         </div>
         
@@ -668,7 +634,6 @@
       
       <div class="contact-card">
         <span style="font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.5rem; display: block;">Direct Desk</span>
-        
         <div class="social-icons-row">
           <a href="mailto:talent@canvasmg.com" aria-label="Email" class="social-icon">
             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
@@ -677,7 +642,6 @@
             <svg viewBox="0 0 24 24"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5Z"/></svg>
           </a>
         </div>
-        
         <p style="font-size: 0.85rem; color: var(--text-dim); line-height: 1.6;">
           Canvas operates under selective non-disclosure agreements for all represented athletes, creators, and corporate brand partners.
         </p>
@@ -689,11 +653,9 @@
   <div class="portal-modal-overlay" id="contactModal">
     <div class="portal-modal-box">
       <button class="modal-close-btn" id="closeContactBtn" style="position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">&times;</button>
-      
       <span style="font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: #34D399; display: block; margin-bottom: 0.8rem;">&bull; Direct Inquiries</span>
       <h3 style="font-family: var(--font-display), sans-serif; font-size: 2.2rem; text-transform: uppercase; font-weight: 900; margin-bottom: 0.5rem; color: #fff;">Contact Us</h3>
       <p style="font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 2.5rem;">For representation, brand partnerships, or general inquiries, please leave a message below.</p>
-      
       <form onsubmit="handleContactSubmit(event)">
         <div style="margin-bottom: 1.5rem;">
           <input type="text" required placeholder="FULL NAME" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding: 0.85rem 0; color: #fff; font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.1em; outline: none;">
@@ -720,7 +682,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      // 1. MODAL Y MENÚ FULL-SCREEN
       const contactModal = document.getElementById('contactModal');
       const openContactBtn = document.getElementById('openContactBtn');
       const closeContactBtn = document.getElementById('closeContactBtn');
@@ -748,9 +709,7 @@
       if (burgerToggle) burgerToggle.addEventListener('click', openMenu);
       if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
 
-      // =========================================
-      // 2. LÁMINAS 3D + CAMBIO A TEMA BLANCO EN LA WEB
-      // =========================================
+      // LÁMINAS 3D + CAMBIO DE COLOR EN NAVBAR TRANSPARENTE
       const panels = document.querySelectorAll('.sticky-panel');
       const mainHeader = document.getElementById('mainHeader');
       const whitePanel = document.getElementById('whiteThemePanel');
@@ -759,7 +718,6 @@
       window.addEventListener('scroll', () => {
         const viewHeight = window.innerHeight;
 
-        // A. Detectar si la Lámina 2 (Blanca) domina la pantalla para cambiar la Navbar a Tema Blanco
         if (whitePanel && founderPanel && mainHeader) {
           const whiteRect = whitePanel.getBoundingClientRect();
           const founderRect = founderPanel.getBoundingClientRect();
@@ -771,7 +729,6 @@
           }
         }
 
-        // B. Efecto 3D de empuje en las láminas
         panels.forEach((panel, index) => {
           const nextPanel = panels[index + 1];
           if (nextPanel) {
@@ -789,9 +746,7 @@
         });
       }, { passive: true });
 
-      // =========================================
-      // 3. CARRUSEL DE BALONES (FIJACIÓN INFALIBLE EN PC Y MÓVIL)
-      // =========================================
+      // CARRUSEL DE BALONES
       const scrollWrapper = document.getElementById('ballScrollSection');
       const stickyPin = document.getElementById('ballStickyPin');
       const horizontalTrack = document.getElementById('ballTrack');
@@ -807,7 +762,6 @@
           const viewHeight = window.innerHeight;
           const totalScrollable = scrollWrapper.offsetHeight - viewHeight;
 
-          // Anclaje directo por coordenadas: garantiza que la pantalla se detenga en PC y Móvil
           if (rect.top <= 0 && rect.bottom >= viewHeight) {
             stickyPin.classList.add('is-fixed');
             stickyPin.classList.remove('is-bottom');
@@ -824,7 +778,6 @@
           if (rawProgress < 0) rawProgress = 0;
           if (rawProgress > 1) rawProgress = 1;
 
-          // Primer 15% del recorrido muestra "Trusted by Elite Talent" despejado
           const holdThreshold = 0.15;
           let trackProgress = 0;
 
@@ -848,7 +801,6 @@
           currentX += (targetX - currentX) * 0.07;
           horizontalTrack.style.transform = `translateX(-${currentX}px)`;
 
-          // Curva parabólica + rotación de balón rodando
           marqueeItems.forEach(item => {
             const itemRect = item.getBoundingClientRect();
             const xPos = ((itemRect.left + itemRect.width / 2) / window.innerWidth) - 0.5;
@@ -861,9 +813,7 @@
       }
       animateScroll();
 
-      // =========================================
-      // 4. RASTREADOR TÁCTIL PARA MÓVILES
-      // =========================================
+      // RASTREADOR TÁCTIL MÓVIL
       marqueeItems.forEach(item => {
         item.addEventListener('touchstart', () => {
           marqueeItems.forEach(i => i.classList.remove('touch-active'));
