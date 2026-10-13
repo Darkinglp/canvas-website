@@ -1102,6 +1102,59 @@ header, .nav-inner {
         color: #E2C76A !important;
       }
     }
+
+    /* =========================================
+       FIX DEFINITIVO: TIPOGRAFÍA MÓVIL Y CENTRADO
+    ========================================= */
+    @media (max-width: 768px) {
+      
+      /* 1. RESET DE RESTRICCIONES (Permitir que el texto fluya) */
+      h1, h2, h3, .hero-big-title, .page-title, .hero-title, .footer-huge {
+        white-space: normal !important; /* Cancela la regla que prohibía saltos de línea */
+        word-break: break-word !important; 
+        overflow-wrap: break-word !important;
+        box-sizing: border-box !important;
+        max-width: 100% !important;
+      }
+
+      /* 2. HERO CINEMÁTICO (Centrado elegante) */
+      .hero-content {
+        align-items: center !important;
+        text-align: center !important;
+        padding: 0 1rem !important;
+        width: 100% !important;
+      }
+
+      .hero-big-title {
+        /* Tamaño dinámico pero con un límite máximo para que no desborde */
+        font-size: clamp(2.5rem, 11vw, 3.8rem) !important; 
+        text-align: center !important;
+        margin: 0 auto 1.5rem auto !important;
+        width: 100% !important;
+        line-height: 0.95 !important;
+      }
+
+      /* 3. TÍTULOS LARGOS (Architecture, Venture, Contact, Footer) */
+      h2, h3, .footer-huge, .panel-title, .contact-modal h3 {
+        /* Tamaño seguro para palabras de más de 12 letras en pantallas estrechas */
+        font-size: clamp(1.8rem, 8.5vw, 2.5rem) !important; 
+        line-height: 1.1 !important;
+        padding-right: 0.5rem !important; /* Margen de seguridad derecho */
+      }
+
+      /* 4. CONTENEDORES Y CAJAS (Prevenir empujes invisibles) */
+      .container, .pillar-box, .contact-card, .portal-modal-box {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Ajuste específico para el modal de contacto */
+      .portal-modal-box {
+        padding: 2.5rem 1.5rem !important;
+      }
+    }
   </style>
 </head>
 <body>
