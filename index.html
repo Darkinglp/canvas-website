@@ -1238,7 +1238,43 @@ header, .nav-inner {
       transform: translateY(0);
     }
 
+/* =========================================
+       FIX FINAL: REDUCCIÓN DE TAMAÑOS Y ANTI-APRETÓN
+    ========================================= */
+    @media (max-width: 768px) {
+      
+      /* Evitar el "apretón" durante la animación de las puertas */
+      .middle-content-wrapper {
+        width: 100vw !important;
+        min-width: 100vw !important; 
+      }
 
+      /* Reducción general para que nada se corte */
+      .door-text {
+        font-size: 11vw !important; /* Más pequeño para que CAN y VAS respiren */
+        white-space: nowrap !important; /* Prohíbe terminantemente que se partan */
+      }
+
+      .hero-big-title {
+        font-size: 8.5vw !important; /* Reducido drásticamente para elegancia */
+        line-height: 1.15 !important;
+        white-space: nowrap !important; /* Mantiene ATHLETES en una sola línea */
+      }
+
+      /* Títulos de secciones: más pequeños y limpios */
+      h2, h3, .footer-huge, .panel-title, .contact-modal h3 {
+        font-size: 7.5vw !important; /* Reducción a 7.5vw asegura que palabras largas quepan */
+        line-height: 1.2 !important;
+        white-space: normal !important;
+        word-break: normal !important; 
+      }
+      
+      /* Textos descriptivos más delicados */
+      .hero-description, p {
+        font-size: 0.85rem !important;
+        line-height: 1.6 !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1650,41 +1686,50 @@ header, .nav-inner {
         });
       }
     // =========================================
-      // NUEVO MOTOR: ANIMACIÓN 100% AUTOMÁTICA
+      // MOTOR DEFINITIVO: APERTURA, APARICIÓN Y CAÍDA
       // =========================================
       const splitGrid = document.getElementById('split-grid');
       const hero = document.getElementById('heroCinematic');
       const heroContent = document.querySelector('.hero-content');
-      
-      // Ocultar mensaje de "Tap" si quedó en el HTML
-      const tapMsg = document.querySelector('.tap-to-enter-msg');
-      if(tapMsg) tapMsg.style.display = 'none';
+      const heroToggleBtn = document.getElementById('heroToggleBtn');
 
-      // 1. ABRIR LAS PUERTAS SOLAS A LOS 2 SEGUNDOS
-      setTimeout(() => {
-        if (splitGrid) {
-          // Animación suave de apertura
-          splitGrid.style.transition = 'grid-template-columns 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
-          splitGrid.style.gridTemplateColumns = '0fr 1fr 0fr'; 
-        }
-      }, 2000);
-
-      // 2. APARECER EL TEXTO DEL INICIO A LOS 4.5 SEGUNDOS
+      // Preparar el texto para que entre desde arriba
       if (heroContent) {
-        // Inicialmente el texto está invisible y un poco arriba
         heroContent.style.opacity = '0';
         heroContent.style.transform = 'translateY(-30px)';
         heroContent.style.transition = 'opacity 1.2s ease, transform 1.2s ease';
       }
 
+      // 1. ABRIR LAS PUERTAS (A los 2 segundos)
       setTimeout(() => {
-        if (hero) hero.classList.add('loaded'); // Quita el fondo borroso
+        if (splitGrid) {
+          splitGrid.style.transition = 'grid-template-columns 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
+          splitGrid.style.gridTemplateColumns = '0fr 1fr 0fr'; 
+        }
+      }, 2000);
+
+      // 2. APARECER EL TEXTO (A los 4.5 segundos)
+      setTimeout(() => {
+        if (hero) hero.classList.add('loaded'); 
         if (heroContent) {
-          // El texto baja suavemente y aparece
           heroContent.style.opacity = '1';
           heroContent.style.transform = 'translateY(0)'; 
         }
       }, 4500);
+
+      // 3. BAJAR EL TEXTO Y MOSTRAR EL FONDO (A los 7 segundos)
+      setTimeout(() => {
+        if (heroContent) {
+          // El texto cae suavemente y desaparece
+          heroContent.style.opacity = '0';
+          heroContent.style.transform = 'translateY(120px)'; 
+          heroContent.classList.add('slide-down'); 
+        }
+        if (heroToggleBtn) {
+          // Muestra el botón por si el cliente quiere volver a subir el texto
+          heroToggleBtn.classList.add('visible'); 
+        }
+      }, 7000);
   </script>
 
 </body>
