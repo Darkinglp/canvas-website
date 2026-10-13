@@ -1006,6 +1006,61 @@ header, .nav-inner {
     box-sizing: border-box !important;
   }
 }
+
+/* =========================================
+       FIX FINAL: TAP TO ENTER (MÓVIL) Y TÍTULOS
+    ========================================= */
+    
+    /* El texto parpadeante de "TAP TO ENTER" */
+    .tap-to-enter-msg {
+      display: none;
+      position: absolute;
+      top: 75%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #D4AF37;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      z-index: 30;
+      animation: pulseTap 1.5s infinite;
+      pointer-events: none;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    
+    @keyframes pulseTap {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    @media (max-width: 768px) {
+      /* Mostramos el mensaje en celular */
+      .tap-to-enter-msg { display: block; }
+      
+      /* Eliminamos el espacio de scroll extra en móvil para evitar bugs de iOS */
+      .split-splash-section {
+        height: 100dvh !important; 
+      }
+      #split-grid {
+        position: relative !important; 
+        height: 100dvh !important;
+      }
+
+      /* Títulos calculados milimétricamente para que NO se rompan jamás */
+      .hero-big-title {
+        font-size: 11.5vw !important; /* Ajuste perfecto al ancho del iPhone */
+        line-height: 1 !important;
+        white-space: nowrap !important; /* Prohíbe terminantemente que se partan a la mitad */
+      }
+      
+      /* Corrección para los títulos largos del footer y otras secciones */
+      .footer-huge, h2, h3 {
+        font-size: min(10vw, 2.5rem) !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1417,35 +1472,53 @@ header, .nav-inner {
         });
       }
     // =========================================
-      // MOTOR DE APERTURA DE PUERTAS (OPTIMIZADO iOS)
+      // MOTOR DE APERTURA DE PUERTAS (SCROLL DESKTOP + TAP MÓVIL)
       // =========================================
       const splitSplash = document.querySelector('.split-splash-section');
       const splitGrid = document.getElementById('split-grid');
 
       if (splitSplash && splitGrid) {
-        // Ejecutar inmediatamente al cargar y al hacer scroll
+        // Creamos el mensaje de Tap To Enter dinámicamente
+        const tapMsg = document.createElement('div');
+        tapMsg.className = 'tap-to-enter-msg';
+        tapMsg.innerText = 'Tap to Enter';
+        splitGrid.appendChild(tapMsg);
+
+        let isMobileOpened = false;
+
+        // Lógica de Scroll (Solo para Computadoras)
         const handleSplitScroll = () => {
-          // getBoundingClientRect().top es la única forma 100% fiable en iOS
+          if (window.innerWidth <= 768) return; // Si es celular, ignorar el scroll
+          
           const rect = splitSplash.getBoundingClientRect();
           const viewHeight = window.innerHeight;
-          
-          // La sección mide 200vh (2 veces el alto de pantalla)
-          // Cuando top está en 0, el usuario empieza a bajar por el bloque "sticky"
-          const totalScrollableDistance = viewHeight; // scrollable span (100vh)
-          const currentProgress = -rect.top; // Cuánto ha subido la sección fuera de la pantalla
-
-          let progress = currentProgress / totalScrollableDistance;
+          const currentProgress = -rect.top; 
+          let progress = currentProgress / viewHeight;
           
           if (progress < 0) progress = 0;
           if (progress > 1) progress = 1;
 
-          // Transición fluida de cerrado (1-0-1) a abierto (0-1-0)
+          // Código reparado sin saltos de línea (Abre las puertas)
           splitGrid.style.gridTemplateColumns = `${1 - progress}fr ${progress}fr ${1 - progress}fr`;
         };
 
+        // Lógica de Tocar (Solo para Celulares)
+        splitGrid.addEventListener('click', () => {
+          if (window.innerWidth <= 768 && !isMobileOpened) {
+            isMobileOpened = true;
+            // Animación suave al abrir con el dedo
+            splitGrid.style.transition = 'grid-template-columns 0.9s cubic-bezier(0.25, 1, 0.5, 1)';
+            splitGrid.style.gridTemplateColumns = '0fr 1fr 0fr'; // Abre al 100%
+            tapMsg.style.opacity = '0'; // Desaparece el texto
+            
+            // Limpieza del texto después de abrir
+            setTimeout(() => { tapMsg.remove(); }, 900);
+          }
+        });
+
         window.addEventListener('scroll', handleSplitScroll, { passive: true });
         window.addEventListener('resize', handleSplitScroll, { passive: true });
-        handleSplitScroll(); // Ejecución inicial
+        handleSplitScroll(); 
       }
   </script>
 
